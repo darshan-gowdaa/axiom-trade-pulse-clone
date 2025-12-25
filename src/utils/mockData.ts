@@ -17,7 +17,7 @@ const CRYPTO_TERMS = [
   'Remilio', 'Pudgy', 'Azuki', 'WIF', 'BONK', 'MOG'
 ];
 
-const generateNameAndSymbol = () => {
+export const generateNameAndSymbol = () => {
   const p1 = BRAINROT_TERMS[Math.floor(Math.random() * BRAINROT_TERMS.length)];
   const useCorporate = Math.random() > 0.5;
   const p2 = useCorporate 
@@ -33,10 +33,20 @@ const generateNameAndSymbol = () => {
   return { name, symbol };
 };
 
+export const generateCreatorName = (): string => {
+  const chars = 'abcdefghijklmnopqrstuvwxyz';
+  const len = Math.floor(Math.random() * 4) + 6; // 6-9 chars
+  let name = '';
+  for(let i=0; i<len; i++) name += chars.charAt(Math.floor(Math.random() * chars.length));
+  const suffixes = ['', '99', '69', '41', '67', '77'];
+  const suffix = suffixes[Math.floor(Math.random() * suffixes.length)];
+  return name + suffix;
+};
+
 /**
  * Generate a random Solana-like address
  */
-function generateAddress(): string {
+export function generateAddress(): string {
   const chars = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
   let address = '';
   for (let i = 0; i < 44; i++) {

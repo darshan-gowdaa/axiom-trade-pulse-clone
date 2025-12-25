@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useCallback } from 'react';
+import { shallowEqual } from 'react-redux';
 import { useAppDispatch, useAppSelector } from './useRedux';
 import {
   updateTokenPrice,
@@ -19,7 +20,7 @@ export function useWebSocketSimulation() {
     newPairs: state.tokens.newPairs,
     finalStretch: state.tokens.finalStretch,
     migrated: state.tokens.migrated,
-  }));
+  }), shallowEqual);
   
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 

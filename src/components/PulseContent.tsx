@@ -60,15 +60,7 @@ export function PulseContent() {
   };
 
   return (
-    <div
-      style={{
-        flex: 1,
-        display: 'flex',
-        flexDirection: 'column',
-        overflow: 'hidden',
-        backgroundColor: '#06070b',
-      }}
-    >
+    <div className="flex-1 flex flex-col overflow-hidden bg-[#06070b]">
       {/* Pulse Toolbar */}
       <PulseToolbar />
 
@@ -88,7 +80,7 @@ export function PulseContent() {
       )}
 
       {/* Token Columns - Only this section scrolls */}
-      <div style={{ flex: 1, display: 'flex', overflow: 'hidden', minHeight: 0, padding: '0 16px', gap: '4px' }}>
+      <div className="flex-1 flex overflow-hidden min-h-0 px-7 gap-1">
         {isMobile ? (
           <>
             {activeTab === 'newPairs' && (

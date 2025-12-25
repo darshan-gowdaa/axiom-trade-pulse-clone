@@ -19,17 +19,17 @@ export function ProgressBar({
   
   // Color changes based on progress
   const getBarColor = () => {
-    if (clampedValue >= 90) return 'bg-[var(--primary-green)]';
+    if (clampedValue >= 90) return 'bg-[#12c897]'; // var(--color-positive)
     if (clampedValue >= 70) return 'bg-teal-400';
     if (clampedValue >= 50) return 'bg-cyan-400';
-    return 'bg-[var(--primary-blue)]';
+    return 'bg-[#526fff]'; // var(--primary-blue)
   };
 
   return (
     <div className={cn('flex items-center gap-2', className)}>
       <div
         className={cn(
-          'relative overflow-hidden rounded-full bg-[var(--background-card)]',
+          'relative overflow-hidden rounded-full bg-[#0d0d10]', // var(--bg-card)
           size === 'sm' ? 'h-1.5 flex-1' : 'h-2 flex-1'
         )}
       >
@@ -42,7 +42,7 @@ export function ProgressBar({
         />
       </div>
       {showLabel && (
-        <span className="text-xs text-[var(--text-secondary)] tabular-nums min-w-[2.5rem] text-right">
+        <span className="text-xs text-[#9b9ba8] tabular-nums min-w-[2.5rem] text-right">
           {clampedValue.toFixed(0)}%
         </span>
       )}

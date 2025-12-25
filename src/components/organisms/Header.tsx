@@ -2,9 +2,10 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
-import { Search, ChevronDown, Bell, Star, Settings, Wallet } from 'lucide-react';
+import { Search, ChevronDown, Bell, Star, Settings, Wallet, Globe } from 'lucide-react';
 import { SolanaLogo } from '@/components/atoms/SolanaLogo';
+import { AxiomLogo } from '@/components/atoms/AxiomLogo';
+import { Button } from '@/components/atoms/Button';
 
 const NAV_LINKS = [
   { href: '/discover', label: 'Discover', active: false },
@@ -20,69 +21,31 @@ export function Header() {
   const [chain] = useState<'SOL' | 'BNB'>('SOL');
 
   return (
-    <header
-      style={{
-        height: '53px',
-        backgroundColor: '#0c0c10',
-        borderBottom: '1px solid #1a1b23',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '0 24px',
-      }}
-    >
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0px' }}>
+    <header className="h-[53px] bg-[#0c0c10] border-b border-[#1a1b23] flex items-center justify-between px-[40px] select-none">
+      {/* Left Section: Logo + Nav */}
+      <div className="flex items-center gap-0">
         <Link
           href="/"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '2px',
-            textDecoration: 'none',
-            marginRight: '8px',
-          }}
+          className="flex items-center gap-[2px] no-underline mr-[24px]"
         >
-          <Image
-            src="/favicon.ico"
-            alt="Axiom"
-            width={36}
-            height={36}
-            style={{ width: '36px', height: '36px' }}
-          />
-          <span
-            style={{
-              color: 'white',
-              fontWeight: 500,
-              fontSize: '17px',
-            }}
-          >
+          <AxiomLogo className="w-[36px] h-[36px] text-white" />
+          <span className="text-white font-medium text-[17px]">
             AXIOM
           </span>
-          <span
-            style={{
-              backgroundColor: 'transparent',
-              color: '#fcfcfc',
-              fontSize: '11px',
-              fontWeight: 300,
-              padding: '0',
-              alignSelf: 'flex-end',
-              marginBottom: '8px',
-            }}
-          >
+          <span className="bg-transparent text-[#fcfcfc] text-[11px] font-light p-0 self-end mb-[8px]">
             Pro
           </span>
         </Link>
 
         {/* nav */}
-        <nav style={{ display: 'flex', alignItems: 'center', gap: '0px' }}>
+        <nav className="flex items-center gap-[16px]">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="nav-link"
-              style={{
-                color: link.active ? '#526fff' : '#e4e4e7',
-              }}
+              className={`text-[14px] font-medium transition-colors ${
+                link.active ? 'text-[#526fff]' : 'text-[#e4e4e7]'
+              }`}
             >
               {link.label}
             </Link>
@@ -90,242 +53,90 @@ export function Header() {
         </nav>
       </div>
 
-      <div
-        style={{
-          flex: 1,
-          display: 'flex',
-          justifyContent: 'center',
-          maxWidth: '320px',
-          margin: '0 24px',
-        }}
-      >
-        <div style={{ position: 'relative', width: '100%' }}>
-          <Search
-            style={{
-              position: 'absolute',
-              left: '10px',
-              top: '50%',
-              transform: 'translateY(-50%)',
-              width: '14px',
-              height: '14px',
-              color: '#d4d4d8',
-            }}
+      {/* Middle Section: Search */}
+      <div className="flex-1 flex justify-center max-w-[280px] mx-[24px]">
+        <div className="relative w-full">
+          <Search 
+            className="absolute left-[12px] top-1/2 -translate-y-1/2 w-[14px] h-[14px] text-[#d4d4d8]"
           />
           <input
             type="text"
             placeholder="Search by token or CA..."
-            style={{
-              width: '100%',
-              height: '28px',
-              paddingLeft: '32px',
-              paddingRight: '32px',
-              backgroundColor: '#16161e',
-              border: '1px solid #2a2a38',
-              borderRadius: '16px',
-              fontSize: '12px',
-              color: 'white',
-              outline: 'none',
-            }}
+            className="w-full h-[28px] pl-[36px] pr-[36px] bg-[#16161e] border border-[#2a2a38] rounded-[16px] text-[12px] text-white outline-none placeholder:text-[#d4d4d8]"
           />
-          <kbd
-            style={{
-              position: 'absolute',
-              right: '10px',
-              top: '50%',
-              transform: 'translateY(-50%)',
-              fontSize: '10px',
-              color: '#d4d4d8',
-              backgroundColor: '#1c1c26',
-              padding: '2px 6px',
-              borderRadius: '4px',
-              border: '1px solid #2a2a38',
-              fontFamily: 'monospace',
-            }}
-          >
+          <kbd className="absolute right-[10px] top-1/2 -translate-y-1/2 text-[10px] text-[#d4d4d8] bg-[#1c1c26] px-[6px] py-[2px] rounded-[4px] border border-[#2a2a38] font-mono">
             /
           </kbd>
         </div>
       </div>
 
-      {/* right actions */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+      {/* Right Actions */}
+      <div className="flex items-center gap-[8px]">
+        {/* Chain Selector */}
         <button
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px',
-            height: '28px',
-            padding: '0 10px',
-            backgroundColor: '#16161e',
-            border: '1px solid #2a2a38',
-            borderRadius: '16px',
-            fontSize: '12px',
-            color: 'white',
-            cursor: 'pointer',
-          }}
+          className="flex items-center gap-[6px] h-[28px] px-[12px] bg-[#16161e] border border-[#2a2a38] rounded-[16px] text-[12px] text-white cursor-pointer"
         >
           <SolanaLogo width={10} height={8} />
-          <span style={{ fontWeight: 500 }}>{chain}</span>
-          <ChevronDown style={{ width: '12px', height: '12px', color: '#d4d4d8' }} />
+          <span className="font-medium">{chain}</span>
+          <ChevronDown className="w-[12px] h-[12px] text-[#d4d4d8]" />
         </button>
 
+        {/* Deposit Button */}
         <button
-          style={{
-            height: '28px',
-            padding: '0 14px',
-            backgroundColor: '#526fff',
-            border: 'none',
-            borderRadius: '16px',
-            fontSize: '12px',
-            fontWeight: 750,
-            color: '#000000',
-            cursor: 'pointer',
-          }}
+          className="h-[28px] px-[8px] py-[2px] bg-[#526fff] border-0 rounded-[16px] text-[12px] font-[750] text-[#000000] cursor-pointer"
         >
           Deposit
         </button>
 
+        {/* Star Button */}
         <button
-          style={{
-            width: '32px',
-            height: '32px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: '#1a1b23',
-            borderRadius: '50%',
-            border: 'none',
-            color: '#fcfcfc',
-            cursor: 'pointer',
-          }}
+          className="w-[32px] h-[32px] flex items-center justify-center bg-[#1a1b23] rounded-full border-0 text-[#fcfcfc] cursor-pointer"
         >
-          <Star style={{ width: '16px', height: '16px' }} strokeWidth={1.5} />
+          <Star className="w-[16px] h-[16px]" strokeWidth={1.5} />
         </button>
 
+        {/* Bell Button */}
         <button
-          style={{
-            position: 'relative',
-            width: '32px',
-            height: '32px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: '#1a1b23',
-            borderRadius: '50%',
-            border: 'none',
-            color: '#fcfcfc',
-            cursor: 'pointer',
-          }}
+          className="relative w-[32px] h-[32px] flex items-center justify-center bg-[#1a1b23] rounded-full border-0 text-[#fcfcfc] cursor-pointer"
         >
-          <Bell style={{ width: '16px', height: '16px' }} strokeWidth={1.5} />
-          <span
-            style={{
-              position: 'absolute',
-              top: '6px',
-              right: '6px',
-              width: '6px',
-              height: '6px',
-              backgroundColor: '#ef4444',
-              borderRadius: '50%',
-            }}
-          />
+          <Bell className="w-[16px] h-[16px]" strokeWidth={1.5} />
+          <span className="absolute top-[6px] right-[6px] w-[6px] h-[6px] bg-[#ef4444] rounded-full" />
         </button>
 
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '10px',
-            height: '28px',
-            padding: '0 10px',
-            backgroundColor: '#16161e',
-            border: '1px solid #2a2a38',
-            borderRadius: '16px',
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Wallet style={{ width: '12px', height: '12px', color: '#d4d4d8' }} />
+        {/* Wallet & Globe Group */}
+        <div className="flex items-center gap-[10px] h-[28px] px-[10px] bg-[#16161e] border border-[#2a2a38] rounded-[16px]">
+          <div className="flex items-center gap-[8px]">
+            <Wallet className="w-[12px] h-[12px] text-[#d4d4d8]" />
             <SolanaLogo width={10} height={8} />
-            <span style={{ color: 'white', fontSize: '12px', fontWeight: 500 }}>0</span>
+            <span className="text-white text-[12px] font-medium">0</span>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ color: '#fbbf24', fontSize: '10px' }}>◆</span>
-            <span style={{ color: 'white', fontSize: '12px', fontWeight: 500 }}>0</span>
-            <ChevronDown style={{ width: '10px', height: '10px', color: '#d4d4d8' }} />
+          <div className="flex items-center gap-[8px]">
+            <span className="text-[#fbbf24] text-[10px]">◆</span>
+            <span className="text-white text-[12px] font-medium">0</span>
+            <ChevronDown className="w-[10px] h-[10px] text-[#d4d4d8]" />
           </div>
         </div>
 
-        <div
-          style={{
-            position: 'relative',
-            width: '28px',
-            height: '28px',
-          }}
-        >
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              borderRadius: '50%',
-              background: 'linear-gradient(135deg, #f472b6, #a78bfa, #22d3ee)',
-              padding: '2px',
-            }}
+        {/* Profile Gradient Circle */}
+        <div className="relative w-[28px] h-[28px]">
+          <div 
+            className="absolute inset-0 rounded-full bg-gradient-to-br from-[#f472b6] via-[#a78bfa] to-[#22d3ee] p-[2px]"
           >
-            <div
-              style={{
-                width: '100%',
-                height: '100%',
-                borderRadius: '50%',
-                backgroundColor: '#0c0c10',
-              }}
-            />
+            <div className="w-full h-full rounded-full bg-[#0c0c10]" />
           </div>
           <button
-            style={{
-              position: 'absolute',
-              inset: '2px',
-              borderRadius: '50%',
-              background: 'linear-gradient(135deg, #6366f1, #a855f7, #ec4899)',
-              border: 'none',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer',
-              overflow: 'hidden',
-              padding: 0,
-            }}
+            className="absolute inset-[2px] rounded-full bg-gradient-to-br from-[#6366f1] via-[#a855f7] to-[#ec4899] border-0 flex items-center justify-center cursor-pointer overflow-hidden p-0"
           >
-            <span style={{ fontSize: '10px', fontWeight: 700, color: 'white' }}>67</span>
+            <span className="text-[10px] font-bold text-white">67</span>
           </button>
-          <div
-            style={{
-              position: 'absolute',
-              bottom: '0px',
-              right: '0px',
-              width: '10px',
-              height: '10px',
-              backgroundColor: '#14f195',
-              borderRadius: '50%',
-              border: '2px solid #0c0c10',
-            }}
-          />
+          <div className="absolute bottom-0 right-0 w-[10px] h-[10px] bg-[#14f195] rounded-full border-[2px] border-[#0c0c10]" />
         </div>
 
+        {/* Settings Button */}
         <button
-          style={{
-            width: '32px',
-            height: '32px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: '#1a1b23',
-            borderRadius: '50%',
-            border: 'none',
-            color: '#fcfcfc',
-            cursor: 'pointer',
-          }}
+          className="w-[32px] h-[32px] flex items-center justify-center bg-[#1a1b23] rounded-full border-0 text-[#fcfcfc] cursor-pointer"
         >
-          <Settings style={{ width: '16px', height: '16px' }} strokeWidth={1.5} />
+          <Settings className="w-[16px] h-[16px]" strokeWidth={1.5} />
         </button>
       </div>
     </header>

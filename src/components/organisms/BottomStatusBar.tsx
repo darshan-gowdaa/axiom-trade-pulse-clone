@@ -2,7 +2,7 @@
 
 import { 
    Twitter, Wallet, ChevronDown, Compass, Activity, 
-  DollarSign, Disc, AppWindow, Bell, Paintbrush, MessageCircle, Settings, Fuel, Pill, 
+  Disc, AppWindow, Bell, Paintbrush, MessageCircle, Settings, Fuel, Pill, 
   BarChart,
 } from 'lucide-react';
 import { SolanaLogo } from '@/components/atoms/SolanaLogo';
@@ -15,199 +15,153 @@ interface BottomStatusBarProps {
 export function BottomStatusBar({ className, loading }: BottomStatusBarProps) {
   return (
     <div
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        height: '32px',
-        padding: '0 16px',
-        backgroundColor: '#06070b',
-        borderTop: '1px solid #1a1b23',
-        fontSize: '11px',
-        flexShrink: 0,
-      }}
-      className={className}
+      className={`flex items-center justify-between h-8 px-7 bg-[#06070b] border-t border-[#1a1b23] text-[11px] shrink-0 ${className || ''}`}
     >
       {/* Left Section */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+      <div className="flex items-center gap-2">
         {/* Preset Button - Light purple bg, purple text */}
-        <button
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '4px',
-            padding: '3px 8px',
-            backgroundColor: 'rgba(82, 111, 255, 0.15)',
-            border: 'none',
-            borderRadius: '4px',
-            color: '#526fff',
-            fontSize: '10px',
-            fontWeight: 500,
-            cursor: 'pointer',
-            whiteSpace: 'nowrap',
-          }}
-        >
-          <Disc style={{ width: '10px', height: '10px' }} />
+        <button className="flex items-center gap-1 px-2 py-[3px] bg-[rgba(82,111,255,0.15)] border-none rounded-[4px] text-[#526fff] text-[10px] font-medium cursor-pointer whitespace-nowrap">
+          <Disc className="w-[10px] h-[10px]" />
           <span>PRESET 1</span>
         </button>
 
-{/* Wallet + Sol Status */}
-        <button
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '5px',
-            padding: '2px 5px',
-            backgroundColor: 'transparent', 
-            border: '1px solid #1a1b23',
-            borderRadius: '12px',
-            color: '#6b6b7a',
-            fontSize: '10px',
-            cursor: 'pointer'
-          }}
-        >
-          <Wallet style={{ width: '10px', height: '10px', color: '#6b6b7a' }} />
-          <span style={{ color: '#e2e8f0', fontWeight: 600 }}>1</span>
+        {/* Wallet + Sol Status */}
+        <button className="flex items-center gap-[5px] px-[5px] py-[2px] bg-transparent border border-[#1a1b23] rounded-xl text-[#6b6b7a] text-[10px] cursor-pointer">
+          <Wallet className="w-[10px] h-[10px] text-[#6b6b7a]" />
+          <span className="text-[#e2e8f0] font-semibold">1</span>
           
           {/* Custom Solana Gradient Icon */}
           <SolanaLogo width={10} height={8} />
 
-          <span style={{ color: '#e2e8f0', fontWeight: 600 }}>0</span>
-          <ChevronDown style={{ width: '10px', height: '10px', color: '#6b6b7a' }} />
+          <span className="text-[#e2e8f0] font-semibold">0</span>
+          <ChevronDown className="w-[10px] h-[10px] text-[#6b6b7a]" />
         </button>
 
-        <div style={{ width: '1px', height: '12px', backgroundColor: '#1a1a1f' }} />
+        <div className="w-[1px] h-3 bg-[#1a1a1f]" />
         
         {/* Settings */}
-        <button style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', color: '#6b6b7a', display: 'flex' }}>
-          <Settings style={{ width: '10px', height: '10px' }} />
+        <button className="bg-none border-none p-0 cursor-pointer text-[#6b6b7a] flex">
+          <Settings className="w-[10px] h-[10px]" />
         </button>
 
         {/* Wallet dropdown */}
-        <button style={{ display: 'flex', alignItems: 'center', gap: '3px', background: 'none', border: 'none', color: '#6b6b7a', cursor: 'pointer', fontSize: '10px' }}>
-          <Wallet style={{ width: '10px', height: '10px' }} />
+        <button className="flex items-center gap-[3px] bg-none border-none text-[#6b6b7a] cursor-pointer text-[10px]">
+          <Wallet className="w-[10px] h-[10px]" />
           <span>Wallet</span>
-          <ChevronDown style={{ width: '8px', height: '8px' }} />
         </button>
 
         {/* Twitter */}
-        <button style={{ display: 'flex', alignItems: 'center', gap: '3px', background: 'none', border: 'none', color: '#6b6b7a', cursor: 'pointer', fontSize: '10px' }}>
-          <Twitter style={{ width: '10px', height: '10px' }} />
+        <button className="flex items-center gap-[3px] bg-none border-none text-[#6b6b7a] cursor-pointer text-[10px]">
+          <Twitter className="w-[10px] h-[10px]" />
           <span>Twitter</span>
         </button>
 
         {/* Discover */}
-        <button style={{ display: 'flex', alignItems: 'center', gap: '3px', background: 'none', border: 'none', color: '#6b6b7a', cursor: 'pointer', fontSize: '10px' }}>
-          <Compass style={{ width: '10px', height: '10px' }} />
+        <button className="flex items-center gap-[3px] bg-none border-none text-[#6b6b7a] cursor-pointer text-[10px]">
+          <Compass className="w-[10px] h-[10px]" />
           <span>Discover</span>
         </button>
 
         {/* Pulse - Active */}
-        <button style={{ display: 'flex', alignItems: 'center', gap: '3px', padding: '2px 6px', backgroundColor: '#1a1a1f', border: 'none', borderRadius: '4px', color: 'white', fontSize: '10px', cursor: 'pointer' }}>
-          <Activity style={{ width: '10px', height: '10px', color: '#22d3ee' }} />
+        <button className="flex items-center gap-[3px] px-1.5 py-[2px] bg-[#1a1a1f] border-none rounded-[4px] text-white text-[10px] cursor-pointer">
+          <Activity className="w-[10px] h-[10px] text-[#22d3ee]" />
           <span>Pulse</span>
         </button>
 
         {/* PnL */}
-        <button style={{ display: 'flex', alignItems: 'center', gap: '3px', background: 'none', border: 'none', color: '#6b6b7a', cursor: 'pointer', fontSize: '10px' }}>
-          <BarChart style={{ width: '10px', height: '10px' }} />
+        <button className="flex items-center gap-[3px] bg-none border-none text-[#6b6b7a] cursor-pointer text-[10px]">
+          <BarChart className="w-[10px] h-[10px]" />
           <span>PnL</span>
         </button>
 
-        <div style={{ width: '1px', height: '12px', backgroundColor: '#1a1a1f' }} />
+        <div className="w-[1px] h-3 bg-[#1a1a1f]" />
 
         {/* Bitcoin - Yellow */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
-          <span style={{ color: '#f7931a', fontSize: '10px', fontWeight: 600 }}>₿</span>
-          <span style={{ color: '#f7931a', fontSize: '10px' }}>97.4K</span>
+        <div className="flex items-center gap-[3px]">
+          <span className="text-[#f7931a] text-[10px] font-semibold">₿</span>
+          <span className="text-[#f7931a] text-[10px]">97.4K</span>
         </div>
 
         {/* Ethereum - Blue/Purple */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
-          <span style={{ color: '#627eea', fontSize: '10px', fontWeight: 600 }}>Ξ</span>
-          <span style={{ color: '#627eea', fontSize: '10px' }}>3.4K</span>
+        <div className="flex items-center gap-[3px]">
+          <span className="text-[#627eea] text-[10px] font-semibold">Ξ</span>
+          <span className="text-[#627eea] text-[10px]">3.4K</span>
         </div>
 
         {/* SOL - Green */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
-          <span style={{ color: '#14f195', fontSize: '10px', fontWeight: 600 }}>◎</span>
-          <span style={{ color: '#14f195', fontSize: '10px' }}>189</span>
+        <div className="flex items-center gap-[3px]">
+          <span className="text-[#14f195] text-[10px] font-semibold">◎</span>
+          <span className="text-[#14f195] text-[10px]">189</span>
         </div>
 
-        <div style={{ width: '1px', height: '12px', backgroundColor: '#1a1a1f' }} />
+        <div className="w-[1px] h-3 bg-[#1a1a1f]" />
 
         {/* Link + $50.4K */}
 
       </div>
 
       {/* Right Section */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+      <div className="flex items-center gap-2">
         {/* New Metrics: Pill, Fuel, Disc */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
-            <Pill style={{ width: '10px', height: '10px', color: '#6b6b7a' }} />
-            <span style={{ color: '#6b6b7a', fontSize: '10px' }}>$50.2K</span>
+        <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-[3px]">
+            <Pill className="w-[10px] h-[10px] text-[#6b6b7a]" />
+            <span className="text-[#6b6b7a] text-[10px]">$50.2K</span>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
-            <Fuel style={{ width: '10px', height: '10px', color: '#6b6b7a' }} />
-            <span style={{ color: '#6b6b7a', fontSize: '10px' }}>0.021</span>
+          <div className="flex items-center gap-[3px]">
+            <Fuel className="w-[10px] h-[10px] text-[#6b6b7a]" />
+            <span className="text-[#6b6b7a] text-[10px]">0.021</span>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
-            <Disc style={{ width: '10px', height: '10px', color: '#6b6b7a' }} />
-            <span style={{ color: '#6b6b7a', fontSize: '10px' }}>0.003</span>
+          <div className="flex items-center gap-[3px]">
+            <Disc className="w-[10px] h-[10px] text-[#6b6b7a]" />
+            <span className="text-[#6b6b7a] text-[10px]">0.003</span>
           </div>
         </div>
 
-        <div style={{ width: '1px', height: '12px', backgroundColor: '#1a1a1f' }} />
+        <div className="w-[1px] h-3 bg-[#1a1a1f]" />
 
         {/* Connection - Conditionally Rendered */}
         <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '4px',
-            padding: '2px 6px',
-            backgroundColor: loading ? 'rgba(248, 113, 113, 0.15)' : 'rgba(52, 211, 153, 0.15)',
-            borderRadius: '4px',
-            whiteSpace: 'nowrap',
-          }}
+          className={`flex items-center gap-1 px-1.5 py-[2px] rounded-[4px] whitespace-nowrap ${
+            loading ? 'bg-[rgba(248,113,113,0.15)]' : 'bg-[rgba(52,211,153,0.15)]'
+          }`}
         >
-          <span style={{ width: '5px', height: '5px', borderRadius: '50%', backgroundColor: loading ? '#f87171' : '#34d399' }} />
-          <span style={{ color: loading ? '#f87171' : '#34d399', fontSize: '10px' }}>
+          <span className={`w-[5px] h-[5px] rounded-full ${loading ? 'bg-[#f87171]' : 'bg-[#34d399]'}`} />
+          <span className={`text-[10px] ${loading ? 'text-[#f87171]' : 'text-[#34d399]'}`}>
             {loading ? 'Disconnected' : 'Connection is stable'}
           </span>
         </div>
 
         {/* GLOBAL with dropdown */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '2px', color: '#6b6b7a' }}>
-          <span style={{ fontWeight: 500, fontSize: '10px' }}>GLOBAL</span>
-          <ChevronDown style={{ width: '8px', height: '8px' }} />
+        <div className="flex items-center gap-[2px] text-[#6b6b7a]">
+          <span className="font-medium text-[10px]">GLOBAL</span>
+          <ChevronDown className="w-2 h-2" />
         </div>
 
-        <div style={{ width: '1px', height: '12px', backgroundColor: '#1a1a1f' }} />
+        <div className="w-[1px] h-3 bg-[#1a1a1f]" />
 
         {/* Action Icons */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <button style={{ background: 'none', border: 'none', color: '#6b6b7a', cursor: 'pointer', padding: '1px', display: 'flex' }}>
-            <AppWindow style={{ width: '12px', height: '12px' }} />
+        <div className="flex items-center gap-1.5">
+          <button className="bg-none border-none text-[#6b6b7a] cursor-pointer p-[1px] flex">
+            <AppWindow className="w-3 h-3" />
           </button>
-          <button style={{ background: 'none', border: 'none', color: '#6b6b7a', cursor: 'pointer', padding: '1px', display: 'flex' }}>
-            <Bell style={{ width: '12px', height: '12px' }} />
+          <button className="bg-none border-none text-[#6b6b7a] cursor-pointer p-[1px] flex">
+            <Bell className="w-3 h-3" />
           </button>
-          <button style={{ background: 'none', border: 'none', color: '#6b6b7a', cursor: 'pointer', padding: '1px', display: 'flex' }}>
-            <Paintbrush style={{ width: '12px', height: '12px' }} />
+          <button className="bg-none border-none text-[#6b6b7a] cursor-pointer p-[1px] flex">
+            <Paintbrush className="w-3 h-3" />
           </button>
         </div>
 
-        <div style={{ width: '1px', height: '12px', backgroundColor: '#1a1a1f' }} />
+        <div className="w-[1px] h-3 bg-[#1a1a1f]" />
 
         {/* Social Icons */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <button style={{ background: 'none', border: 'none', color: '#6b6b7a', cursor: 'pointer', padding: '1px', display: 'flex' }}>
-            <MessageCircle style={{ width: '12px', height: '12px' }} />
+        <div className="flex items-center gap-1.5">
+          <button className="bg-none border-none text-[#6b6b7a] cursor-pointer p-[1px] flex">
+            <MessageCircle className="w-3 h-3" />
           </button>
-          <button style={{ background: 'none', border: 'none', color: '#6b6b7a', cursor: 'pointer', padding: '1px', display: 'flex' }}>
-            <Twitter style={{ width: '12px', height: '12px' }} />
+          <button className="bg-none border-none text-[#6b6b7a] cursor-pointer p-[1px] flex">
+            <Twitter className="w-3 h-3" />
           </button>
         </div>
       </div>

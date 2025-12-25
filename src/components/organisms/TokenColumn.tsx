@@ -6,7 +6,7 @@ import { type Token, type ActiveTab } from '@/types';
 import { TokenCard } from './TokenCard';
 import { TokenCardSkeleton } from '@/components/atoms';
 import { DEFAULT_PRESETS, VIRTUAL_SCROLL_OVERSCAN } from '@/utils';
-import { Settings2, SlidersHorizontal, Zap, List } from 'lucide-react';
+import { SlidersHorizontal, Zap } from 'lucide-react';
 import { SolanaLogo } from '@/components/atoms/SolanaLogo';
 
 interface TokenColumnProps {
@@ -28,6 +28,7 @@ export function TokenColumn({
   tokens,
   priceFlash,
   isLoading = false,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   activePreset,
   showDecimals = true,
   onPresetClick,
@@ -37,6 +38,7 @@ export function TokenColumn({
   const parentRef = useRef<HTMLDivElement>(null);
   const presets = DEFAULT_PRESETS[columnType] || [];
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const virtualizer = useVirtualizer({
     count: tokens.length,
     getScrollElement: () => parentRef.current,
@@ -53,92 +55,45 @@ export function TokenColumn({
 
   return (
     <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100%',
-        minHeight: 0,
-        backgroundColor: '#06070b',
-        borderRight: '1px solid #1a1a1f',
-      }}
-      className={className}
+      className={`flex flex-col h-full min-h-0 bg-[#06070b] border-r border-[#1a1a1f] ${className || ''}`}
     >
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          padding: '10px 12px',
-          borderBottom: '1px solid #1a1a1f',
-          backgroundColor: '#0c0c10',
-          position: 'sticky',
-          top: 0,
-          zIndex: 10,
-        }}
-      >
-        <h2 style={{ fontSize: '13px', fontWeight: 600, color: '#fcfcfc', margin: 0 }}>{title}</h2>
+      <div className="flex items-center justify-between px-3 py-2.5 border-b border-[#1a1a1f] bg-[#0c0c10] sticky top-0 z-10">
+        <h2 className="text-[13px] font-semibold text-[#fcfcfc] m-0">{title}</h2>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              padding: '3px 8px',
-              border: '1px solid #2a2a35',
-              borderRadius: '999px',
-              backgroundColor: 'transparent',
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
-              <Zap style={{ width: '12px', height: '12px', color: '#6b6b7a' }} />
-              <span style={{ fontSize: '11px', color: '#6b6b7a' }}>0</span>
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 px-2 py-[3px] border border-[#2a2a35] rounded-full bg-transparent">
+            <div className="flex items-center gap-[3px]">
+              <Zap className="w-3 h-3 text-[#6b6b7a]" />
+              <span className="text-[11px] text-[#6b6b7a]">0</span>
             </div>
 
             <SolanaLogo width={12} height={10} />
 
-            <div style={{ width: '1px', height: '12px', backgroundColor: '#2a2a35' }} />
+            <div className="w-[1px] h-3 bg-[#2a2a35]" />
 
             {presets.map((preset, index) => (
               <button
                 key={preset.id}
                 onClick={() => handlePresetClick(preset.id)}
-                style={{
-                  padding: '0 2px',
-                  fontSize: '10px',
-                  fontWeight: 500,
-                  border: 'none',
-                  cursor: 'pointer',
-                  backgroundColor: 'transparent',
-                  color: index === 0 ? '#526fff' : '#6b6b7a',
-                }}
+                className={`p-0 px-[2px] text-[10px] font-medium border-none cursor-pointer bg-transparent ${
+                  index === 0 ? 'text-[#526fff]' : 'text-[#6b6b7a]'
+                }`}
               >
                 {preset.name}
               </button>
             ))}
           </div>
 
-          <button
-            style={{
-              padding: '4px',
-              background: 'none',
-              border: 'none',
-              color: '#6b6b7a',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
-            <SlidersHorizontal style={{ width: '14px', height: '14px' }} />
+          <button className="p-1 bg-none border-none text-[#6b6b7a] cursor-pointer flex items-center">
+            <SlidersHorizontal className="w-[14px] h-[14px]" />
           </button>
         </div>
       </div>
 
       <div
         ref={parentRef}
+        className="flex-1 overflow-y-auto scrollbar-thin scrollbar-color-[#2a2a35_transparent]"
         style={{
-          flex: 1,
-          overflowY: 'auto',
           scrollbarWidth: 'thin',
           scrollbarColor: '#2a2a35 transparent',
         }}
@@ -150,24 +105,14 @@ export function TokenColumn({
             ))}
           </div>
         ) : tokens.length === 0 ? (
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              height: '96px',
-              color: '#6b6b7a',
-              fontSize: '14px',
-            }}
-          >
+          <div className="flex items-center justify-center h-24 text-[#6b6b7a] text-[14px]">
             No tokens found
           </div>
         ) : (
           <div
+            className="w-full relative"
             style={{
               height: `${virtualizer.getTotalSize()}px`,
-              width: '100%',
-              position: 'relative',
             }}
           >
             {virtualizer.getVirtualItems().map((virtualRow) => {

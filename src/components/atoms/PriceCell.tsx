@@ -14,9 +14,12 @@ export function PriceCell({ value, flashDirection, className }: PriceCellProps) 
 
   useEffect(() => {
     if (flashDirection) {
-      setIsFlashing(true);
-      const timer = setTimeout(() => setIsFlashing(false), 300);
-      return () => clearTimeout(timer);
+      const showTimer = setTimeout(() => setIsFlashing(true), 0);
+      const hideTimer = setTimeout(() => setIsFlashing(false), 300);
+      return () => {
+        clearTimeout(showTimer);
+        clearTimeout(hideTimer);
+      };
     }
   }, [flashDirection, value]);
 

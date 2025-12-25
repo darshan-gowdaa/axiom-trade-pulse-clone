@@ -1,8 +1,10 @@
 'use client';
 
 import { 
-  Settings, Star, TrendingUp, List, Box, HelpCircle, ChevronDown, 
-  Bookmark, Monitor, LayoutGrid, Volume2, Diamond, Grid3X3, Wallet
+  Settings, Star, TrendingUp, Box, HelpCircle, ChevronDown, 
+  Bookmark, Monitor, LayoutGrid, Volume2, Diamond, Grid3X3, Wallet,
+  CrosshairIcon,
+  Keyboard
 } from 'lucide-react';
 import { SolanaLogo } from '@/components/atoms/SolanaLogo';
 
@@ -12,126 +14,92 @@ interface PulseToolbarProps {
 
 export function PulseToolbar({ className }: PulseToolbarProps) {
   return (
-    <div className={className} style={{ backgroundColor: '#06070b', borderBottom: '1px solid #1a1b23' }}>
+    <div className={`bg-[#06070b] border-b border-[#1a1b23] ${className || ''}`}>
       {/* Top Row: Mini icons */}
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px',
-          padding: '2px 8px',
-          borderBottom: '1px solid #1a1b23',
-        }}
-      >
-        <button style={{ background: 'none', border: 'none', color: '#555', cursor: 'pointer', padding: '2px', display: 'flex',marginLeft: '10px' }}>
-          <Settings style={{ width: '14px', height: '14px' }} />
+      <div className="flex items-center gap-3 px-7 py-1.5 border-b border-[#1a1a1f]">
+        <button className="bg-none border-none text-[#52525b] hover:text-[#a1a1aa] cursor-pointer flex transition-colors">
+          <Settings className="w-3.5 h-3.5" />
         </button>
-        <div style={{ width: '1px', height: '12px', backgroundColor: '#38383fff' }} />
-        <button style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', padding: '2px', display: 'flex' }}>
-          <Star style={{ width: '14px', height: '14px' }} />
+        <div className="w-[1px] h-3 bg-[#27272a]" />
+        <button className="bg-none border-none text-white hover:text-[#fbbf24]/80 cursor-pointer flex transition-colors">
+          <Star className="w-3.5 h-3.5" />
         </button>
-        <button style={{ background: 'none', border: 'none', color: '#555', cursor: 'pointer', padding: '2px', display: 'flex' }}>
-          <TrendingUp style={{ width: '14px', height: '14px' }} />
+        <button className="bg-none border-none text-[#52525b] hover:text-[#a1a1aa] cursor-pointer flex transition-colors">
+          <TrendingUp className="w-3.5 h-3.5" />
         </button>
-        <div style={{ width: '1px', height: '12px', backgroundColor: '#38383fff' }} />
+        <div className="w-[1px] h-3 bg-[#27272a]" />
       </div>
 
       {/* Main Toolbar Row */}
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          padding: '8px 16px',
-        }}
-      >
+      <div className="flex items-center justify-between px-7 py-3">
         {/* Left: Pulse + Icons */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span style={{ fontSize: '14px', fontWeight: 600, color: '#fcfcfc' }}>Pulse</span>
-          <button style={{ background: 'none', border: 'none', color: '#52c5ff', cursor: 'pointer', padding: '4px', display: 'flex' }}>
-            <SolanaLogo width={16} height={16} />
-          </button>
-          <button style={{ background: 'none', border: 'none', color: '#fbbf24', cursor: 'pointer', padding: '4px', display: 'flex' }}>
-            <Box style={{ width: '16px', height: '16px' }} />
-          </button>
+        <div className="flex items-center gap-3">
+          <span className="text-[15px] font-bold text-white tracking-wide">Pulse</span>
+          <div className="flex items-center gap-1  p-1">
+            <button className="w-6 h-6 flex items-center justify-center bg-[#27272a] rounded text-[#22d3ee] cursor-pointer">
+              <SolanaLogo width={14} height={14} />
+            </button>
+            <button className="w-6 h-6 flex items-center justify-center hover:bg-[#27272a] rounded text-[#fbbf24] cursor-pointer transition-colors">
+              <Box className="w-3.5 h-3.5" />
+            </button>
+          </div>
         </div>
 
         {/* Right: Actions */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <div className="flex items-center gap-3">
           {/* Help */}
-          <button style={{ background: 'none', border: 'none', color: '#555', cursor: 'pointer', padding: '4px', display: 'flex' }}>
-            <HelpCircle style={{ width: '16px', height: '16px' }} />
+          <button className="bg-none border-none text-[#52525b] hover:text-[#a1a1aa] cursor-pointer p-1 flex transition-colors">
+            <HelpCircle className="w-4 h-4" />
           </button>
 
           {/* Display Dropdown */}
-          <button
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              padding: '4px 10px',
-              backgroundColor: '#1a1b23',
-              border: '1px solid #2a2a35',
-              borderRadius: '4px',
-              color: '#fcfcfc',
-              fontSize: '12px',
-              cursor: 'pointer',
-            }}
-          >
-            <Grid3X3 style={{ width: '14px', height: '14px' }} />
+          <button className="flex items-center gap-2 px-3 py-1 bg-[#121215] border border-[#27272a] hover:border-[#3f3f46] rounded-full text-white text-[12px] font-medium cursor-pointer transition-colors">
+            <Grid3X3 className="w-3.5 h-3.5 text-[#a1a1aa]" />
             <span>Display</span>
-            <ChevronDown style={{ width: '12px', height: '12px', color: '#555' }} />
+            <ChevronDown className="w-3 h-3 text-[#52525b]" />
           </button>
 
           {/* Divider */}
-          <div style={{ width: '1px', height: '16px', backgroundColor: '#2a2a35' }} />
+          <div className="w-[1px] h-5 bg-[#27272a]" />
 
           {/* Action Icons */}
-          <button style={{ background: 'none', border: 'none', color: '#555', cursor: 'pointer', padding: '4px', display: 'flex' }}>
-            <Bookmark style={{ width: '16px', height: '16px' }} />
-          </button>
-          <button style={{ background: 'none', border: 'none', color: '#555', cursor: 'pointer', padding: '4px', display: 'flex' }}>
-            <Monitor style={{ width: '16px', height: '16px' }} />
-          </button>
-          <button style={{ background: 'none', border: 'none', color: '#555', cursor: 'pointer', padding: '4px', display: 'flex' }}>
-            <LayoutGrid style={{ width: '16px', height: '16px' }} />
-          </button>
-          <button style={{ background: 'none', border: 'none', color: '#555', cursor: 'pointer', padding: '4px', display: 'flex' }}>
-            <Volume2 style={{ width: '16px', height: '16px' }} />
-          </button>
-          <button style={{ background: 'none', border: 'none', color: '#555', cursor: 'pointer', padding: '4px', display: 'flex' }}>
-            <Diamond style={{ width: '16px', height: '16px' }} />
-          </button>
+          <div className="flex items-center gap-1">
+            <button className="w-7 h-7 flex items-center justify-center bg-none border-none text-[#71717a] hover:text-white hover:bg-[#1a1b23] rounded transition-colors cursor-pointer">
+              <Bookmark className="w-4 h-4" />
+            </button>
+            <button className="w-7 h-7 flex items-center justify-center bg-none border-none text-[#71717a] hover:text-white hover:bg-[#1a1b23] rounded transition-colors cursor-pointer">
+              <Keyboard className="w-4 h-4" />
+            </button>
+            <button className="w-7 h-7 flex items-center justify-center bg-none border-none text-[#71717a] hover:text-white hover:bg-[#1a1b23] rounded transition-colors cursor-pointer">
+              <LayoutGrid className="w-4 h-4" />
+            </button>
+            <button className="w-7 h-7 flex items-center justify-center bg-none border-none text-[#71717a] hover:text-white hover:bg-[#1a1b23] rounded transition-colors cursor-pointer">
+              <Volume2 className="w-4 h-4" />
+            </button>
+            <button className="w-7 h-7 flex items-center justify-center bg-none border-none text-[#71717a] hover:text-white hover:bg-[#1a1b23] rounded transition-colors cursor-pointer">
+              <CrosshairIcon   className="w-4 h-4" />
+            </button>
+          </div>
 
           {/* Divider */}
-          <div style={{ width: '1px', height: '16px', backgroundColor: '#2a2a35' }} />
+          <div className="w-[1px] h-5 bg-[#27272a]" />
 
-{/* Wallet + Sol Status */}
-        <button
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '5px',
-            padding: '2px 5px',
-            backgroundColor: 'transparent', 
-            border: '1px solid #1a1b23',
-            borderRadius: '12px',
-            color: '#6b6b7a',
-            fontSize: '10px',
-            cursor: 'pointer'
-          }}
-        >
-          <Wallet style={{ width: '14px', height: '14px', color: '#6b6b7a' }} />
-          <span style={{ color: '#e2e8f0', fontWeight: 600 }}>1</span>
-          
-          {/* Custom Solana Gradient Icon */}
-          <SolanaLogo width={10} height={8} />
-
-          <span style={{ color: '#e2e8f0', fontWeight: 600 }}>0</span>
-          <ChevronDown style={{ width: '14px', height: '14px', color: '#6b6b7a' }} />
-        </button>
+          {/* Wallet + Sol Status */}
+          <button className="flex items-center gap-2 px-3 py-1.5 bg-transparent border border-[#27272a] hover:border-[#3f3f46] rounded-full text-[#71717a] text-[11px] cursor-pointer transition-colors">
+            <div className="flex items-center gap-1.5">
+              <Wallet className="w-3.5 h-3.5" />
+              <span className="text-white font-semibold">1</span>
+            </div>
+            <div className="w-[1px] h-3 bg-[#27272a]" />
+            <div className="flex items-center gap-1.5">
+              <SolanaLogo width={10} height={8} />
+              <span className="text-white font-semibold">0</span>
+              <ChevronDown className="w-3 h-3" />
+            </div>
+          </button>
         </div>
       </div>
     </div>
   );
 }
+

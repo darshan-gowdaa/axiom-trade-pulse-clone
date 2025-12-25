@@ -3,8 +3,8 @@
 import { default as React, memo, useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import { type Token } from '@/types';
-import { formatCurrency, formatCompactNumber, formatTimeAgo, truncateAddress } from '@/utils';
-import { Check, Copy, User, Link, Crown, Globe, Trophy, Users, ChefHat, Target, Sparkles, Ghost, Box, Zap, AlignJustify, Send, Ticket, BarChart2, Search } from 'lucide-react';
+import { formatCurrency, formatCompactNumber, formatTimeAgo, generateNameAndSymbol, generateCreatorName } from '@/utils';
+import { Check, Copy, User, Globe, Trophy, Users, ChefHat, Target, Ghost, Zap, Send, Ticket, BarChart2, Search } from 'lucide-react';
 import { SolanaLogo } from '@/components/atoms/SolanaLogo';
 
 interface TokenCardProps {
@@ -16,31 +16,25 @@ interface TokenCardProps {
 
 const RING_COLORS = ['#14f195', '#f87171', '#fbbf24'];
 
-const SIMULATED_NAMES = [
-  { name: 'Pepe Coin', symbol: 'PEPE' },
-  { name: 'Wif Hat', symbol: 'WIF' },
-  { name: 'Bonk Inu', symbol: 'BONK' },
-  { name: 'Popcat Sol', symbol: 'POPCAT' },
-  { name: 'Trump Maga', symbol: 'TRUMP' },
-  { name: 'Mog Coin', symbol: 'MOG' },
-  { name: 'Based Brett', symbol: 'BRETT' },
-  { name: 'Giga Chad', symbol: 'GIGA' },
-  { name: 'Michi Cat', symbol: 'MICHI' },
-  { name: 'Apu Apustaja', symbol: 'APU' },
-  { name: 'Gooing Up', symbol: 'GOO' },
-  { name: 'Circle Jerking', symbol: 'JERK' },
-  { name: 'Puh Please', symbol: 'PUH' },
-  { name: 'Dih Coin', symbol: 'DIH' },
-  { name: 'Skibidi Toilet', symbol: 'TOILET' },
-  { name: 'Lvl 10 Gyatt', symbol: 'GYATT' },
-  { name: 'W Rizz', symbol: 'RIZZ' },
-  { name: 'Ohio Rizz', symbol: 'OHIO' },
-  { name: 'Fanum Tax', symbol: 'TAX' },
-  { name: 'Sigma Male', symbol: 'SIGMA' },
-];
+const MetricBlock = ({ icon, text, color = '#777a8c', textClass = 'text-[#fcfcfc]' }: { icon: React.ReactNode, text: string | number, color?: string, textClass?: string }) => (
+  <span className="flex items-center gap-1">
+    <span style={{ color }}>{icon}</span>
+    <span className={textClass}>{text}</span>
+  </span>
+);
+
+interface MetricData {
+  icon: React.ReactNode;
+  count?: string | number;
+  suffix?: string;
+  val?: string | number;
+  isTime?: boolean;
+  color?: string;
+}
 
 function TokenCardComponent({
   token,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   flashDirection,
   showDecimals = true,
   onQuickBuy,
@@ -48,32 +42,50 @@ function TokenCardComponent({
   const [imgError, setImgError] = useState(false);
   const [imgLoaded, setImgLoaded] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [userIconColor] = useState(() => Math.random() > 0.5 ? '#51c4fe' : '#777a8c');
 
   // Simulation State
   const [tokenIdentity, setTokenIdentity] = useState({ 
     name: token.name, 
     symbol: token.symbol,
-    creator: (() => {
-      const chars = 'abcdefghijklmnopqrstuvwxyz';
-      const len = Math.floor(Math.random() * 4) + 6; // 6-9 chars
-      let name = '';
-      for(let i=0; i<len; i++) name += chars.charAt(Math.floor(Math.random() * chars.length));
-      const suffixes = ['', '99', '69', '41', '67', '77'];
-      const suffix = suffixes[Math.floor(Math.random() * suffixes.length)];
-      return name + suffix;
-    })()
+    creator: generateCreatorName()
   });
   const [txCount, setTxCount] = useState(token.txCount);
   const [marketCap, setMarketCap] = useState(token.marketCap);
   const [volume, setVolume] = useState(token.volume24h);
   
-  // Metrics State
-  const [topMetrics, setTopMetrics] = useState<any[]>([]);
-  const [bottomMetrics, setBottomMetrics] = useState<any[]>([]);
+  // --- Metrics & Time Simulation ---
   
-  // Time simulation
+  // Helpers implemented as stable callbacks or outside if possible, but inside is fine if used in state init
+  const generateTopMetrics = () => [
+    { icon: <Globe className="w-[9px] h-[9px]" />, count: Math.floor(Math.random() * 90) + 10 },
+    { icon: <Send className="w-[9px] h-[9px]" />, count: Math.floor(Math.random() * 90) + 10 },
+    { icon: <Ticket className="w-[9px] h-[9px]" />, count: Math.floor(Math.random() * 90) + 10 },
+    { icon: <Search className="w-[9px] h-[9px]" />, count: Math.floor(Math.random() * 90) + 10 },
+    { icon: <User className="w-[9px] h-[9px]" />, count: Math.floor(Math.random() * 90) + 10 },
+    { icon: <BarChart2 className="w-[9px] h-[9px]" />, count: Math.floor(Math.random() * 90) + 10 },
+    { icon: <Trophy className="w-[9px] h-[9px]" />, count: `${Math.floor(Math.random() * 20)}/${Math.floor(Math.random() * 90) + 20}` },
+  ].sort(() => Math.random() - 0.5).slice(0, 4);
+
+  const generateBottomMetrics = () => [
+    { icon: <Users className="w-[10px] h-[10px]" />, suffix: '%', val: Math.floor(Math.random() * 90) + 10 },
+    { icon: <ChefHat className="w-[10px] h-[10px]" />, suffix: '', val: '', isTime: true }, 
+    { icon: <Target className="w-[10px] h-[10px]" />, suffix: '%', val: Math.floor(Math.random() * 90) + 10 },
+    { icon: <Ghost className="w-[10px] h-[10px]" />, suffix: '%', val: Math.floor(Math.random() * 90) + 10 },
+  ].map(m => ({
+    ...m,
+    color: Math.random() > 0.5 ? '#14f195' : '#f87171'
+  }));
+
+  // Initialize state lazily
+  // Initialize state lazily
+  const [topMetrics, setTopMetrics] = useState<MetricData[]>(generateTopMetrics);
+  const [bottomMetrics, setBottomMetrics] = useState<MetricData[]>(generateBottomMetrics);
+  const [barWidths, setBarWidths] = useState(() => {
+    const green = Math.floor(Math.random() * 80) + 10;
+    return { green, red: 100 - green };
+  });
   const [timeState, setTimeState] = useState<{ val: number, unit: 's' | 'm' | 'h' | 'd' }>({ val: 5, unit: 's' });
-  const [barWidths, setBarWidths] = useState({ green: 50, red: 50 });
 
   // generate ring color from token id
   const ringColor = RING_COLORS[token.id.charCodeAt(0) % RING_COLORS.length];
@@ -85,307 +97,142 @@ function TokenCardComponent({
     setTimeout(() => setCopied(false), 1500);
   };
 
-  // --- 1. Name & Creator Rotation (7s) ---
   useEffect(() => {
-    const interval = setInterval(() => {
-      const randomIdx = Math.floor(Math.random() * SIMULATED_NAMES.length);
-      
-      // Generate new creator name
-      const chars = 'abcdefghijklmnopqrstuvwxyz';
-      const len = Math.floor(Math.random() * 4) + 6;
-      let name = '';
-      for(let i=0; i<len; i++) name += chars.charAt(Math.floor(Math.random() * chars.length));
-      const suffixes = ['', '99', '69', '41', '67', '77'];
-      const suffix = suffixes[Math.floor(Math.random() * suffixes.length)];
-      
+    // 1. Name Rotation (7s)
+    const nameInterval = setInterval(() => {
+      const { name, symbol } = generateNameAndSymbol();
       setTokenIdentity({
-        ...SIMULATED_NAMES[randomIdx],
-        creator: name + suffix
+        name,
+        symbol,
+        creator: generateCreatorName()
       });
     }, 7000);
-    return () => clearInterval(interval);
-  }, []);
 
-  // --- 2. TX Update (1s, increase only) ---
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTxCount(prev => prev + Math.floor(Math.random() * 5) + 1); // Increase by 1-5
+    // 2. TX Update (1s)
+    const txInterval = setInterval(() => {
+      setTxCount(prev => prev + Math.floor(Math.random() * 5) + 1);
     }, 1000);
-    return () => clearInterval(interval);
-  }, []);
 
-  // --- 3. MC Update (3s) ---
-  useEffect(() => {
-    const interval = setInterval(() => {
-      // Fluctuate MC by +/- 5%
-      setMarketCap(prev => {
-        const change = prev * (Math.random() * 0.1 - 0.04);
-        return Math.max(0, prev + change);
-      });
+    // 3. MC Update (3s)
+    const mcInterval = setInterval(() => {
+      setMarketCap(prev => Math.max(0, prev + prev * (Math.random() * 0.1 - 0.04)));
     }, 3000);
-    return () => clearInterval(interval);
-  }, []);
 
-  // --- 4. Volume Update (3.5s) ---
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setVolume(prev => {
-        const change = prev * (Math.random() * 0.1 - 0.04);
-        return Math.max(0, prev + change);
-      });
+    // 4. Volume Update (3.5s)
+    const volInterval = setInterval(() => {
+      setVolume(prev => Math.max(0, prev + prev * (Math.random() * 0.1 - 0.04)));
     }, 3500);
-    return () => clearInterval(interval);
+
+    return () => {
+      clearInterval(nameInterval);
+      clearInterval(txInterval);
+      clearInterval(mcInterval);
+      clearInterval(volInterval);
+    };
   }, []);
 
-  // --- 5. Line Items & Time (5s) ---
   useEffect(() => {
-    // Initial Population
-    const generateTopMetrics = () => [
-      { icon: <Globe style={{ width: '9px', height: '9px' }} />, count: Math.floor(Math.random() * 90) + 10 },
-      { icon: <Send style={{ width: '9px', height: '9px' }} />, count: Math.floor(Math.random() * 90) + 10 },
-      { icon: <Ticket style={{ width: '9px', height: '9px' }} />, count: Math.floor(Math.random() * 90) + 10 },
-      { icon: <Search style={{ width: '9px', height: '9px' }} />, count: Math.floor(Math.random() * 90) + 10 },
-      { icon: <User style={{ width: '9px', height: '9px' }} />, count: Math.floor(Math.random() * 90) + 10 },
-      { icon: <BarChart2 style={{ width: '9px', height: '9px' }} />, count: Math.floor(Math.random() * 90) + 10 },
-      { icon: <Trophy style={{ width: '9px', height: '9px' }} />, count: `${Math.floor(Math.random() * 20)}/${Math.floor(Math.random() * 90) + 20}` },
-    ].sort(() => Math.random() - 0.5).slice(0, 4);
-
-    const generateBottomMetrics = () => [
-      { icon: <Users style={{ width: '10px', height: '10px' }} />, suffix: '%', val: Math.floor(Math.random() * 90) + 10 },
-      // The "time" item
-      { icon: <ChefHat style={{ width: '10px', height: '10px' }} />, suffix: '', val: '', isTime: true }, 
-      { icon: <Target style={{ width: '10px', height: '10px' }} />, suffix: '%', val: Math.floor(Math.random() * 90) + 10 },
-      { icon: <Ghost style={{ width: '10px', height: '10px' }} />, suffix: '%', val: Math.floor(Math.random() * 90) + 10 },
-    ].map(m => ({
-      ...m,
-      color: Math.random() > 0.5 ? '#14f195' : '#f87171'
-    }));
-
-    setTopMetrics(generateTopMetrics());
-    setBottomMetrics(generateBottomMetrics());
-    setBarWidths({ green: Math.floor(Math.random() * 80) + 10, red: 0 }); // Red calc on render
-
     const interval = setInterval(() => {
       setTopMetrics(generateTopMetrics());
       setBottomMetrics(generateBottomMetrics());
       
-      // Update Time (simulate increasing seconds/minutes)
       setTimeState(prev => {
         let newVal = prev.val + Math.floor(Math.random() * 5) + 1;
         let newUnit = prev.unit;
         
-        if (newUnit === 's' && newVal > 59) {
-           newVal = 1;
-           newUnit = 'm';
-        } else if (newUnit === 'm' && newVal > 59) {
-           newVal = 1;
-           newUnit = 'h';
-        }
+        if (newUnit === 's' && newVal > 59) { newVal = 1; newUnit = 'm'; } 
+        else if (newUnit === 'm' && newVal > 59) { newVal = 1; newUnit = 'h'; }
         
         return { val: newVal, unit: newUnit };
       });
       
-       setBarWidths(prev => {
-          const green = Math.floor(Math.random() * 80) + 10;
-          return { green, red: 100 - green };
-       });
-
+      const green = Math.floor(Math.random() * 80) + 10;
+      setBarWidths({ green, red: 100 - green });
     }, 5000);
+
     return () => clearInterval(interval);
   }, []);
 
-  // Helper for MC Color
-  const mcColor = useMemo(() => {
-     if (marketCap > 1000000) return '#14f195'; // > 1M Green
-     return '#52c5ff'; // <= 1M Blue
-  }, [marketCap]);
-
-  // Derived Values
+  const mcColor = useMemo(() => marketCap > 1000000 ? '#14f195' : '#52c5ff', [marketCap]);
   const redBarPct = 100 - barWidths.green;
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        padding: '8px 12px',
-        borderBottom: '1px solid #1a1b23',
-        cursor: 'pointer',
-        backgroundColor: 'transparent',
-        gap: '8px',
-        minHeight: '64px',
-      }}
-    >
-      {/* left: avatar */}
-      <div style={{ flexShrink: 0, width: '45px', position: 'relative' }}>
-        <div style={{ position: 'relative', width: '45px', height: '45px' }}>
-          <div 
-            style={{ 
-              position: 'absolute', 
-              inset: '-2px', 
-              borderRadius: '3px', 
-              border: `1.5px solid ${ringColor}`,
-              boxShadow: `0 0 4px ${ringColor}40`
-            }} 
-          />
-          <div
-            style={{
-              position: 'absolute',
-              inset: '0',
-              borderRadius: '2px',
-              overflow: 'hidden',
-              backgroundColor: imgError ? '#1a1b23' : '#1a1b23',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
+    <div className="flex items-center px-3 py-2 border-b border-[#1a1b23] cursor-pointer bg-transparent gap-2 min-h-[64px]">
+      {/* Avatar */}
+      <div className="shrink-0 w-[45px] relative">
+        <div className="relative w-[45px] h-[45px]">
+          <div className="absolute inset-[-2px] rounded-[3px]" style={{ border: `1.5px solid ${ringColor}`, boxShadow: `0 0 4px ${ringColor}40` }} />
+          <div className="absolute inset-0 rounded-[2px] overflow-hidden bg-[#1a1b23] flex items-center justify-center">
             {!imgError ? (
               <>
-                 <Image 
-                   src={`https://api.dicebear.com/7.x/identicon/svg?seed=${tokenIdentity.symbol}`} 
-                   alt=""
-                   fill
-                   style={{ objectFit: 'cover' }}
-                   onError={() => setImgError(true)}
-                   unoptimized
-                 />
-                 <Image 
-                   src={token.imageUrl} 
-                   alt={tokenIdentity.name} 
-                   fill
-                   style={{ 
-                     objectFit: 'cover', 
-                     opacity: imgLoaded ? 1 : 0, 
-                     transition: 'opacity 0.5s ease-in-out' 
-                   }} 
-                   onLoad={() => setImgLoaded(true)}
-                   unoptimized 
-                 />
+                <Image src={`https://api.dicebear.com/7.x/identicon/svg?seed=${tokenIdentity.symbol}`} alt="" fill className="object-cover" onError={() => setImgError(true)} unoptimized />
+                <Image src={token.imageUrl} alt={tokenIdentity.name} fill className={`object-cover transition-opacity duration-500 ease-in-out ${imgLoaded ? 'opacity-100' : 'opacity-0'}`} onLoad={() => setImgLoaded(true)} unoptimized />
               </>
             ) : (
-              <span style={{ color: ringColor, fontSize: '14px', fontWeight: 'bold' }}>{tokenIdentity.symbol.charAt(0)}</span>
+              <span className="text-[14px] font-bold" style={{ color: ringColor }}>{tokenIdentity.symbol.charAt(0)}</span>
             )}
           </div>
-          <div 
-            style={{
-              position: 'absolute',
-              bottom: '-4px',
-              right: '-4px',
-              width: '16px',
-              height: '16px',
-              backgroundColor: '#000000',
-              border: `1.5px solid ${ringColor}`,
-              borderRadius: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              zIndex: 10,
-            }}
-          >
-          </div>
+          <div className="absolute bottom-[-4px] right-[-4px] w-4 h-4 bg-black rounded-full flex items-center justify-center z-10" style={{ border: `1.5px solid ${ringColor}` }}></div>
         </div>
-        <div style={{ marginTop: '6px', fontSize: '8px', color: '#555', textAlign: 'center', fontWeight: 700 }}>{tokenIdentity.creator}</div>
+        <div className="mt-1.5 text-[8px] text-[#555] text-center font-bold">{tokenIdentity.creator}</div>
       </div>
 
-      {/* info */}
-      <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: '2px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-          <span style={{ fontWeight: 600, fontSize: '12px', color: '#fcfcfc', whiteSpace: 'nowrap' }}>{tokenIdentity.name}</span>
-          <span style={{ fontSize: '10px', color: '#777a8c' }}>{tokenIdentity.symbol}</span>
-          <button onClick={handleCopy} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, display: 'flex', marginLeft: '2px' }}>
-            {copied ? <Check style={{ width: '10px', height: '10px', color: '#14f195' }} /> : <Copy style={{ width: '10px', height: '10px', color: '#555' }} />}
+      {/* Info */}
+      <div className="flex-1 min-w-0 flex flex-col gap-1">
+        <div className="flex items-center gap-1.5">
+          <span className="font-semibold text-[12px] text-[#fcfcfc] whitespace-nowrap">{tokenIdentity.name}</span>
+          <span className="text-[10px] text-[#777a8c]">{tokenIdentity.symbol}</span>
+          <button onClick={handleCopy} className="bg-none border-none cursor-pointer p-0 flex ml-[2px]">
+            {copied ? <Check className="w-[10px] h-[10px] text-[#14f195]" /> : <Copy className="w-[10px] h-[10px] text-[#555]" />}
           </button>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '9px', color: '#777a8c' }}>
-          <span style={{ color: '#14f195' }}>{formatTimeAgo(token.createdAt)}</span>
-          <User style={{ width: '9px', height: '9px', color: Math.random() > 0.5 ? '#51c4fe' : '#777a8c' }} />
+        <div className="flex items-center gap-2 text-[9px] text-[#777a8c]">
+          <span className="text-[#14f195]">{formatTimeAgo(token.createdAt)}</span>
+          <User className="w-[9px] h-[9px]" style={{ color: userIconColor }} />
           {topMetrics.map((m, i) => (
-            <span key={i} style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
-              <span style={{ color: '#777a8c' }}>{m.icon}</span>
-              <span style={{ color: '#fcfcfc' }}>{m.count}</span>
-            </span>
+            <MetricBlock key={i} icon={m.icon} text={m.count ?? 0} />
           ))}
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '2px', marginTop: '10px', flexWrap: 'nowrap', overflow: 'hidden' }}>
-          {bottomMetrics.map((m, i) => {
-            const isLast = i === bottomMetrics.length - 1;
-            return (
-              <div 
-                key={i} 
-                style={{ 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  gap: '2px', 
-                  padding: '1px 3px',
-                  borderRadius: '99px',
-                  backgroundColor: isLast ? 'transparent' : '#1a1b23',
-                  border: '1px solid #2a2a35',
-                  fontSize: '9px',
-                  whiteSpace: 'nowrap',
-                  flexShrink: 0,
-                }}
-              >
-                <span style={{ color: m.color, display: 'flex' }}>{m.icon}</span>
-                <span style={{ color: m.color, fontWeight: 500 }}>
-                  {m.val}{m.suffix}
-                  {m.isTime && <span style={{ color: '#fcfcfc', marginLeft: '3px' }}>{timeState.val}{timeState.unit}</span>}
-                </span>
-              </div>
-            );
-          })}
+        <div className="flex items-center gap-1 mt-2.5 flex-nowrap overflow-hidden">
+          {bottomMetrics.map((m, i) => (
+            <div key={i} className={`flex items-center gap-1 px-1.5 py-0.5 rounded-[99px] border border-[#2a2a35] text-[9px] whitespace-nowrap shrink-0 ${i === bottomMetrics.length - 1 ? 'bg-transparent' : 'bg-[#1a1b23]'}`}>
+              <span style={{ color: m.color }} className="flex">{m.icon}</span>
+              <span style={{ color: m.color }} className="font-medium">
+                {m.val}{m.suffix}
+                {m.isTime && <span className="text-[#fcfcfc] ml-[3px]">{timeState.val}{timeState.unit}</span>}
+              </span>
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* metrics + buy */}
-      <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'space-between', minWidth: '70px', height: '100%', minHeight: '52px' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '1px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
-            <span style={{ fontSize: '9px', color: '#555' }}>MC</span>
-            <span style={{ fontSize: '11px', fontWeight: 600, color: mcColor }}>{formatCurrency(marketCap, showDecimals)}</span>
+      {/* Metrics + Buy */}
+      <div className="shrink-0 flex flex-col items-end justify-between min-w-[70px] h-full min-h-[52px]">
+        <div className="flex flex-col items-end gap-[1px]">
+          <div className="flex items-center gap-[3px]">
+            <span className="text-[9px] text-[#555]">MC</span>
+            <span className="text-[11px] font-semibold" style={{ color: mcColor }}>{formatCurrency(marketCap, showDecimals)}</span>
           </div>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
-            <span style={{ fontSize: '9px', color: '#555' }}>V</span>
-            <span style={{ fontSize: '11px', fontWeight: 600, color: '#fcfcfc' }}>{formatCurrency(volume, showDecimals)}</span>
-          </div>
-        </div>
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '9px' }}>
-          <span style={{ color: '#555', display: 'flex', alignItems: 'center', gap: '2px' }}>
-            F <SolanaLogo width={9} height={7} /> 0.045
-          </span>
-          <span style={{ color: '#555' }}>TX</span>
-          <span style={{ color: '#fcfcfc', fontWeight: 600 }}>{formatCompactNumber(txCount)}</span>
-          <div style={{ display: 'flex', width: '20px', height: '2px', borderRadius: '1px', overflow: 'hidden' }}>
-            <div style={{ width: `${barWidths.green}%`, height: '100%', backgroundColor: '#14f195' }} />
-            <div style={{ width: `${redBarPct}%`, height: '100%', backgroundColor: '#f87171' }} />
+          <div className="flex items-center gap-[3px]">
+            <span className="text-[9px] text-[#555]">V</span>
+            <span className="text-[11px] font-semibold text-[#fcfcfc]">{formatCurrency(volume, showDecimals)}</span>
           </div>
         </div>
 
-        <button
-          onClick={(e) => { e.stopPropagation(); onQuickBuy?.(token); }}
-          style={{
-            padding: '3px 8px',
-            borderRadius: '12px',
-            fontSize: '10px',
-            fontWeight: 700,
-            backgroundColor: '#526fff',
-            border: 'none',
-            color: '#000000',
-            cursor: 'pointer',
-            whiteSpace: 'nowrap',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '2px',
-            minWidth: '54px',
-            justifyContent: 'center',
-          }}
-        >
-          <Zap style={{ width: '8px', height: '8px', fill: 'black' }} />
-          0 SOL
+        <div className="flex items-center gap-1 text-[9px]">
+          <span className="text-[#555] flex items-center gap-[2px]">F <SolanaLogo width={9} height={7} /> 0.045</span>
+          <span className="text-[#555]">TX</span>
+          <span className="text-[#fcfcfc] font-semibold">{formatCompactNumber(txCount)}</span>
+          <div className="flex w-5 h-[2px] rounded-[1px] overflow-hidden">
+            <div className="bg-[#14f195]" style={{ width: `${barWidths.green}%` }} />
+            <div className="bg-[#f87171]" style={{ width: `${redBarPct}%` }} />
+          </div>
+        </div>
+
+        <button onClick={(e) => { e.stopPropagation(); onQuickBuy?.(token); }} className="px-2 py-[3px] rounded-xl text-[10px] font-bold bg-[#526fff] border-none text-black cursor-pointer whitespace-nowrap flex items-center gap-[2px] min-w-[54px] justify-center">
+          <Zap className="w-2 h-2 fill-black" /> 0 SOL
         </button>
       </div>
     </div>
