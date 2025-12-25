@@ -162,7 +162,7 @@ export function PulseContent() {
       </div>
 
       {/* Bottom Status Bar - Sticky at bottom */}
-      <BottomStatusBar />
+      <BottomStatusBar loading={isLoading} />
     </div>
   );
 }

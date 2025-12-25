@@ -7,6 +7,7 @@ import { TokenCard } from './TokenCard';
 import { TokenCardSkeleton } from '@/components/atoms';
 import { DEFAULT_PRESETS, VIRTUAL_SCROLL_OVERSCAN } from '@/utils';
 import { Settings2, SlidersHorizontal, Zap, List } from 'lucide-react';
+import { SolanaLogo } from '@/components/atoms/SolanaLogo';
 
 interface TokenColumnProps {
   title: string;
@@ -94,7 +95,7 @@ export function TokenColumn({
               <span style={{ fontSize: '11px', color: '#6b6b7a' }}>0</span>
             </div>
 
-            <List style={{ width: '12px', height: '12px', color: '#52c5ff' }} />
+            <SolanaLogo width={12} height={10} />
 
             <div style={{ width: '1px', height: '12px', backgroundColor: '#2a2a35' }} />
 

@@ -1,16 +1,18 @@
 'use client';
 
 import { 
-  TrendingUp, TrendingDown, Twitter, Wallet, ChevronDown, Compass, Activity, 
-  DollarSign, Disc, AppWindow, Bell, Paintbrush, MessageCircle, Settings, 
-  Link, Fuel 
+   Twitter, Wallet, ChevronDown, Compass, Activity, 
+  DollarSign, Disc, AppWindow, Bell, Paintbrush, MessageCircle, Settings, Fuel, Pill, 
+  BarChart,
 } from 'lucide-react';
+import { SolanaLogo } from '@/components/atoms/SolanaLogo';
 
 interface BottomStatusBarProps {
   className?: string;
+  loading?: boolean;
 }
 
-export function BottomStatusBar({ className }: BottomStatusBarProps) {
+export function BottomStatusBar({ className, loading }: BottomStatusBarProps) {
   return (
     <div
       style={{
@@ -47,19 +49,39 @@ export function BottomStatusBar({ className }: BottomStatusBarProps) {
         >
           <Disc style={{ width: '10px', height: '10px' }} />
           <span>PRESET 1</span>
-          <ChevronDown style={{ width: '8px', height: '8px' }} />
         </button>
 
-        {/* Wallet + Hamburger + 0 + Settings */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#6b6b7a' }}>
-          <Wallet style={{ width: '10px', height: '10px' }} />
-          <span style={{ color: '#526fff', fontSize: '10px' }}>1</span>
-          <span style={{ fontSize: '9px' }}>≡</span>
-          <span style={{ fontSize: '10px' }}>0</span>
-          <Settings style={{ width: '10px', height: '10px' }} />
-        </div>
+{/* Wallet + Sol Status */}
+        <button
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '5px',
+            padding: '2px 5px',
+            backgroundColor: 'transparent', 
+            border: '1px solid #1a1b23',
+            borderRadius: '12px',
+            color: '#6b6b7a',
+            fontSize: '10px',
+            cursor: 'pointer'
+          }}
+        >
+          <Wallet style={{ width: '10px', height: '10px', color: '#6b6b7a' }} />
+          <span style={{ color: '#e2e8f0', fontWeight: 600 }}>1</span>
+          
+          {/* Custom Solana Gradient Icon */}
+          <SolanaLogo width={10} height={8} />
+
+          <span style={{ color: '#e2e8f0', fontWeight: 600 }}>0</span>
+          <ChevronDown style={{ width: '10px', height: '10px', color: '#6b6b7a' }} />
+        </button>
 
         <div style={{ width: '1px', height: '12px', backgroundColor: '#1a1a1f' }} />
+        
+        {/* Settings */}
+        <button style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', color: '#6b6b7a', display: 'flex' }}>
+          <Settings style={{ width: '10px', height: '10px' }} />
+        </button>
 
         {/* Wallet dropdown */}
         <button style={{ display: 'flex', alignItems: 'center', gap: '3px', background: 'none', border: 'none', color: '#6b6b7a', cursor: 'pointer', fontSize: '10px' }}>
@@ -86,11 +108,9 @@ export function BottomStatusBar({ className }: BottomStatusBarProps) {
           <span>Pulse</span>
         </button>
 
-        <div style={{ width: '1px', height: '12px', backgroundColor: '#1a1a1f' }} />
-
         {/* PnL */}
         <button style={{ display: 'flex', alignItems: 'center', gap: '3px', background: 'none', border: 'none', color: '#6b6b7a', cursor: 'pointer', fontSize: '10px' }}>
-          <DollarSign style={{ width: '10px', height: '10px' }} />
+          <BarChart style={{ width: '10px', height: '10px' }} />
           <span>PnL</span>
         </button>
 
@@ -117,51 +137,45 @@ export function BottomStatusBar({ className }: BottomStatusBarProps) {
         <div style={{ width: '1px', height: '12px', backgroundColor: '#1a1a1f' }} />
 
         {/* Link + $50.4K */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '3px', color: '#6b6b7a' }}>
-          <Link style={{ width: '10px', height: '10px' }} />
-          <span style={{ fontSize: '10px' }}>$50.4K</span>
-        </div>
 
-        {/* Gas/Fuel icon */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '3px', color: '#6b6b7a' }}>
-          <Fuel style={{ width: '10px', height: '10px' }} />
-        </div>
       </div>
 
       {/* Right Section */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-        {/* Buy/Sell Pressure */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-          <TrendingUp style={{ width: '10px', height: '10px', color: '#34d399' }} />
-          <span style={{ color: '#34d399', fontSize: '10px' }}>$877K</span>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-          <TrendingDown style={{ width: '10px', height: '10px', color: '#f87171' }} />
-          <span style={{ color: '#f87171', fontSize: '10px' }}>$294</span>
-        </div>
-
-        {/* SOL Price */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
-          <span style={{ width: '5px', height: '5px', borderRadius: '50%', backgroundColor: '#34d399' }} />
-          <span style={{ color: '#34d399', fontSize: '10px' }}>$122.41</span>
+        {/* New Metrics: Pill, Fuel, Disc */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
+            <Pill style={{ width: '10px', height: '10px', color: '#6b6b7a' }} />
+            <span style={{ color: '#6b6b7a', fontSize: '10px' }}>$50.2K</span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
+            <Fuel style={{ width: '10px', height: '10px', color: '#6b6b7a' }} />
+            <span style={{ color: '#6b6b7a', fontSize: '10px' }}>0.021</span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
+            <Disc style={{ width: '10px', height: '10px', color: '#6b6b7a' }} />
+            <span style={{ color: '#6b6b7a', fontSize: '10px' }}>0.003</span>
+          </div>
         </div>
 
         <div style={{ width: '1px', height: '12px', backgroundColor: '#1a1a1f' }} />
 
-        {/* Connection - Green bg, green text */}
+        {/* Connection - Conditionally Rendered */}
         <div
           style={{
             display: 'flex',
             alignItems: 'center',
             gap: '4px',
             padding: '2px 6px',
-            backgroundColor: 'rgba(52, 211, 153, 0.15)',
+            backgroundColor: loading ? 'rgba(248, 113, 113, 0.15)' : 'rgba(52, 211, 153, 0.15)',
             borderRadius: '4px',
             whiteSpace: 'nowrap',
           }}
         >
-          <span style={{ width: '5px', height: '5px', borderRadius: '50%', backgroundColor: '#34d399' }} />
-          <span style={{ color: '#34d399', fontSize: '10px' }}>Connection is stable</span>
+          <span style={{ width: '5px', height: '5px', borderRadius: '50%', backgroundColor: loading ? '#f87171' : '#34d399' }} />
+          <span style={{ color: loading ? '#f87171' : '#34d399', fontSize: '10px' }}>
+            {loading ? 'Disconnected' : 'Connection is stable'}
+          </span>
         </div>
 
         {/* GLOBAL with dropdown */}

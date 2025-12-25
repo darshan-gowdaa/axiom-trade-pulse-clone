@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Search, ChevronDown, Bell, Star, Settings, Wallet } from 'lucide-react';
+import { SolanaLogo } from '@/components/atoms/SolanaLogo';
 
 const NAV_LINKS = [
   { href: '/discover', label: 'Discover', active: false },
@@ -21,7 +22,7 @@ export function Header() {
   return (
     <header
       style={{
-        height: '52px',
+        height: '53px',
         backgroundColor: '#0c0c10',
         borderBottom: '1px solid #1a1b23',
         display: 'flex',
@@ -36,22 +37,22 @@ export function Header() {
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '4px',
+            gap: '2px',
             textDecoration: 'none',
-            marginRight: '16px',
+            marginRight: '8px',
           }}
         >
           <Image
             src="/favicon.ico"
             alt="Axiom"
-            width={32}
-            height={32}
-            style={{ width: '32px', height: '32px' }}
+            width={36}
+            height={36}
+            style={{ width: '36px', height: '36px' }}
           />
           <span
             style={{
               color: 'white',
-              fontWeight: 600,
+              fontWeight: 500,
               fontSize: '17px',
             }}
           >
@@ -62,10 +63,10 @@ export function Header() {
               backgroundColor: 'transparent',
               color: '#fcfcfc',
               fontSize: '11px',
-              fontWeight: 400,
+              fontWeight: 300,
               padding: '0',
               alignSelf: 'flex-end',
-              marginBottom: '3px',
+              marginBottom: '8px',
             }}
           >
             Pro
@@ -163,7 +164,7 @@ export function Header() {
             cursor: 'pointer',
           }}
         >
-          <span style={{ color: '#e4e4e7' }}>≡</span>
+          <SolanaLogo width={10} height={8} />
           <span style={{ fontWeight: 500 }}>{chain}</span>
           <ChevronDown style={{ width: '12px', height: '12px', color: '#d4d4d8' }} />
         </button>
@@ -244,7 +245,7 @@ export function Header() {
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <Wallet style={{ width: '12px', height: '12px', color: '#d4d4d8' }} />
-            <span style={{ color: '#5865F2', fontSize: '12px' }}>≡</span>
+            <SolanaLogo width={10} height={8} />
             <span style={{ color: 'white', fontSize: '12px', fontWeight: 500 }}>0</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
