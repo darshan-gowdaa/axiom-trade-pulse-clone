@@ -57,8 +57,9 @@ export function PulseContent() {
     isLoading,
     showDecimals: displaySettings.showDecimals,
     onQuickBuy: handleQuickBuy,
-    className: isMobile ? 'w-full max-w-4xl border-l border-b border-[#1a1a1f] mx-auto' : undefined,
   };
+
+  const mobileClassName = 'w-full max-w-4xl border-l border-b border-[#1a1a1f] mx-auto';
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden bg-[#06070b]">
@@ -77,6 +78,7 @@ export function PulseContent() {
                 priceFlash={priceFlash}
                 activePreset={activePresets.newPairs}
                 onPresetClick={(id) => handlePresetClick('newPairs', id)}
+                className={mobileClassName}
                 {...columnProps}
               />
             )}
@@ -88,6 +90,7 @@ export function PulseContent() {
                 priceFlash={priceFlash}
                 activePreset={activePresets.finalStretch}
                 onPresetClick={(id) => handlePresetClick('finalStretch', id)}
+                className={mobileClassName}
                 {...columnProps}
               />
             )}
@@ -99,6 +102,7 @@ export function PulseContent() {
                 priceFlash={priceFlash}
                 activePreset={activePresets.migrated}
                 onPresetClick={(id) => handlePresetClick('migrated', id)}
+                className={mobileClassName}
                 {...columnProps}
               />
             )}
