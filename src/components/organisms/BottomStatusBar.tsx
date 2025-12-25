@@ -1,7 +1,7 @@
 'use client';
 
 import { 
-   Twitter, Wallet, ChevronDown, Compass, Activity, 
+  Twitter, Wallet, ChevronDown, Compass, Activity, 
   Disc, AppWindow, Bell, Paintbrush, MessageCircle, Settings, Fuel, Pill, 
   BarChart,
 } from 'lucide-react';
@@ -15,7 +15,7 @@ interface BottomStatusBarProps {
 export function BottomStatusBar({ className, loading }: BottomStatusBarProps) {
   return (
     <div
-      className={`flex items-center justify-between h-8 px-7 bg-[#06070b] border-t border-[#1a1b23] text-[11px] shrink-0 ${className || ''}`}
+      className={`flex items-center justify-between h-6.5 px-7 bg-[#06070b] border-t border-[#1a1b23] text-[11px] shrink-0 ${className || ''}`}
     >
       {/* Left Section */}
       <div className="flex items-center gap-2">
@@ -56,6 +56,12 @@ export function BottomStatusBar({ className, loading }: BottomStatusBarProps) {
           <span>Twitter</span>
         </button>
 
+        {/* Docs - Added after Twitter */}
+        <button className="flex items-center gap-[3px] bg-none border-none text-white cursor-pointer text-[10px]">
+          <AppWindow className="w-[10px] h-[10px] text-white" />
+          <span className="text-white">Docs</span>
+        </button>
+
         {/* Discover */}
         <button className="flex items-center gap-[3px] bg-none border-none text-[#6b6b7a] cursor-pointer text-[10px]">
           <Compass className="w-[10px] h-[10px]" />
@@ -84,8 +90,8 @@ export function BottomStatusBar({ className, loading }: BottomStatusBarProps) {
 
         {/* Ethereum - Blue/Purple */}
         <div className="flex items-center gap-[3px]">
-          <span className="text-[#627eea] text-[10px] font-semibold">Ξ</span>
-          <span className="text-[#627eea] text-[10px]">3.4K</span>
+          <img src="https://axiom.trade/images/eth-fill.svg" alt="ETH" className="w-[10px] h-[10px]" />
+          <span className="text-[#8A9FFF] text-[10px]">3.4K</span>
         </div>
 
         {/* SOL - Green */}
@@ -97,7 +103,6 @@ export function BottomStatusBar({ className, loading }: BottomStatusBarProps) {
         <div className="w-[1px] h-3 bg-[#1a1a1f]" />
 
         {/* Link + $50.4K */}
-
       </div>
 
       {/* Right Section */}

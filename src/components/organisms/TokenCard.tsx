@@ -78,7 +78,6 @@ function TokenCardComponent({
   }));
 
   // Initialize state lazily
-  // Initialize state lazily
   const [topMetrics, setTopMetrics] = useState<MetricData[]>(generateTopMetrics);
   const [bottomMetrics, setBottomMetrics] = useState<MetricData[]>(generateBottomMetrics);
   const [barWidths, setBarWidths] = useState(() => {

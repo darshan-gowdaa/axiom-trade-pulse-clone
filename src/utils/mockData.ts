@@ -17,35 +17,69 @@ const CRYPTO_TERMS = [
   'Remilio', 'Pudgy', 'Azuki', 'WIF', 'BONK', 'MOG'
 ];
 
-export const generateNameAndSymbol = () => {
+// User provided static data (Deduplicated and Expanded)
+const STATIC_TOKENS: Partial<Token>[] = [
+  // --- New Pairs (Pulse / Pump V1 / Meteora) ---
+  { name: 'Help Find TubTub', symbol: 'TubTub', marketCap: 3400, volume24h: 577, txCount: 6, status: 'new', imageUrl: 'https://image.pollinations.ai/prompt/TubTub%20cute%20cartoon%20mascot%203d' },
+  { name: 'MonkeyDLuffy', symbol: 'Luffy', marketCap: 3400, volume24h: 923, txCount: 10, status: 'new', imageUrl: 'https://image.pollinations.ai/prompt/Luffy%20anime%20style%20character' },
+  { name: 'Frogy', symbol: 'FROGY', marketCap: 3420, volume24h: 3000, txCount: 28, status: 'new', imageUrl: 'https://image.pollinations.ai/prompt/Frogy%20frog%20meme%20coin' },
+  { name: 'bucks', symbol: 'bucks', marketCap: 3430, volume24h: 4000, txCount: 71, status: 'new', imageUrl: 'https://image.pollinations.ai/prompt/bucks%20money%20cash%20green' },
+  { name: 'the cult of SOL', symbol: 'INVICTUS', marketCap: 3400, volume24h: 216, txCount: 3, status: 'new', imageUrl: 'https://image.pollinations.ai/prompt/cult%20of%20sol%20invictus%20mysterious' },
+  { name: 'Dev is active', symbol: 'AGENT', marketCap: 3400, volume24h: 0, txCount: 3, status: 'new', imageUrl: 'https://image.pollinations.ai/prompt/secret%20agent%20silhouette%20matrix' },
+  
+  // Additional Pulse/New items from text dump
+  { name: 'WANTA XMAS', symbol: 'XMAS', marketCap: 49500, volume24h: 11000, txCount: 45, status: 'new', imageUrl: 'https://image.pollinations.ai/prompt/christmas%20santa%20coin%20holiday' },
+  { name: 'Olympic Snowflake Mascot', symbol: 'TINA', marketCap: 49900, volume24h: 11000, txCount: 55, status: 'new', imageUrl: 'https://image.pollinations.ai/prompt/winter%20olympic%20snowflake%20mascot' },
+  { name: 'Agent City', symbol: 'AGENT_CITY', marketCap: 55000, volume24h: 12000, txCount: 100, status: 'new', imageUrl: 'https://image.pollinations.ai/prompt/cyberpunk%20city%20agent' },
+  { name: 'XMASKNIGHT', symbol: 'MEGAKNIGH', marketCap: 57900, volume24h: 15000, txCount: 253, status: 'new', imageUrl: 'https://image.pollinations.ai/prompt/knight%20christmas%20armor' },
+  { name: 'OddsLayer', symbol: 'ODD', marketCap: 46500, volume24h: 11000, txCount: 162, status: 'new', imageUrl: 'https://image.pollinations.ai/prompt/odds%20gambling%20dice%20abstract' },
+
+  // --- Final Stretch ---
+  { name: 'Slay House', symbol: 'SLAY', marketCap: 32000, volume24h: 65000, txCount: 911, status: 'finalStretch', imageUrl: 'https://image.pollinations.ai/prompt/slay%20house%20fashion%20runway' },
+  { name: 'DUMPSANTA', symbol: 'DUMPSANTA', marketCap: 27400, volume24h: 15000, txCount: 329, status: 'finalStretch', imageUrl: 'https://image.pollinations.ai/prompt/bad%20santa%20cartoon%20funny' },
+  { name: 'MULLER', symbol: 'MULLER', marketCap: 25200, volume24h: 233000, txCount: 3460, status: 'finalStretch', imageUrl: 'https://image.pollinations.ai/prompt/muller%20abstract%20art' },
+  { name: 'CollabraChain', symbol: 'COLLA', marketCap: 24800, volume24h: 119000, txCount: 1612, status: 'finalStretch', imageUrl: 'https://image.pollinations.ai/prompt/blockchain%20connectivity%20nodes' },
+  { name: 'GREEDCOIN', symbol: 'GREED$', marketCap: 22900, volume24h: 14000, txCount: 388, status: 'finalStretch', imageUrl: 'https://image.pollinations.ai/prompt/greed%20money%20gold%20pile' },
+  { name: 'Mascarade', symbol: 'Mascarade', marketCap: 11800, volume24h: 16000, txCount: 4172, status: 'finalStretch', imageUrl: 'https://image.pollinations.ai/prompt/venetian%20mask%20masquerade' },
+  { name: 'Modex420o', symbol: 'MODEXO', marketCap: 22300, volume24h: 120000, txCount: 1897, status: 'finalStretch', imageUrl: 'https://image.pollinations.ai/prompt/modern%20tech%20logo%20neon' },
+  { name: 'SILVER', symbol: 'SILVER', marketCap: 22100, volume24h: 6000, txCount: 71, status: 'finalStretch', imageUrl: 'https://image.pollinations.ai/prompt/silver%20bar%20shiny%20metal' },
+  { name: 'TURK', symbol: 'TC', marketCap: 21400, volume24h: 101000, txCount: 1933, status: 'finalStretch', imageUrl: 'https://image.pollinations.ai/prompt/turkey%20flag%20abstract' },
+  { name: 'STiFF Coin', symbol: 'STiFF', marketCap: 21400, volume24h: 6000, txCount: 102, status: 'finalStretch', imageUrl: 'https://image.pollinations.ai/prompt/stiff%20stone%20statue' },
+  { name: 'Luna Rose', symbol: 'LROSE', marketCap: 20800, volume24h: 203000, txCount: 3247, status: 'finalStretch', imageUrl: 'https://image.pollinations.ai/prompt/moon%20rose%20flower%20space' },
+];
+
+// Helper to generate random when static list is exhausted
+const generateRandomNameAndSymbol = () => {
   const p1 = BRAINROT_TERMS[Math.floor(Math.random() * BRAINROT_TERMS.length)];
   const useCorporate = Math.random() > 0.5;
   const p2 = useCorporate 
     ? CORPORATE_TERMS[Math.floor(Math.random() * CORPORATE_TERMS.length)]
     : CRYPTO_TERMS[Math.floor(Math.random() * CRYPTO_TERMS.length)];
   
-  // Random order: "Skibidi Apple" vs "Apple Skibidi"
   const name = Math.random() > 0.5 ? `${p1} ${p2}` : `${p2} ${p1}`;
-  
-  // Symbol: First 2 chars of each word or just 3-5 chars from name
   const symbol = name.toUpperCase().replace(/[^A-Z]/g, '').slice(0, 4) + (Math.random() > 0.5 ? 'X' : '');
 
   return { name, symbol };
 };
 
-export const generateCreatorName = (): string => {
-  const chars = 'abcdefghijklmnopqrstuvwxyz';
-  const len = Math.floor(Math.random() * 4) + 6; // 6-9 chars
-  let name = '';
-  for(let i=0; i<len; i++) name += chars.charAt(Math.floor(Math.random() * chars.length));
-  const suffixes = ['', '99', '69', '41', '67', '77'];
-  const suffix = suffixes[Math.floor(Math.random() * suffixes.length)];
-  return name + suffix;
+export const generateNameAndSymbol = (index?: number) => {
+  if (index !== undefined && index < STATIC_TOKENS.length) {
+    return { 
+      name: STATIC_TOKENS[index].name!,
+      symbol: STATIC_TOKENS[index].symbol!
+    };
+  }
+  return generateRandomNameAndSymbol();
 };
 
-/**
- * Generate a random Solana-like address
- */
+export const generateCreatorName = (): string => {
+  const chars = 'abcdefghijklmnopqrstuvwxyz';
+  const len = Math.floor(Math.random() * 4) + 6;
+  let name = '';
+  for(let i=0; i<len; i++) name += chars.charAt(Math.floor(Math.random() * chars.length));
+  return name;
+};
+
 export function generateAddress(): string {
   const chars = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
   let address = '';
@@ -55,35 +89,55 @@ export function generateAddress(): string {
   return address;
 }
 
-/**
- * Generate a random token
- */
-function generateToken(status: TokenStatus): Token {
-  const { name, symbol } = generateNameAndSymbol();
-  
-  // Vary values based on status
+function getStaticToken(index: number, desiredStatus: TokenStatus): Token {
+  // 1. Try to find a matching static token
+  const candidates = STATIC_TOKENS.filter(t => t.status === desiredStatus);
+  const staticData = candidates[index];
+
+  // 2. If we have static data for this index, use it
+  if (staticData) {
+    return {
+      id: generateId(),
+      address: generateAddress(),
+      name: staticData.name!,
+      symbol: staticData.symbol!,
+      imageUrl: staticData.imageUrl!,
+      marketCap: staticData.marketCap!,
+      volume24h: staticData.volume24h!,
+      txCount: staticData.txCount!,
+      priceInSol: Math.random() * 0.01 + 0.001,
+      priceChange24h: (Math.random() - 0.5) * 20,
+      bondingCurveProgress: desiredStatus === 'finalStretch' ? (80 + Math.random() * 20) : (Math.random() * 50),
+      createdAt: Date.now() - (Math.random() * 3600000), // recent
+      socials: {
+        twitter: Math.random() > 0.5 ? `https://twitter.com/${staticData.symbol}` : undefined,
+      },
+      safety: {
+        isVerified: Math.random() > 0.7,
+        auditScore: 80 + Math.floor(Math.random() * 20),
+        liquidityLocked: true,
+        contractRenounced: Math.random() > 0.5,
+      },
+      status: desiredStatus,
+    };
+  }
+
+  // 3. Fallback to Random Generation (preserving old data logic)
+  const { name, symbol } = generateRandomNameAndSymbol();
   let marketCap: number;
   let bondingProgress: number;
-  let createdOffset: number;
   
-  switch (status) {
-    case 'new':
+  if (desiredStatus === 'new') {
       marketCap = Math.random() * 100000;
       bondingProgress = Math.random() * 50;
-      createdOffset = Math.random() * 300000; // 0-5 minutes ago
-      break;
-    case 'finalStretch':
+  } else if (desiredStatus === 'finalStretch') {
       marketCap = 50000 + Math.random() * 100000;
       bondingProgress = 80 + Math.random() * 20;
-      createdOffset = 300000 + Math.random() * 1800000; // 5-35 minutes ago
-      break;
-    case 'migrated':
+  } else {
       marketCap = 100000 + Math.random() * 2000000;
       bondingProgress = 100;
-      createdOffset = 1800000 + Math.random() * 86400000; // 30 min - 24 hours ago
-      break;
   }
-  
+
   return {
     id: generateId(),
     address: generateAddress(),
@@ -96,11 +150,9 @@ function generateToken(status: TokenStatus): Token {
     priceInSol: Math.random() * 0.01,
     priceChange24h: (Math.random() - 0.5) * 100,
     bondingCurveProgress: bondingProgress,
-    createdAt: Date.now() - createdOffset,
+    createdAt: Date.now() - Math.random() * 86400000,
     socials: {
-      twitter: Math.random() > 0.3 ? `https://twitter.com/${symbol.toLowerCase()}` : undefined,
-      telegram: Math.random() > 0.5 ? `https://t.me/${symbol.toLowerCase()}` : undefined,
-      website: Math.random() > 0.6 ? `https://${symbol.toLowerCase()}.io` : undefined,
+      twitter: Math.random() > 0.5 ? `https://twitter.com/${symbol}` : undefined,
     },
     safety: {
       isVerified: Math.random() > 0.7,
@@ -108,20 +160,34 @@ function generateToken(status: TokenStatus): Token {
       liquidityLocked: Math.random() > 0.5,
       contractRenounced: Math.random() > 0.8,
     },
-    status,
+    status: desiredStatus,
   };
 }
 
-/**
- * Generate initial mock tokens
- */
 export function generateMockTokens(count: number, status: TokenStatus): Token[] {
-  return Array.from({ length: count }, () => generateToken(status));
+  return Array.from({ length: count }, (_, i) => getStaticToken(i, status));
 }
 
-/**
- * Generate a new token for real-time updates
- */
 export function generateNewToken(status: TokenStatus): Token {
-  return generateToken(status);
+  // Randomly pick a static one or generate new
+  if (Math.random() > 0.3) {
+     return getStaticToken(Math.floor(Math.random() * STATIC_TOKENS.length), status);
+  }
+  const { name, symbol } = generateRandomNameAndSymbol();
+  // ... simple random fallback for streaming updates
+  return {
+      id: generateId(),
+      address: generateAddress(),
+      name,
+      symbol,
+      imageUrl: `https://image.pollinations.ai/prompt/${encodeURIComponent(name + ' logo')}`,
+      marketCap: 10000,
+      volume24h: 5000,
+      txCount: 10,
+      priceInSol: 0.001,
+      priceChange24h: 0,
+      bondingCurveProgress: 0,
+      createdAt: Date.now(),
+      status
+  } as Token;
 }

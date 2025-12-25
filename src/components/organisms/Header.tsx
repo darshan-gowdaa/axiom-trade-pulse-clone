@@ -21,18 +21,18 @@ export function Header() {
   const [chain] = useState<'SOL' | 'BNB'>('SOL');
 
   return (
-    <header className="h-[53px] bg-[#0c0c10] border-b border-[#1a1b23] flex items-center justify-between px-[40px] select-none">
+    <header className="h-[53px] bg-[#0c0c10] border-b border-[#1a1b23] flex items-center justify-between px-[24px] select-none">
       {/* Left Section: Logo + Nav */}
-      <div className="flex items-center gap-0">
+      <div className="flex items-center">
         <Link
           href="/"
-          className="flex items-center gap-[2px] no-underline mr-[24px]"
+          className="flex items-center gap-[1px] no-underline mr-[24px]"
         >
           <AxiomLogo className="w-[36px] h-[36px] text-white" />
-          <span className="text-white font-medium text-[17px]">
+          <span className="text-white font-medium text-[19px]">
             AXIOM
           </span>
-          <span className="bg-transparent text-[#fcfcfc] text-[11px] font-light p-0 self-end mb-[8px]">
+          <span className="bg-transparent text-[#fcfcfc] text-[13px] font-light p-0 self-end mb-[7px] ml-[2px]">
             Pro
           </span>
         </Link>
@@ -62,9 +62,9 @@ export function Header() {
           <input
             type="text"
             placeholder="Search by token or CA..."
-            className="w-full h-[28px] pl-[36px] pr-[36px] bg-[#16161e] border border-[#2a2a38] rounded-[16px] text-[12px] text-white outline-none placeholder:text-[#d4d4d8]"
-          />
-          <kbd className="absolute right-[10px] top-1/2 -translate-y-1/2 text-[10px] text-[#d4d4d8] bg-[#1c1c26] px-[6px] py-[2px] rounded-[4px] border border-[#2a2a38] font-mono">
+            className="w-full h-[28px] pl-[36px] pr-[36px] bg-[#16161e] border border-[#2a2a38] rounded-[16px] text-[10px] text-gray-300 outline-none placeholder:text-[#d4d4d8]"
+          />  
+          <kbd className="absolute right-[10px] top-1/2 -translate-y-1/2 text-[10px] text-[#d4d4d8] px-[6px] py-[2px] rounded-[12px] border border-[#2a2a38] font-mono bg-[#1c1c26]">
             /
           </kbd>
         </div>
@@ -104,14 +104,18 @@ export function Header() {
         </button>
 
         {/* Wallet & Globe Group */}
-        <div className="flex items-center gap-[10px] h-[28px] px-[10px] bg-[#16161e] border border-[#2a2a38] rounded-[16px]">
+        <div className="flex items-center gap-[10px] h-[28px] px-[10px] bg-[#22242d] border border-[#2a2a38] rounded-[16px]">
           <div className="flex items-center gap-[8px]">
             <Wallet className="w-[12px] h-[12px] text-[#d4d4d8]" />
             <SolanaLogo width={10} height={8} />
             <span className="text-white text-[12px] font-medium">0</span>
           </div>
           <div className="flex items-center gap-[8px]">
-            <span className="text-[#fbbf24] text-[10px]">◆</span>
+            <img 
+              src="https://axiom.trade/images/usdc-perps.svg" 
+              alt="USDC Perps"
+              className="w-[18px] h-[18px]"
+            />
             <span className="text-white text-[12px] font-medium">0</span>
             <ChevronDown className="w-[10px] h-[10px] text-[#d4d4d8]" />
           </div>
