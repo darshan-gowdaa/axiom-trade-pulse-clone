@@ -1,0 +1,77 @@
+import { type FilterPreset } from '@/types';
+
+/**
+ * Default filter presets for each column
+ */
+export const DEFAULT_PRESETS: Record<string, FilterPreset[]> = {
+  newPairs: [
+    { id: 'p1', name: 'P1', minMarketCap: 0, maxMarketCap: 50000 },
+    { id: 'p2', name: 'P2', minMarketCap: 50000, maxMarketCap: 100000 },
+    { id: 'p3', name: 'P3', minMarketCap: 100000 },
+  ],
+  finalStretch: [
+    { id: 'p1', name: 'P1', minBondingProgress: 80 },
+    { id: 'p2', name: 'P2', minBondingProgress: 90 },
+    { id: 'p3', name: 'P3', minBondingProgress: 95 },
+  ],
+  migrated: [
+    { id: 'p1', name: 'P1', minMarketCap: 100000 },
+    { id: 'p2', name: 'P2', minMarketCap: 500000 },
+    { id: 'p3', name: 'P3', minMarketCap: 1000000 },
+  ],
+};
+
+/**
+ * Navigation links for the header
+ */
+export const NAV_LINKS = [
+  { href: '/discover', label: 'Discover', active: false },
+  { href: '/pulse', label: 'Pulse', active: true },
+  { href: '/trackers', label: 'Trackers', active: false },
+  { href: '/perpetuals', label: 'Perpetuals', active: false },
+  { href: '/yield', label: 'Yield', active: false },
+  { href: '/vision', label: 'Vision', active: false },
+] as const;
+
+/**
+ * Supported chain options
+ */
+export const CHAINS = [
+  { id: 'sol', name: 'SOL', icon: '◎' },
+  { id: 'bnb', name: 'BNB', icon: '🟡' },
+] as const;
+
+/**
+ * WebSocket simulation interval (ms)
+ */
+export const WS_UPDATE_INTERVAL = 2000;
+
+/**
+ * Number of tokens to generate per column
+ */
+export const INITIAL_TOKENS_COUNT = 25;
+
+/**
+ * Virtual scroll overscan count
+ */
+export const VIRTUAL_SCROLL_OVERSCAN = 5;
+
+/**
+ * Animation durations (ms)
+ */
+export const ANIMATION = {
+  PRICE_FLASH: 300,
+  FADE_IN: 200,
+  HOVER: 150,
+} as const;
+
+/**
+ * Breakpoints matching Tailwind defaults
+ */
+export const BREAKPOINTS = {
+  sm: 640,
+  md: 768,
+  lg: 1024,
+  xl: 1280,
+  '2xl': 1536,
+} as const;

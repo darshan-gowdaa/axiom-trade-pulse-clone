@@ -1,26 +1,126 @@
 @import "tailwindcss";
 
+/* ============================================
+   AXIOM TRADE PULSE - EXACT DESIGN TOKENS
+   ============================================ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Background Colors */
+  --bg-primary: #06070b;
+  --bg-secondary: #0d0d12;
+  --bg-card: #0d0d10;
+  --bg-hover: #0d0d10;
+  
+  /* Border Colors */
+  --border-default: #1a1a1f;
+  --border-hover: #2a2a35;
+  
+  /* Primary Colors */
+  --primary-blue: #526fff;
+  --primary-blue-hover: #6b82ff;
+  
+  /* Status Colors */
+  --color-positive: #12c897;
+  --color-positive-bg: rgba(18, 200, 151, 0.15);
+  --color-negative: #ef4444;
+  --color-negative-bg: rgba(239, 68, 68, 0.15);
+  
+  /* Text Colors */
+  --text-primary: #ffffff;
+  --text-secondary: #9b9ba8;
+  --text-muted: #6b6b7a;
+  
+  /* Font */
+  --font-sans: "Geist", system-ui, -apple-system, sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Base Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html, body {
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-default);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-hover);
+}
+
+/* Animation Keyframes */
+@keyframes flash-up {
+  0% { color: var(--color-positive); }
+  100% { color: var(--text-primary); }
+}
+
+@keyframes flash-down {
+  0% { color: var(--color-negative); }
+  100% { color: var(--text-primary); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Utility Classes */
+.flash-up {
+  animation: flash-up 0.3s ease-out;
+}
+
+.flash-down {
+  animation: flash-down 0.3s ease-out;
+}
+
+.animate-pulse {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Nav Link Hover */
+.nav-link {
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.15s ease;
+  border-radius: 8px;
+}
+
+.nav-link:hover {
+  background-color: #1a1b23;
+}
+
+/* Tailwind theme overrides */
+@theme inline {
+  --color-background: var(--bg-primary);
+  --color-foreground: var(--text-primary);
 }
