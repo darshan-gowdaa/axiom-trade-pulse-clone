@@ -1,0 +1,48 @@
+'use client';
+
+import { Activity, Flame, Satellite, ArrowLeftRight, SquareUser } from 'lucide-react';
+import { usePathname } from 'next/navigation';
+import Link from 'next/link';
+
+const NAV_ITEMS = [
+  { label: 'Trending', icon: Flame, href: '/discover' },
+  { label: 'Track', icon: Satellite, href: '/trackers' },
+  { label: 'Pulse', icon: Activity, href: '/pulse' },
+  { label: 'Perpetuals', icon: ArrowLeftRight, href: '/perpetuals' },
+  { label: 'Account', icon: SquareUser, href: '/portfolio' },
+];
+
+export function MobileNavBar() {
+  const pathname = usePathname();
+
+  return (
+    <div className="fixed bottom-0 left-0 right-0 h-[45px] bg-[#0c0c10] border-t border-[#1a1b23] flex items-center w-full z-50 lg:hidden safe-area-bottom">
+      {NAV_ITEMS.map((item) => {
+        const isActive =
+          item.label === 'Pulse'
+            ? pathname === '/' || pathname.startsWith('/pulse')
+            : pathname.startsWith(item.href);
+        return (
+          <Link
+            key={item.href}
+            href={item.href}
+            className="flex-1 flex flex-col items-center justify-center gap-0.5 no-underline bg-transparent"
+          >
+            <item.icon
+              className={`w-4 h-4 ${
+                isActive ? 'text-white' : 'text-[#6b6b7a]'
+              }`}
+            />
+            <span
+              className={`text-[10px] font-medium ${
+                isActive ? 'text-white' : 'text-[#6b6b7a]'
+              }`}
+            >
+              {item.label}
+            </span>
+          </Link>
+        );
+      })}
+    </div>
+  );
+}

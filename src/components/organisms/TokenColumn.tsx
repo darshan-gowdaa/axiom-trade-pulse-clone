@@ -55,9 +55,9 @@ export function TokenColumn({
 
   return (
     <div
-      className={`flex flex-col h-full min-h-0 bg-[#06070b] border-r border-[#1a1a1f] ${className || ''}`}
+      className={`w-full flex flex-col h-full min-h-0 bg-[#06070b] border-r border-[#1a1a1f] ${className || ''}`}
     >
-      <div className="flex items-center justify-between px-3 py-2.5 border-b border-[#1a1a1f] bg-[#0c0c10] sticky top-0 z-10">
+      <div className="hidden lg:flex items-center justify-between px-3 py-1.5 border-b border-[#1a1a1f] bg-[#0c0c10] sticky top-0 z-10">
         <h2 className="text-[13px] font-semibold text-[#fcfcfc] m-0">{title}</h2>
 
         <div className="flex items-center gap-2">

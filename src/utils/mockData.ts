@@ -73,11 +73,10 @@ export const generateNameAndSymbol = (index?: number) => {
 };
 
 export const generateCreatorName = (): string => {
-  const chars = 'abcdefghijklmnopqrstuvwxyz';
-  const len = Math.floor(Math.random() * 4) + 6;
-  let name = '';
-  for(let i=0; i<len; i++) name += chars.charAt(Math.floor(Math.random() * chars.length));
-  return name;
+  const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  const start = Array.from({ length: 4 }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
+  const end = Array.from({ length: 4 }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
+  return `${start}...${end}`;
 };
 
 export function generateAddress(): string {

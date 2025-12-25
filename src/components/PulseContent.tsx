@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector, useIsMobile, useWebSocketSimulation } from '@/hooks';
 import { setTokens, setLoading } from '@/store/tokenSlice';
 import { setActiveTab, setActivePreset, setIsMobile } from '@/store/uiSlice';
-import { TokenColumn, TabSwitcher, PulseToolbar, BottomStatusBar } from '@/components/organisms';
+import { TokenColumn, TabSwitcher, PulseToolbar, BottomStatusBar, MobileNavBar } from '@/components/organisms';
 import { generateMockTokens, INITIAL_TOKENS_COUNT } from '@/utils';
 import { type Token, type ActiveTab } from '@/types';
 
@@ -57,30 +57,16 @@ export function PulseContent() {
     isLoading,
     showDecimals: displaySettings.showDecimals,
     onQuickBuy: handleQuickBuy,
+    className: isMobile ? 'w-full max-w-4xl border-l border-b border-[#1a1a1f] mx-auto' : undefined,
   };
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden bg-[#06070b]">
       {/* Pulse Toolbar */}
-      <PulseToolbar />
-
-      {/* Mobile Tab Switcher */}
-      {isMobile && (
-        <div className="px-3 py-2 border-b border-[#1a1a1f]">
-          <TabSwitcher
-            activeTab={activeTab}
-            onTabChange={handleTabChange}
-            counts={{
-              newPairs: newPairs.length,
-              finalStretch: finalStretch.length,
-              migrated: migrated.length,
-            }}
-          />
-        </div>
-      )}
+      <PulseToolbar activeTab={activeTab} onTabChange={handleTabChange} />
 
       {/* Token Columns - Only this section scrolls */}
-      <div className="flex-1 flex overflow-hidden min-h-0 px-7 gap-1">
+      <div className={`flex-1 flex overflow-hidden min-h-0 px-2 lg:px-7 gap-1 ${isMobile ? 'pb-[50px] justify-center' : ''}`}>
         {isMobile ? (
           <>
             {activeTab === 'newPairs' && (
@@ -116,6 +102,7 @@ export function PulseContent() {
                 {...columnProps}
               />
             )}
+            <MobileNavBar />
           </>
         ) : (
           <>
@@ -153,8 +140,8 @@ export function PulseContent() {
         )}
       </div>
 
-      {/* Bottom Status Bar - Sticky at bottom */}
-      <BottomStatusBar loading={isLoading} />
+      {/* Bottom Status Bar - Sticky at bottom - Hide on Mobile */}
+      {!isMobile && <BottomStatusBar loading={isLoading} />}
     </div>
   );
 }

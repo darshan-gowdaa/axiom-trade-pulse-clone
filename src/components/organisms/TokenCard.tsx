@@ -156,12 +156,12 @@ function TokenCardComponent({
   const redBarPct = 100 - barWidths.green;
 
   return (
-    <div className="flex items-center px-3 py-2 border-b border-[#1a1b23] cursor-pointer bg-transparent gap-2 min-h-[64px]">
+    <div className="relative flex items-center px-2 lg:px-3 py-2 border-b border-[#1a1b23] cursor-pointer bg-transparent gap-2 min-h-[64px]">
       {/* Avatar */}
-      <div className="shrink-0 w-[45px] relative">
-        <div className="relative w-[45px] h-[45px]">
+      <div className="shrink-0 w-[55px] relative">
+        <div className="relative w-[55px] h-[55px]">
           <div className="absolute inset-[-2px] rounded-[3px]" style={{ border: `1.5px solid ${ringColor}`, boxShadow: `0 0 4px ${ringColor}40` }} />
-          <div className="absolute inset-0 rounded-[2px] overflow-hidden bg-[#1a1b23] flex items-center justify-center">
+          <div className="absolute inset-0 rounded-[2px] overflow-hidden  flex items-center justify-center">
             {!imgError ? (
               <>
                 <Image src={`https://api.dicebear.com/7.x/identicon/svg?seed=${tokenIdentity.symbol}`} alt="" fill className="object-cover" onError={() => setImgError(true)} unoptimized />
@@ -176,63 +176,79 @@ function TokenCardComponent({
         <div className="mt-1.5 text-[8px] text-[#555] text-center font-bold">{tokenIdentity.creator}</div>
       </div>
 
-      {/* Info */}
-      <div className="flex-1 min-w-0 flex flex-col gap-1">
-        <div className="flex items-center gap-1.5">
-          <span className="font-semibold text-[12px] text-[#fcfcfc] whitespace-nowrap">{tokenIdentity.name}</span>
-          <span className="text-[10px] text-[#777a8c]">{tokenIdentity.symbol}</span>
-          <button onClick={handleCopy} className="bg-none border-none cursor-pointer p-0 flex ml-[2px]">
-            {copied ? <Check className="w-[10px] h-[10px] text-[#14f195]" /> : <Copy className="w-[10px] h-[10px] text-[#555]" />}
-          </button>
-        </div>
-
-        <div className="flex items-center gap-2 text-[9px] text-[#777a8c]">
-          <span className="text-[#14f195]">{formatTimeAgo(token.createdAt)}</span>
-          <User className="w-[9px] h-[9px]" style={{ color: userIconColor }} />
-          {topMetrics.map((m, i) => (
-            <MetricBlock key={i} icon={m.icon} text={m.count ?? 0} />
-          ))}
-        </div>
-
-        <div className="flex items-center gap-1 mt-2.5 flex-nowrap overflow-hidden">
-          {bottomMetrics.map((m, i) => (
-            <div key={i} className={`flex items-center gap-1 px-1.5 py-0.5 rounded-[99px] border border-[#2a2a35] text-[9px] whitespace-nowrap shrink-0 ${i === bottomMetrics.length - 1 ? 'bg-transparent' : 'bg-[#1a1b23]'}`}>
-              <span style={{ color: m.color }} className="flex">{m.icon}</span>
-              <span style={{ color: m.color }} className="font-medium">
-                {m.val}{m.suffix}
-                {m.isTime && <span className="text-[#fcfcfc] ml-[3px]">{timeState.val}{timeState.unit}</span>}
-              </span>
+      {/* Main Content: Single Column of Rows */}
+      <div className="flex-1 min-w-0 flex flex-col gap-1 justify-center">
+        
+        {/* Row 1: Identity + MC/V */}
+        <div className="flex items-start justify-between gap-2">
+            {/* Identity */}
+            <div className="flex items-center gap-1.5 min-w-0 pr-2">
+              <span className="font-semibold text-[12px] text-[#fcfcfc] truncate">{tokenIdentity.name}</span>
+              <span className="text-[10px] text-[#777a8c] shrink-0">{tokenIdentity.symbol}</span>
+              <button onClick={handleCopy} className="bg-none border-none cursor-pointer p-0 flex ml-[2px] shrink-0">
+                {copied ? <Check className="w-[10px] h-[10px] text-[#14f195]" /> : <Copy className="w-[10px] h-[10px] text-[#555]" />}
+              </button>
             </div>
-          ))}
-        </div>
-      </div>
 
-      {/* Metrics + Buy */}
-      <div className="shrink-0 flex flex-col items-end justify-between min-w-[70px] h-full min-h-[52px]">
-        <div className="flex flex-col items-end gap-[1px]">
-          <div className="flex items-center gap-[3px]">
-            <span className="text-[9px] text-[#555]">MC</span>
-            <span className="text-[11px] font-semibold" style={{ color: mcColor }}>{formatCurrency(marketCap, showDecimals)}</span>
-          </div>
-          <div className="flex items-center gap-[3px]">
-            <span className="text-[9px] text-[#555]">V</span>
-            <span className="text-[11px] font-semibold text-[#fcfcfc]">{formatCurrency(volume, showDecimals)}</span>
-          </div>
+            {/* MC / V */}
+            <div className="flex flex-col items-end gap-[1px] shrink-0">
+              <div className="flex items-center gap-[3px]">
+                <span className="text-[9px] text-[#555]">MC</span>
+                <span className="text-[11px] font-semibold" style={{ color: mcColor }}>{formatCurrency(marketCap, showDecimals)}</span>
+              </div>
+              <div className="flex items-center gap-[3px]">
+                <span className="text-[9px] text-[#555]">V</span>
+                <span className="text-[11px] font-semibold text-[#fcfcfc]">{formatCurrency(volume, showDecimals)}</span>
+              </div>
+            </div>
         </div>
 
-        <div className="flex items-center gap-1 text-[9px]">
-          <span className="text-[#555] flex items-center gap-[2px]">F <SolanaLogo width={9} height={7} /> 0.045</span>
-          <span className="text-[#555]">TX</span>
-          <span className="text-[#fcfcfc] font-semibold">{formatCompactNumber(txCount)}</span>
-          <div className="flex w-5 h-[2px] rounded-[1px] overflow-hidden">
-            <div className="bg-[#14f195]" style={{ width: `${barWidths.green}%` }} />
-            <div className="bg-[#f87171]" style={{ width: `${redBarPct}%` }} />
-          </div>
+        {/* Row 2: Top Metrics + F/TX */}
+        <div className="flex items-center justify-between gap-2">
+            {/* Top Metrics */}
+            <div className="flex items-center gap-2 text-[9px] text-[#777a8c] overflow-hidden whitespace-nowrap min-w-0">
+              <span className="text-[#14f195] shrink-0">{formatTimeAgo(token.createdAt)}</span>
+              <User className="w-[9px] h-[9px] shrink-0" style={{ color: userIconColor }} />
+              <div className="flex items-center gap-2 overflow-hidden">
+                  {topMetrics.map((m, i) => (
+                    <MetricBlock key={i} icon={m.icon} text={m.count ?? 0} />
+                  ))}
+              </div>
+            </div>
+
+            {/* F / TX */}
+            <div className="flex items-center gap-1 text-[9px] shrink-0">
+              <span className="text-[#555] flex items-center gap-[2px]">F <SolanaLogo width={9} height={7} /> 0.045</span>
+              <span className="text-[#555]">TX</span>
+              <span className="text-[#fcfcfc] font-semibold">{formatCompactNumber(txCount)}</span>
+              <div className="flex w-5 h-[2px] rounded-[1px] overflow-hidden">
+                <div className="bg-[#14f195]" style={{ width: `${barWidths.green}%` }} />
+                <div className="bg-[#f87171]" style={{ width: `${redBarPct}%` }} />
+              </div>
+            </div>
         </div>
 
-        <button onClick={(e) => { e.stopPropagation(); onQuickBuy?.(token); }} className="px-2 py-[3px] rounded-xl text-[10px] font-bold bg-[#526fff] border-none text-black cursor-pointer whitespace-nowrap flex items-center gap-[2px] min-w-[54px] justify-center">
-          <Zap className="w-2 h-2 fill-black" /> 0 SOL
-        </button>
+        {/* Row 3: Bottom Metrics + Button */}
+        <div className="flex items-center justify-between gap-2 mt-0.5">
+             {/* Bottom Metrics */}
+            <div className="flex items-center gap-1 flex-nowrap overflow-hidden min-w-0">
+              {bottomMetrics.map((m, i) => (
+                <div key={i} className={`flex items-center gap-1 px-1.5 py-0.5 rounded-[99px] border border-[#2a2a35] text-[9px] whitespace-nowrap shrink-0 ${i === bottomMetrics.length - 1 ? 'bg-transparent' : ''}`}>
+                  <span style={{ color: m.color }} className="flex">{m.icon}</span>
+                  <span style={{ color: m.color }} className="font-medium">
+                    {m.val}{m.suffix}
+                    {m.isTime && <span className="text-[#fcfcfc] ml-[3px]">{timeState.val}{timeState.unit}</span>}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            {/* Button */}
+            <button onClick={(e) => { e.stopPropagation(); onQuickBuy?.(token); }} className="px-2 py-[3px] rounded-xl text-[10px] font-bold bg-[#526fff] border-none text-black cursor-pointer whitespace-nowrap flex items-center gap-[2px] min-w-[54px] justify-center shrink-0">
+              <Zap className="w-2 h-2 fill-black" /> 0 SOL
+            </button>
+        </div>
+
       </div>
     </div>
   );

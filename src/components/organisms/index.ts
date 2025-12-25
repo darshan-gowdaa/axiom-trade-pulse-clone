@@ -4,4 +4,5 @@ export { Header } from './Header';
 export { TabSwitcher } from './TabSwitcher';
 export { PulseToolbar } from './PulseToolbar';
 export { BottomStatusBar } from './BottomStatusBar';
+export { MobileNavBar } from './MobileNavBar';
 
