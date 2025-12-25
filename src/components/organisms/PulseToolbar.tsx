@@ -64,7 +64,7 @@ export function PulseToolbar({ className }: PulseToolbarProps) {
 
           {/* Action Icons */}
           <div className="flex items-center gap-1">
-            <button className="w-7 h-7 flex items-center justify-center bg-none border-none text-[] hover:text-white hover:bg-[#1a1b23] rounded transition-colors cursor-pointer">
+            <button className="w-7 h-7 flex items-center justify-center bg-none border-none text-[#bfc0c8] hover:text-white hover:bg-[#1a1b23] rounded transition-colors cursor-pointer">
               <Bookmark className="w-4 h-4" />
             </button>
             <button className="w-7 h-7 flex items-center justify-center bg-none border-none text-[#bfc0c8] hover:text-white hover:bg-[#1a1b23] rounded transition-colors cursor-pointer">

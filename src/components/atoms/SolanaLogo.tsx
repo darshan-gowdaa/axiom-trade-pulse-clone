@@ -1,6 +1,8 @@
-export const SolanaLogo = () => (
+export const SolanaLogo = ({ className, width, height }: { className?: string, width?: number | string, height?: number | string }) => (
   <img 
-  src="http://axiom.trade/images/sol-fill.svg" 
-  alt=""
-/>
+    src="https://axiom.trade/images/sol-fill.svg" 
+    alt="Solana"
+    className={className}
+    style={{ width, height }}
+  />
 );
