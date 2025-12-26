@@ -55,19 +55,19 @@ export function TokenColumn({
 
   return (
     <div
-      className={`w-full flex flex-col h-full min-h-0 bg-[#06070b] border-r border-[#1a1b2f] ${className || ''}`}
+      className={`w-full flex flex-col h-full min-h-0 bg-[#101114] border-r border-[#1a1b2f] ${className || ''}`}
     >
-      <div className="hidden lg:flex items-center justify-between px-3 py-1.5 border-b border-[#1a1a1f] bg-[#0c0c10] sticky top-0 z-10">
-        <h2 className="text-[13px] font-semibold text-[#fcfcfc] m-0">{title}</h2>
+      <div className="hidden lg:flex items-center justify-between px-3 py-1.5 border-b border-[#1a1a1f] bg-[#0c0c10] sticky top-0 z-10 mb-0.5">
+        <h2 className="text-[12.5px] font-semibold text-white m-0">{title}</h2>
 
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1.5 px-2 py-[3px] border border-[#2a2a35] rounded-full bg-transparent">
             <div className="flex items-center gap-[3px]">
               <RiFlashlightFill className="w-3 h-3 text-[#6b6b7a]" />
-              <span className="text-[11px] text-[#6b6b7a]">0</span>
+              <span className="text-[10px] text-white mr-4">0</span>
             </div>
 
-            <SolanaLogo width={12} height={10} />
+            <SolanaLogo width={10} height={10} />
 
             <div className="w-[1px] h-3 bg-[#2a2a35]" />
 
@@ -75,8 +75,8 @@ export function TokenColumn({
               <button
                 key={preset.id}
                 onClick={() => handlePresetClick(preset.id)}
-                className={`p-0 px-[2px] text-[10px] font-medium border-none cursor-pointer bg-transparent ${
-                  index === 0 ? 'text-[#526fff]' : 'text-[#6b6b7a]'
+                className={`p-0 px-[1px] text-[10px] font-medium border-none cursor-pointer bg-transparent ${
+                  index === 0 ? 'text-[#526fff]' : 'text-white'
                 }`}
               >
                 {preset.name}
@@ -84,8 +84,9 @@ export function TokenColumn({
             ))}
           </div>
 
-          <button className="p-1 bg-none border-none text-[#6b6b7a] cursor-pointer flex items-center">
-            <RiEqualizer3Fill className="w-[14px] h-[14px]" />
+          <button className="relative p-1 bg-none border-none text-white cursor-pointer flex items-center">
+            <RiEqualizer3Fill className="w-[12px] h-[12px]" />
+            <span className="absolute -top-0 -right-0.5 h-1 w-1 rounded-full bg-[#526fff]"></span>
           </button>
         </div>
       </div>
