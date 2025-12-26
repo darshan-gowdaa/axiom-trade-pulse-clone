@@ -74,7 +74,7 @@ export function Header() {
             <input
               type="text"
               placeholder="Search by token or CA..."
-              className="w-full h-[28px] pl-[36px] pr-[36px] border border-[#2a2a38] rounded-[16px] text-[9px] text-gray-200 outline-none placeholder:text-gray-200"
+              className="w-full h-[28px] pl-[36px] pr-[36px] border border-[#2a2a38] rounded-[16px] p-2 text-[9.8px] text-gray-200 outline-none placeholder:text-gray-200"
             />  
             <kbd className="absolute right-[10px] top-1/2 -translate-y-1/2 text-[10px] text-gray-200 px-[6px] py-[2px] rounded-full border border-[#2a2a38] font-mono">
               /
