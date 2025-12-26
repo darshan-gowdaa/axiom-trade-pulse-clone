@@ -4,7 +4,22 @@ import { default as React, memo, useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import { type Token } from '@/types';
 import { formatCurrency, formatCompactNumber, formatTimeAgo, generateNameAndSymbol, generateCreatorName } from '@/utils';
-import { Check, Copy, User, Globe, Trophy, Users, ChefHat, Target, Ghost, Zap, Send, Ticket, BarChart2, Search } from 'lucide-react';
+import { 
+  RiCheckLine, 
+  RiFileCopyLine, 
+  RiUserLine, 
+  RiGlobalLine, 
+  RiTrophyLine, 
+  RiGroupLine, 
+  RiRestaurantLine, 
+  RiCrosshair2Line, 
+  RiGhostLine, 
+  RiSendPlaneLine, 
+  RiTicketLine, 
+  RiBarChartLine, 
+  RiSearchLine, 
+  RiFlashlightFill
+} from '@remixicon/react';
 import { SolanaLogo } from '@/components/atoms/SolanaLogo';
 
 interface TokenCardProps {
@@ -58,20 +73,20 @@ function TokenCardComponent({
   
   // Helpers implemented as stable callbacks or outside if possible, but inside is fine if used in state init
   const generateTopMetrics = () => [
-    { icon: <Globe className="w-[9px] h-[9px]" />, count: Math.floor(Math.random() * 90) + 10 },
-    { icon: <Send className="w-[9px] h-[9px]" />, count: Math.floor(Math.random() * 90) + 10 },
-    { icon: <Ticket className="w-[9px] h-[9px]" />, count: Math.floor(Math.random() * 90) + 10 },
-    { icon: <Search className="w-[9px] h-[9px]" />, count: Math.floor(Math.random() * 90) + 10 },
-    { icon: <User className="w-[9px] h-[9px]" />, count: Math.floor(Math.random() * 90) + 10 },
-    { icon: <BarChart2 className="w-[9px] h-[9px]" />, count: Math.floor(Math.random() * 90) + 10 },
-    { icon: <Trophy className="w-[9px] h-[9px]" />, count: `${Math.floor(Math.random() * 20)}/${Math.floor(Math.random() * 90) + 20}` },
+    { icon: <RiGlobalLine className="w-[9px] h-[9px]" />, count: Math.floor(Math.random() * 90) + 10 },
+    { icon: <RiSendPlaneLine className="w-[9px] h-[9px]" />, count: Math.floor(Math.random() * 90) + 10 },
+    { icon: <RiTicketLine className="w-[9px] h-[9px]" />, count: Math.floor(Math.random() * 90) + 10 },
+    { icon: <RiSearchLine className="w-[9px] h-[9px]" />, count: Math.floor(Math.random() * 90) + 10 },
+    { icon: <RiUserLine className="w-[9px] h-[9px]" />, count: Math.floor(Math.random() * 90) + 10 },
+    { icon: <RiBarChartLine className="w-[9px] h-[9px]" />, count: Math.floor(Math.random() * 90) + 10 },
+    { icon: <RiTrophyLine className="w-[9px] h-[9px]" />, count: `${Math.floor(Math.random() * 20)}/${Math.floor(Math.random() * 90) + 20}` },
   ].sort(() => Math.random() - 0.5).slice(0, 4);
 
   const generateBottomMetrics = () => [
-    { icon: <Users className="w-[10px] h-[10px]" />, suffix: '%', val: Math.floor(Math.random() * 90) + 10 },
-    { icon: <ChefHat className="w-[10px] h-[10px]" />, suffix: '', val: '', isTime: true }, 
-    { icon: <Target className="w-[10px] h-[10px]" />, suffix: '%', val: Math.floor(Math.random() * 90) + 10 },
-    { icon: <Ghost className="w-[10px] h-[10px]" />, suffix: '%', val: Math.floor(Math.random() * 90) + 10 },
+    { icon: <RiGroupLine className="w-[10px] h-[10px]" />, suffix: '%', val: Math.floor(Math.random() * 90) + 10 },
+    { icon: <RiRestaurantLine className="w-[10px] h-[10px]" />, suffix: '', val: '', isTime: true }, 
+    { icon: <RiCrosshair2Line className="w-[10px] h-[10px]" />, suffix: '%', val: Math.floor(Math.random() * 90) + 10 },
+    { icon: <RiGhostLine className="w-[10px] h-[10px]" />, suffix: '%', val: Math.floor(Math.random() * 90) + 10 },
   ].map(m => ({
     ...m,
     color: Math.random() > 0.5 ? '#14f195' : '#f87171'
@@ -186,7 +201,7 @@ function TokenCardComponent({
               <span className="font-semibold text-[12px] text-[#fcfcfc] truncate">{tokenIdentity.name}</span>
               <span className="text-[10px] text-[#777a8c] shrink-0">{tokenIdentity.symbol}</span>
               <button onClick={handleCopy} className="bg-none border-none cursor-pointer p-0 flex ml-[2px] shrink-0">
-                {copied ? <Check className="w-[10px] h-[10px] text-[#14f195]" /> : <Copy className="w-[10px] h-[10px] text-[#555]" />}
+                {copied ? <RiCheckLine className="w-[10px] h-[10px] text-[#14f195]" /> : <RiFileCopyLine className="w-[10px] h-[10px] text-[#555]" />}
               </button>
             </div>
 
@@ -208,7 +223,7 @@ function TokenCardComponent({
             {/* Top Metrics */}
             <div className="flex items-center gap-2 text-[9px] text-[#777a8c] overflow-hidden whitespace-nowrap min-w-0">
               <span className="text-[#14f195] shrink-0">{formatTimeAgo(token.createdAt)}</span>
-              <User className="w-[9px] h-[9px] shrink-0" style={{ color: userIconColor }} />
+              <RiUserLine className="w-[9px] h-[9px] shrink-0" style={{ color: userIconColor }} />
               <div className="flex items-center gap-2 overflow-hidden">
                   {topMetrics.map((m, i) => (
                     <MetricBlock key={i} icon={m.icon} text={m.count ?? 0} />
@@ -245,7 +260,7 @@ function TokenCardComponent({
 
             {/* Button */}
             <button onClick={(e) => { e.stopPropagation(); onQuickBuy?.(token); }} className="px-2 py-[3px] rounded-xl text-[10px] font-bold bg-[#526fff] border-none text-black cursor-pointer whitespace-nowrap flex items-center gap-[2px] min-w-[54px] justify-center shrink-0">
-              <Zap className="w-2 h-2 fill-black" /> 0 SOL
+              <RiFlashlightFill className="w-2 h-2 fill-black" /> 0 SOL
             </button>
         </div>
 

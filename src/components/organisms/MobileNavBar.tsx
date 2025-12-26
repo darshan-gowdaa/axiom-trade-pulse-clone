@@ -1,15 +1,21 @@
 'use client';
 
-import { Activity, Flame, Satellite, ArrowLeftRight, SquareUser } from 'lucide-react';
+import { 
+  RiPulseLine, 
+  RiFireLine, 
+  RiRadarLine, 
+  RiArrowLeftRightLine, 
+  RiAccountBoxLine 
+} from '@remixicon/react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 
 const NAV_ITEMS = [
-  { label: 'Trending', icon: Flame, href: '/discover' },
-  { label: 'Track', icon: Satellite, href: '/trackers' },
-  { label: 'Pulse', icon: Activity, href: '/pulse' },
-  { label: 'Perpetuals', icon: ArrowLeftRight, href: '/perpetuals' },
-  { label: 'Account', icon: SquareUser, href: '/portfolio' },
+  { label: 'Trending', icon: RiFireLine, href: '/discover' },
+  { label: 'Track', icon: RiRadarLine, href: '/trackers' },
+  { label: 'Pulse', icon: RiPulseLine, href: '/pulse' },
+  { label: 'Perpetuals', icon: RiArrowLeftRightLine, href: '/perpetuals' },
+  { label: 'Account', icon: RiAccountBoxLine, href: '/portfolio' },
 ];
 
 export function MobileNavBar() {

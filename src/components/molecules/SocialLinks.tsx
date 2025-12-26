@@ -1,6 +1,10 @@
 'use client';
 
-import { ExternalLink, MessageCircle } from 'lucide-react';
+import { 
+  RiExternalLinkLine, 
+  RiTelegramLine, 
+  RiTwitterXLine 
+} from '@remixicon/react';
 import { cn } from '@/lib/utils';
 import { type TokenSocials } from '@/types';
 
@@ -9,30 +13,11 @@ interface SocialLinksProps {
   className?: string;
 }
 
-function XIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      className={className}
-      fill="currentColor"
-      aria-hidden="true"
-    >
-      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-    </svg>
-  );
-}
-
-function TelegramIcon({ className }: { className?: string }) {
-  return (
-    <MessageCircle className={className} />
-  );
-}
-
 export function SocialLinks({ socials, className }: SocialLinksProps) {
   const links = [
-    { key: 'twitter', url: socials.twitter, icon: XIcon, label: 'Twitter/X' },
-    { key: 'telegram', url: socials.telegram, icon: TelegramIcon, label: 'Telegram' },
-    { key: 'website', url: socials.website, icon: ExternalLink, label: 'Website' },
+    { key: 'twitter', url: socials.twitter, icon: RiTwitterXLine, label: 'Twitter/X' },
+    { key: 'telegram', url: socials.telegram, icon: RiTelegramLine, label: 'Telegram' },
+    { key: 'website', url: socials.website, icon: RiExternalLinkLine, label: 'Website' },
   ].filter(link => link.url);
 
   if (links.length === 0) return null;

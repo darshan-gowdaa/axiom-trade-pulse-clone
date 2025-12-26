@@ -33,7 +33,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen max-h-screen overflow-hidden flex flex-col bg-[#06070b]`}
+        className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased h-screen max-h-screen overflow-hidden flex flex-col bg-[#06070b]`}
       >
         <Providers>
           <div className="shrink-0" style={{ zoom: 1.20 }}>

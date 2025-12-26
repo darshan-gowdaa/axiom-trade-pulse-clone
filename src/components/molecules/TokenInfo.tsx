@@ -3,7 +3,12 @@
 import { cn } from '@/lib/utils';
 import { formatTimeAgo, truncateAddress } from '@/utils';
 import { Badge } from '@/components/atoms';
-import { Copy, Check, Shield, AlertTriangle } from 'lucide-react';
+import { 
+  RiFileCopyLine, 
+  RiCheckLine, 
+  RiShieldCheckLine, 
+  RiAlertLine 
+} from '@remixicon/react';
 import { useState } from 'react';
 
 interface TokenInfoProps {
@@ -61,15 +66,15 @@ export function TokenInfo({
         >
           <span className="font-mono">{truncateAddress(address)}</span>
           {copied ? (
-            <Check className="h-3 w-3 text-[var(--primary-green)]" />
+            <RiCheckLine className="h-3 w-3 text-[var(--primary-green)]" />
           ) : (
-            <Copy className="h-3 w-3" />
+            <RiFileCopyLine className="h-3 w-3" />
           )}
         </button>
 
         {isVerified && (
           <Badge variant="success" size="sm">
-            <Shield className="h-2.5 w-2.5 mr-0.5" />
+            <RiShieldCheckLine className="h-2.5 w-2.5 mr-0.5" />
             Verified
           </Badge>
         )}
@@ -82,7 +87,7 @@ export function TokenInfo({
 
         {!isVerified && !liquidityLocked && (
           <Badge variant="warning" size="sm">
-            <AlertTriangle className="h-2.5 w-2.5 mr-0.5" />
+            <RiAlertLine className="h-2.5 w-2.5 mr-0.5" />
             Unverified
           </Badge>
         )}

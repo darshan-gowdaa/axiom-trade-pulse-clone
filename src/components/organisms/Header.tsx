@@ -2,10 +2,21 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Search, ChevronDown, Bell, Star, Settings, Wallet, Globe, Menu, Copy } from 'lucide-react';
+import { 
+  RiSearchLine, 
+  RiArrowDownSLine, 
+  RiNotification3Line, 
+  RiStarLine, 
+  RiSettings4Line, 
+  RiWalletLine, 
+  RiGlobalLine, 
+  RiMenuLine, 
+  RiFileCopyLine,
+  RiFileCopy2Line,
+  RiUserSettingsLine,
+} from '@remixicon/react';
 import { SolanaLogo } from '@/components/atoms/SolanaLogo';
 import { AxiomLogo } from '@/components/atoms/AxiomLogo';
-import { Button } from '@/components/atoms/Button';
 
 const NAV_LINKS = [
   { href: '/discover', label: 'Discover', active: false },
@@ -22,7 +33,6 @@ export function Header() {
 
   return (
     <header className="h-[35px] lg:h-[53px] bg-[#0c0c10] border-b border-[#1a1b23] select-none">
-      {/* Desktop Layout - Pixel Perfect Preservation */}
       <div className="hidden lg:flex items-center justify-between px-[24px] h-full">
         {/* Left Section: Logo + Nav */}
         <div className="flex items-center">
@@ -30,23 +40,23 @@ export function Header() {
             href="/"
             className="flex items-center gap-[1px] no-underline mr-[24px]"
           >
-            <AxiomLogo className="w-[36px] h-[36px] text-white" />
-            <span className="text-white font-medium text-[19px]">
+            <AxiomLogo className="w-[32px] h-[32px] text-white" />
+            <span className="text-white font-medium text-[20px]">
               AXIOM
             </span>
-            <span className="bg-transparent text-[#fcfcfc] text-[13px] font-light p-0 self-end mb-[7px] ml-[2px]">
+            <span className="bg-transparent text-[#fcfcfc] text-[13px] font-light p-0 self-end mb-[4px] ml-[2px]">
               Pro
             </span>
           </Link>
 
           {/* nav */}
-          <nav className="flex items-center gap-[16px]">
+          <nav className="flex items-center gap-[26px]">
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`text-[14px] font-medium transition-colors ${
-                  link.active ? 'text-[#526fff]' : 'text-[#e4e4e7]'
+                className={`text-[12px] font-medium transition-colors ${
+                  link.active ? 'text-[#526fff]' : 'text-white'
                 }`}
               >
                 {link.label}
@@ -56,36 +66,36 @@ export function Header() {
         </div>
 
         {/* Middle Section: Search */}
-        <div className="flex-1 flex justify-center max-w-[280px] mx-[24px]">
+        <div className="flex-1 flex justify-center max-w-[200px] mx-[20px]">
           <div className="relative w-full">
-            <Search 
-              className="absolute left-[12px] top-1/2 -translate-y-1/2 w-[14px] h-[14px] text-[#d4d4d8]"
+            <RiSearchLine 
+              className="absolute left-[12px] top-1/2 -translate-y-1/2 w-[16px] h-[16px] text-[#d4d4d8]"
             />
             <input
               type="text"
               placeholder="Search by token or CA..."
-              className="w-full h-[28px] pl-[36px] pr-[36px] bg-[#16161e] border border-[#2a2a38] rounded-[16px] text-[10px] text-gray-300 outline-none placeholder:text-[#d4d4d8]"
+              className="w-full h-[28px] pl-[36px] pr-[36px] border border-[#2a2a38] rounded-[16px] text-[9px] text-gray-200 outline-none placeholder:text-gray-200"
             />  
-            <kbd className="absolute right-[10px] top-1/2 -translate-y-1/2 text-[10px] text-[#d4d4d8] px-[6px] py-[2px] rounded-[12px] border border-[#2a2a38] font-mono bg-[#1c1c26]">
+            <kbd className="absolute right-[10px] top-1/2 -translate-y-1/2 text-[10px] text-gray-200 px-[6px] py-[2px] rounded-full border border-[#2a2a38] font-mono">
               /
             </kbd>
           </div>
         </div>
 
         {/* Right Actions */}
-        <div className="flex items-center gap-[8px]">
+        <div className="flex items-center gap-[10px]">
           {/* Chain Selector */}
           <button
-            className="flex items-center gap-[6px] h-[28px] px-[12px] bg-[#16161e] border border-[#2a2a38] rounded-[16px] text-[12px] text-white cursor-pointer"
+            className="flex items-center gap-[6px] h-[28px] px-[12px] border border-[#2a2a38] rounded-[16px] text-[12px] text-white cursor-pointer font-semibold"
           >
-            <SolanaLogo width={10} height={8} />
-            <span className="font-medium">{chain}</span>
-            <ChevronDown className="w-[12px] h-[12px] text-[#d4d4d8]" />
+            <SolanaLogo width={14} height={14} />
+            <span className="font-semibold">{chain}</span>
+            <RiArrowDownSLine className="w-[12px] h-[12px] text-[#d4d4d8] font-semibold" />
           </button>
 
           {/* Deposit Button */}
           <button
-            className="h-[28px] px-[8px] py-[2px] bg-[#526fff] border-0 rounded-[16px] text-[12px] font-[750] text-[#000000] cursor-pointer"
+            className="h-[28px] px-[11px] py-0 bg-[#526fff] border-0 rounded-[16px] text-[12px] font-[750] text-[#000000] cursor-pointer"
           >
             Deposit
           </button>
@@ -94,37 +104,36 @@ export function Header() {
           <button
             className="w-[32px] h-[32px] flex items-center justify-center bg-[#1a1b23] rounded-full border-0 text-[#fcfcfc] cursor-pointer"
           >
-            <Star className="w-[16px] h-[16px]" strokeWidth={1.5} />
+            <RiStarLine className="w-[16px] h-[16px]" />
           </button>
 
           {/* Bell Button */}
           <button
             className="relative w-[32px] h-[32px] flex items-center justify-center bg-[#1a1b23] rounded-full border-0 text-[#fcfcfc] cursor-pointer"
           >
-            <Bell className="w-[16px] h-[16px]" strokeWidth={1.5} />
-            <span className="absolute top-[6px] right-[6px] w-[6px] h-[6px] bg-[#ef4444] rounded-full" />
+            <RiNotification3Line className="w-[16px] h-[16px]" />
           </button>
 
           {/* Wallet & Globe Group */}
           <div className="flex items-center gap-[10px] h-[28px] px-[10px] bg-[#22242d] border border-[#2a2a38] rounded-[16px]">
-            <div className="flex items-center gap-[8px]">
-              <Wallet className="w-[12px] h-[12px] text-[#d4d4d8]" />
-              <SolanaLogo width={10} height={8} />
-              <span className="text-white text-[12px] font-medium">0</span>
+            <div className="flex items-center gap-[4px]">
+              <RiWalletLine className="w-[16px] h-[16px] text-white" />
+              <SolanaLogo width={14} height={14} />
+              <span className="text-white text-[12px] font-bold">O</span>
             </div>
-            <div className="flex items-center gap-[8px]">
+            <div className="flex items-center gap-[4px]">
               <img 
                 src="https://axiom.trade/images/usdc-perps.svg" 
                 alt="USDC Perps"
-                className="w-[18px] h-[18px]"
+                className="w-[16px] h-[16px]"
               />
-              <span className="text-white text-[12px] font-medium">0</span>
-              <ChevronDown className="w-[10px] h-[10px] text-[#d4d4d8]" />
+              <span className="text-white text-[12px] font-bold">O</span>
+              <RiArrowDownSLine className="w-[16px] h-[16px] text-white font-semibold" />
             </div>
           </div>
 
           {/* Profile Gradient Circle */}
-          <div className="relative w-[28px] h-[28px]">
+          <div className="relative w-[24px] h-[24px] ml-2">
             <div 
               className="absolute inset-0 rounded-full bg-gradient-to-br from-[#f472b6] via-[#a78bfa] to-[#22d3ee] p-[2px]"
             >
@@ -142,7 +151,7 @@ export function Header() {
           <button
             className="w-[32px] h-[32px] flex items-center justify-center bg-[#1a1b23] rounded-full border-0 text-[#fcfcfc] cursor-pointer"
           >
-            <Settings className="w-[16px] h-[16px]" strokeWidth={1.5} />
+            <RiUserSettingsLine className="w-[16px] h-[16px]" />
           </button>
         </div>
       </div>
@@ -158,24 +167,24 @@ export function Header() {
         <div className="flex items-center gap-1.5 overflow-hidden">
              {/* Wallet Pill */}
              <button className="flex items-center gap-1 px-2 py-1.5 bg-[#16161e] border border-[#2a2a38] rounded-full text-[10px] whitespace-nowrap shrink-0">
-                <Wallet className="w-3.5 h-3.5 text-[rgba(255,255,255,0.7)]" />
+                <RiWalletLine className="w-3.5 h-3.5 text-[rgba(255,255,255,0.7)]" />
                 <SolanaLogo width={9} height={9} /> 
                 <span className="text-white font-semibold">0</span>
                 <div className="w-[1px] h-2.5 bg-[#2a2a38] mx-0.5" />
                 <img src="https://axiom.trade/images/usdc-perps.svg" alt="USDC" className="w-3.5 h-3.5" />
                 <span className="text-white font-semibold">0</span>
-                <ChevronDown className="w-2.5 h-2.5 text-[#6b6b7a]" />
+                <RiArrowDownSLine className="w-2.5 h-2.5 text-[#6b6b7a]" />
              </button>
 
              {/* Paste CA */}
              <button className="flex items-center gap-1 px-2 py-1.5 bg-[#16161e] border border-[#2a2a38] rounded-full text-[10px] text-white font-medium whitespace-nowrap shrink-0">
-                <Copy className="w-3 h-3 text-white" />
+                <RiFileCopyLine className="w-3 h-3 text-white" />
                 <span>Paste</span>
              </button>
 
              {/* Search */}
              <button className="flex items-center justify-center w-7 h-7 bg-[#16161e] rounded-full border border-[#2a2a38] shrink-0">
-                <Search className="w-3.5 h-3.5 text-white" />
+                <RiSearchLine className="w-3.5 h-3.5 text-white" />
              </button>
 
              {/* Profile */}
@@ -191,7 +200,7 @@ export function Header() {
 
              {/* Menu */}
              <button className="flex items-center justify-center w-7 h-7 bg-[#16161e] rounded-full border border-[#2a2a38] shrink-0">
-                <Menu className="w-3.5 h-3.5 text-white" />
+                <RiMenuLine className="w-3.5 h-3.5 text-white" />
              </button>
         </div>
       </div>

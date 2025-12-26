@@ -6,7 +6,7 @@ import { type Token, type ActiveTab } from '@/types';
 import { TokenCard } from './TokenCard';
 import { TokenCardSkeleton } from '@/components/atoms';
 import { DEFAULT_PRESETS, VIRTUAL_SCROLL_OVERSCAN } from '@/utils';
-import { SlidersHorizontal, Zap } from 'lucide-react';
+import { RiEqualizer3Fill, RiFlashlightFill } from '@remixicon/react';
 import { SolanaLogo } from '@/components/atoms/SolanaLogo';
 
 interface TokenColumnProps {
@@ -55,7 +55,7 @@ export function TokenColumn({
 
   return (
     <div
-      className={`w-full flex flex-col h-full min-h-0 bg-[#06070b] border-r border-[#1a1a1f] ${className || ''}`}
+      className={`w-full flex flex-col h-full min-h-0 bg-[#06070b] border-r border-[#1a1b2f] ${className || ''}`}
     >
       <div className="hidden lg:flex items-center justify-between px-3 py-1.5 border-b border-[#1a1a1f] bg-[#0c0c10] sticky top-0 z-10">
         <h2 className="text-[13px] font-semibold text-[#fcfcfc] m-0">{title}</h2>
@@ -63,7 +63,7 @@ export function TokenColumn({
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1.5 px-2 py-[3px] border border-[#2a2a35] rounded-full bg-transparent">
             <div className="flex items-center gap-[3px]">
-              <Zap className="w-3 h-3 text-[#6b6b7a]" />
+              <RiFlashlightFill className="w-3 h-3 text-[#6b6b7a]" />
               <span className="text-[11px] text-[#6b6b7a]">0</span>
             </div>
 
@@ -85,7 +85,7 @@ export function TokenColumn({
           </div>
 
           <button className="p-1 bg-none border-none text-[#6b6b7a] cursor-pointer flex items-center">
-            <SlidersHorizontal className="w-[14px] h-[14px]" />
+            <RiEqualizer3Fill className="w-[14px] h-[14px]" />
           </button>
         </div>
       </div>
