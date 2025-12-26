@@ -25,16 +25,18 @@ import {
 } from '@remixicon/react';
 import { SolanaLogo } from '@/components/atoms/SolanaLogo';
 
+import { type ActiveTab } from '@/types';
+
 interface PulseToolbarProps {
   className?: string;
-  activeTab?: string;
-  onTabChange?: (tab: string) => void;
+  activeTab?: ActiveTab;
+  onTabChange?: (tab: ActiveTab) => void;
 }
 
 export function PulseToolbar({ className, activeTab, onTabChange }: PulseToolbarProps) {
   const [showMobileSettings, setShowMobileSettings] = useState(false);
 
-  const tabs = [
+  const tabs: { id: ActiveTab; label: string }[] = [
     { id: 'newPairs', label: 'New Pairs' },
     { id: 'finalStretch', label: 'Final Stretch' },
     { id: 'migrated', label: 'Migrated' },

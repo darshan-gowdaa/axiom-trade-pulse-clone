@@ -1,20 +1,27 @@
 'use client';
 
-import { 
-  RiTwitterLine, 
-  RiWalletLine, 
-  RiArrowDownSLine, 
-  RiCompass3Line, 
-  RiPulseLine, 
-  RiDiscLine, 
-  RiWindowLine, 
-  RiNotification3Line, 
-  RiBrushLine, 
-  RiChat1Line, 
-  RiSettings4Line, 
-  RiGasStationLine, 
-  RiCapsuleLine, 
+import {
+  RiWalletLine,
+  RiArrowDownSLine,
+  RiCompass3Line,
+  RiPulseLine,
+  RiDiscLine,
+  RiWindowLine,
+  RiNotification3Line,
+  RiBrushLine,
+  RiChat1Line,
+  RiSettings4Line,
+  RiGasStationLine,
+  RiCapsuleLine,
   RiBarChartLine,
+  RiTwitterXLine,
+  RiListSettingsLine,
+  RiBtcLine,
+  RiBtcFill,
+  RiPaletteLine,
+  RiDiscordLine,
+  RiDiscordFill,
+  RiCoinLine,
 } from '@remixicon/react';
 import { SolanaLogo } from '@/components/atoms/SolanaLogo';
 
@@ -23,97 +30,132 @@ interface BottomStatusBarProps {
   loading?: boolean;
 }
 
+/** Small red dot shown on top-right of a child */
+const NotificationDot = ({ children }: { children: React.ReactNode }) => (
+  <div className="relative inline-flex">
+    {children}
+    <span className="absolute -top-0.5 right-0 w-[4px] h-[4px] rounded-full bg-[#ec397a]" />
+  </div>
+);
+
+/** Generic small text button with icon (keeps Tailwind DRY) */
+const NavButton = ({
+  icon,
+  label,
+  className = '',
+  withDot = false,
+}: {
+  icon: React.ReactNode;
+  label?: string;
+  className?: string;
+  withDot?: boolean;
+}) => {
+  const content = (
+    <button
+      className={`flex items-center gap-[3px] bg-none border-none text-[#6b6b7a] cursor-pointer text-[10px] ${className}`}
+    >
+      {icon}
+      {label && <span className="text-[#fcfcfcfc]">{label}</span>}
+    </button>
+  );
+
+  return withDot ? <NotificationDot>{content}</NotificationDot> : content;
+};
+
 export function BottomStatusBar({ className, loading }: BottomStatusBarProps) {
   return (
     <div
-      className={`flex items-center justify-between h-6.5 px-7 bg-[#06070b] border-t border-[#1a1b23] text-[11px] shrink-0 ${className || ''}`}
+      className={`flex items-center justify-between h-6.5 px-7 bg-[#06070b] border-t border-[#1a1b23] text-[11px] shrink-0 ${
+        className || ''
+      }`}
     >
       {/* Left Section */}
       <div className="flex items-center gap-2">
-        {/* Preset Button - Light purple bg, purple text */}
+        {/* Preset Button */}
         <button className="flex items-center gap-1 px-2 py-[3px] bg-[rgba(82,111,255,0.15)] border-none rounded-[4px] text-[#526fff] text-[10px] font-medium cursor-pointer whitespace-nowrap">
-          <RiDiscLine className="w-[10px] h-[10px]" />
+          <RiListSettingsLine className="w-[10px] h-[10px]" />
           <span>PRESET 1</span>
         </button>
 
-        {/* Wallet + Sol Status */}
-        <button className="flex items-center gap-[5px] px-[5px] py-[2px] bg-transparent border border-[#1a1b23] rounded-xl text-[#6b6b7a] text-[10px] cursor-pointer">
-          <RiWalletLine className="w-[10px] h-[10px] text-[#6b6b7a]" />
-          <span className="text-[#e2e8f0] font-semibold">1</span>
-          
-          {/* Custom Solana Gradient Icon */}
-          <SolanaLogo width={10} height={8} />
-
-          <span className="text-[#e2e8f0] font-semibold">0</span>
-          <RiArrowDownSLine className="w-[10px] h-[10px] text-[#6b6b7a]" />
-        </button>
+        {/* Wallet + Sol Status (kept as-is, but wrapped with notification dot) */}
+        
+          <button className="flex items-center gap-[5px] px-[5px] py-[2px] bg-transparent border border-[#1a1b23] rounded-xl text-[#6b6b7a] text-[10px] cursor-pointer">
+            <RiWalletLine className="w-[10px] h-[10px] text-[#6b6b7a]" />
+            <span className="text-[#e2e8f0] font-semibold">1</span>
+            <SolanaLogo width={10} height={8} />
+            <span className="text-[#e2e8f0] font-semibold">0</span>
+            <RiArrowDownSLine className="w-[10px] h-[10px] text-[#fcfcfcfc]" />
+          </button>
 
         <div className="w-[1px] h-3 bg-[#1a1a1f]" />
-        
+
         {/* Settings */}
         <button className="bg-none border-none p-0 cursor-pointer text-[#6b6b7a] flex">
-          <RiSettings4Line className="w-[10px] h-[10px]" />
+          <RiSettings4Line className="w-[11px] h-[11px]" />
         </button>
 
-        {/* Wallet dropdown */}
-        <button className="flex items-center gap-[3px] bg-none border-none text-[#6b6b7a] cursor-pointer text-[10px]">
-          <RiWalletLine className="w-[10px] h-[10px]" />
-          <span>Wallet</span>
-        </button>
+        {/* Wallet nav (with notification dot) */}
+        <NavButton
+          icon={<RiWalletLine className="w-[11px] h-[11px]" />}
+          label="Wallet"
+          withDot
+        />
 
-        {/* Twitter */}
-        <button className="flex items-center gap-[3px] bg-none border-none text-[#6b6b7a] cursor-pointer text-[10px]">
-          <RiTwitterLine className="w-[10px] h-[10px]" />
-          <span>Twitter</span>
-        </button>
+        {/* Twitter (with notification dot) */}
+        <NavButton
+          icon={<RiTwitterXLine className="w-[11px] h-[11px]" />}
+          label="Twitter"
+          withDot
+        />
 
-        {/* Docs - Added after Twitter */}
-        <button className="flex items-center gap-[3px] bg-none border-none text-white cursor-pointer text-[10px]">
-          <RiWindowLine className="w-[10px] h-[10px] text-white" />
-          <span className="text-white">Docs</span>
-        </button>
+        {/* Discover (with notification dot) */}
+        <NavButton
+          icon={<RiCompass3Line className="w-[11px] h-[11px]" />}
+          label="Discover"
+          withDot
+        />
 
-        {/* Discover */}
-        <button className="flex items-center gap-[3px] bg-none border-none text-[#6b6b7a] cursor-pointer text-[10px]">
-          <RiCompass3Line className="w-[10px] h-[10px]" />
-          <span>Discover</span>
-        </button>
-
-        {/* Pulse - Active */}
-        <button className="flex items-center gap-[3px] px-1.5 py-[2px] bg-[#1a1a1f] border-none rounded-[4px] text-white text-[10px] cursor-pointer">
-          <RiPulseLine className="w-[10px] h-[10px] text-[#22d3ee]" />
-          <span>Pulse</span>
-        </button>
+        {/* Pulse - active (with notification dot) */}
+        <NotificationDot>
+          <button className="flex items-center gap-[3px] px-1.5 py-[2px] bg-[#1a1a1f] border-none rounded-[4px] text-white text-[10px] cursor-pointer">
+            <RiPulseLine className="w-[11px] h-[11px] text-[#22d3ee]" />
+            <span className="text-[#fcfcfcfc]">Pulse</span>
+          </button>
+        </NotificationDot>
 
         {/* PnL */}
-        <button className="flex items-center gap-[3px] bg-none border-none text-[#6b6b7a] cursor-pointer text-[10px]">
-          <RiBarChartLine className="w-[10px] h-[10px]" />
-          <span>PnL</span>
-        </button>
+        <NavButton
+          icon={<RiBarChartLine className="w-[11px] h-[11px]" />}
+          label="PnL"
+        />
 
         <div className="w-[1px] h-3 bg-[#1a1a1f]" />
 
-        {/* Bitcoin - Yellow */}
+        {/* Bitcoin */}
         <div className="flex items-center gap-[3px]">
-          <span className="text-[#f7931a] text-[10px] font-semibold">₿</span>
-          <span className="text-[#f7931a] text-[10px]">97.4K</span>
+          <RiBtcFill className="w-[11px] h-[11px] text-[#f7931a]" />
+          <span className="text-[#f7931a] text-[10px]">690.67K</span>
         </div>
 
-        {/* Ethereum - Blue/Purple */}
+        {/* Ethereum */}
         <div className="flex items-center gap-[3px]">
-          <img src="https://axiom.trade/images/eth-fill.svg" alt="ETH" className="w-[10px] h-[10px]" />
-          <span className="text-[#8A9FFF] text-[10px]">3.4K</span>
+          <img
+            src="https://axiom.trade/images/eth-fill.svg"
+            alt="ETH"
+            className="w-[11px] h-[11px]"
+          />
+          <span className="text-[#497493] text-[10px]">401.67K</span>
         </div>
 
-        {/* SOL - Green */}
+        {/* SOL */}
         <div className="flex items-center gap-[3px]">
-          <span className="text-[#14f195] text-[10px] font-semibold">◎</span>
-          <span className="text-[#14f195] text-[10px]">189</span>
+          <SolanaLogo width={11} height={11} />
+          <span className="text-[#14f195] text-[10px]">$189.96</span>
         </div>
 
         <div className="w-[1px] h-3 bg-[#1a1a1f]" />
 
-        {/* Link + $50.4K */}
+        {/* (placeholder for Link + $50.4K – left as comment in original) */}
       </div>
 
       {/* Right Section */}
@@ -121,51 +163,61 @@ export function BottomStatusBar({ className, loading }: BottomStatusBarProps) {
         {/* New Metrics: Pill, Fuel, Disc */}
         <div className="flex items-center gap-1.5">
           <div className="flex items-center gap-[3px]">
-            <RiCapsuleLine className="w-[10px] h-[10px] text-[#6b6b7a]" />
+            <RiCapsuleLine className="w-[12px] h-[12px] text-[#6b6b7a]" />
             <span className="text-[#6b6b7a] text-[10px]">$50.2K</span>
           </div>
           <div className="flex items-center gap-[3px]">
-            <RiGasStationLine className="w-[10px] h-[10px] text-[#6b6b7a]" />
+            <RiGasStationLine className="w-[12px] h-[12px] text-[#6b6b7a]" />
             <span className="text-[#6b6b7a] text-[10px]">0.021</span>
           </div>
           <div className="flex items-center gap-[3px]">
-            <RiDiscLine className="w-[10px] h-[10px] text-[#6b6b7a]" />
+            <RiCoinLine className="w-[12px] h-[12px] text-[#6b6b7a]" />
             <span className="text-[#6b6b7a] text-[10px]">0.003</span>
           </div>
         </div>
 
         <div className="w-[1px] h-3 bg-[#1a1a1f]" />
 
-        {/* Connection - Conditionally Rendered */}
+        {/* Connection */}
         <div
           className={`flex items-center gap-1 px-1.5 py-[2px] rounded-[4px] whitespace-nowrap ${
-            loading ? 'bg-[rgba(248,113,113,0.15)]' : 'bg-[rgba(52,211,153,0.15)]'
+            loading
+              ? 'bg-[rgba(248,113,113,0.15)]'
+              : 'bg-[rgba(52,211,153,0.15)]'
           }`}
         >
-          <span className={`w-[5px] h-[5px] rounded-full ${loading ? 'bg-[#f87171]' : 'bg-[#34d399]'}`} />
-          <span className={`text-[10px] ${loading ? 'text-[#f87171]' : 'text-[#34d399]'}`}>
+          <span
+            className={`w-[5px] h-[5px] rounded-full ${
+              loading ? 'bg-[#f87171]' : 'bg-[#34d399]'
+            }`}
+          />
+          <span
+            className={`text-[10px] ${
+              loading ? 'text-[#f87171]' : 'text-[#34d399]'
+            }`}
+          >
             {loading ? 'Disconnected' : 'Connection is stable'}
           </span>
         </div>
 
-        {/* GLOBAL with dropdown */}
-        <div className="flex items-center gap-[2px] text-[#6b6b7a]">
-          <span className="font-medium text-[10px]">GLOBAL</span>
+        {/* GLOBAL */}
+        <div className="flex items-center gap-[2px] text-white">
+          <span className="font-medium text-[9.8px]">GLOBAL</span>
           <RiArrowDownSLine className="w-2 h-2" />
         </div>
 
         <div className="w-[1px] h-3 bg-[#1a1a1f]" />
 
         {/* Action Icons */}
-        <div className="flex items-center gap-1.5">
-          <button className="bg-none border-none text-[#6b6b7a] cursor-pointer p-[1px] flex">
+        <div className="flex items-center gap-2">
+          <button className="bg-none border-none text-white cursor-pointer p-[1px] flex">
             <RiWindowLine className="w-3 h-3" />
           </button>
-          <button className="bg-none border-none text-[#6b6b7a] cursor-pointer p-[1px] flex">
+          <button className="bg-none border-none text-white cursor-pointer p-[1px] flex">
             <RiNotification3Line className="w-3 h-3" />
           </button>
-          <button className="bg-none border-none text-[#6b6b7a] cursor-pointer p-[1px] flex">
-            <RiBrushLine className="w-3 h-3" />
+          <button className="bg-none border-none text-white cursor-pointer p-[1px] flex">
+            <RiPaletteLine className="w-3 h-3" />
           </button>
         </div>
 
@@ -173,11 +225,15 @@ export function BottomStatusBar({ className, loading }: BottomStatusBarProps) {
 
         {/* Social Icons */}
         <div className="flex items-center gap-1.5">
-          <button className="bg-none border-none text-[#6b6b7a] cursor-pointer p-[1px] flex">
-            <RiChat1Line className="w-3 h-3" />
+          <button className="bg-none border-none text-white cursor-pointer p-[1px] flex">
+            <RiDiscordFill className="w-3 h-3" />
           </button>
-          <button className="bg-none border-none text-[#6b6b7a] cursor-pointer p-[1px] flex">
-            <RiTwitterLine className="w-3 h-3" />
+          <button className="bg-none border-none text-white cursor-pointer p-[1px] flex">
+            <RiTwitterXLine className="w-3 h-3" />
+          </button>
+          <button className="flex items-center gap-[3px] bg-none border-none text-white cursor-pointer text-[10px]">
+            <RiWindowLine className="w-[10px] h-[10px] text-white" />
+            <span className="text-white">Docs</span>
           </button>
         </div>
       </div>
