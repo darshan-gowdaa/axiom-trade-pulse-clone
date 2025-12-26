@@ -69,9 +69,14 @@ export function PulseToolbar({ className, activeTab, onTabChange }: PulseToolbar
               <button className="w-6 h-6 flex items-center justify-center bg-[#16181f] rounded-full text-[#22d3ee] cursor-pointer">
                 <SolanaLogo width={16} height={16} />
               </button>
-              <button className="w-6 h-6 flex items-center text-[#887129] justify-center hover:bg-[#27272a] rounded-full cursor-pointer transition-colors">
-                <img src="https://axiom.trade/images/bnb-fill.svg" alt="BNB" className="w-3.5 h-3.5" />
-              </button>
+              <button className="w-6 h-6 flex items-center justify-center hover:bg-[#27272a] rounded-full cursor-pointer transition-colors">
+  <img
+    src="https://axiom.trade/images/bnb-fill.svg"
+    alt="BNB"
+    className="w-3.5 h-3.5 opacity-50"
+  />
+</button>
+
             </div>
           </div>
  
@@ -119,13 +124,13 @@ export function PulseToolbar({ className, activeTab, onTabChange }: PulseToolbar
               <SolanaLogo width={15} height={15} />
             </div>
             <div className="w-8 h-8 rounded-full bg-transparent flex items-center justify-center">
-              <img src="https://axiom.trade/images/bnb-fill.svg" alt="BNB" className="w-3.5 h-3.5" />
+              <img src="https://axiom.trade/images/bnb-fill.svg" alt="BNB" className="w-3.5 h-3.5 opacity-50" />
             </div>
           </div>
 
           {/* Center: Tabs */}
           <div className="flex-1 overflow-x-auto scrollbar-hide min-w-0">
-            <div className="flex items-center gap-0.5 bg-[#0c0c10] rounded-full p-0.5 border border-[#1a1b23]/50 w-max">
+            <div className="flex items-center gap-0.5 rounded-full p-0.5 border border-[#1a1b23]/50 w-max">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}

@@ -168,11 +168,11 @@ export function BottomStatusBar({ className, loading }: BottomStatusBarProps) {
           </div>
           <div className="flex items-center gap-[3px]">
             <RiGasStationLine className="w-[12px] h-[12px] text-[#6b6b7a]" />
-            <span className="text-[#6b6b7a] text-[10px]">0.021</span>
+            <span className="text-[#6b6b7a] text-[10px]">0.062₂1</span>
           </div>
           <div className="flex items-center gap-[3px]">
             <RiCoinLine className="w-[12px] h-[12px] text-[#6b6b7a]" />
-            <span className="text-[#6b6b7a] text-[10px]">0.003</span>
+            <span className="text-[#6b6b7a] text-[10px]">0.00₂38</span>
           </div>
         </div>
 

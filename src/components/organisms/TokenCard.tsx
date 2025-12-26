@@ -300,7 +300,7 @@ function TokenCardComponent({
           <div className="flex-1" />
           <div className="flex items-center gap-1 text-[9px] shrink-0 -mt-1">
             <span className="text-white flex items-center gap-[2px]">
-              F <SolanaLogo width={9} height={9} /> 0.045
+              F <SolanaLogo width={9} height={9} /> 0.00₂5
             </span>
             <span className="text-[#777a8c]">TX</span>
             <span className="text-[#fcfcfc] font-semibold">
