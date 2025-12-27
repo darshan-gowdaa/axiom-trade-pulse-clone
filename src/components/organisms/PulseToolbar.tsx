@@ -15,7 +15,7 @@ import {
   RiSettings3Line,
   RiKeyboardBoxLine,
   RiBookmark3Line,
-  RiListCheck
+  RiListCheck,
 } from '@remixicon/react';
 import { WalletSolPill, ChainSelector, PresetPill } from '@/components/molecules';
 import { type ActiveTab } from '@/types';
@@ -66,11 +66,19 @@ export function PulseToolbar({ className, activeTab, onTabChange }: PulseToolbar
             </button>
 
             <div className="flex items-center gap-1.5">
-              {[RiBookmark3Line, RiKeyboardBoxLine, RiVolumeUpLine, RiCrosshair2Line].map((Icon, i) => (
-                <button key={i} className="w-6 h-6 flex items-center justify-center bg-none border-none text-[#bfc0c8] hover:text-white hover:bg-[#1a1b23] rounded transition-colors cursor-pointer">
-                  <Icon className="w-3 h-3" />
-                </button>
-              ))}
+              <button className="w-6 h-6 flex items-center justify-center bg-none border-none text-[#bfc0c8] hover:text-white hover:bg-[#1a1b23] rounded transition-colors cursor-pointer">
+                <RiBookmark3Line className="w-3 h-3" />
+              </button>
+              <button className="w-6 h-6 flex items-center justify-center bg-none border-none text-[#bfc0c8] hover:text-white hover:bg-[#1a1b23] rounded transition-colors cursor-pointer">
+                <RiKeyboardBoxLine className="w-3 h-3" />
+              </button>
+              <button className="w-6 h-6 flex items-center justify-center bg-none border-none text-[#bfc0c8] hover:text-white hover:bg-[#1a1b23] rounded transition-colors cursor-pointer">
+                <RiVolumeUpLine className="w-3 h-3" />
+              </button>
+              <button className="relative w-6 h-6 flex items-center justify-center bg-none border-none text-[#bfc0c8] hover:text-white hover:bg-[#1a1b23] rounded transition-colors cursor-pointer">
+                <RiCrosshair2Line className="w-3.5 h-3.5" />
+                <RiSettings4Line className="w-2.5 h-2.5 absolute -bottom-0.5 -right-0.5" />
+              </button>
             </div>
 
             <WalletSolPill variant="compact" walletCount={1} solBalance={0} />
@@ -89,10 +97,11 @@ export function PulseToolbar({ className, activeTab, onTabChange }: PulseToolbar
                 <button
                   key={tab.id}
                   onClick={() => onTabChange?.(tab.id)}
-                  className={`h-6 px-2 rounded-full text-[10px] font-medium whitespace-nowrap transition-colors flex items-center ${activeTab === tab.id
-                    ? 'bg-[#2a2a38] text-white'
-                    : 'text-[#6b6b7a] hover:text-[#a1a1aa]'
-                    }`}
+                  className={`h-6 px-2 rounded-full text-[10px] font-medium whitespace-nowrap transition-colors flex items-center ${
+                    activeTab === tab.id
+                      ? 'bg-[#2a2a38] text-white'
+                      : 'text-[#6b6b7a] hover:text-[#a1a1aa]'
+                  }`}
                 >
                   {tab.label}
                 </button>
@@ -102,7 +111,9 @@ export function PulseToolbar({ className, activeTab, onTabChange }: PulseToolbar
 
           <button
             onClick={() => setShowMobileSettings(!showMobileSettings)}
-            className={`flex items-center gap-1.5 py-0.5 bg-[#16161e] rounded-full border border-[#2a2a38] shrink-0 ${showMobileSettings ? 'px-1.5' : 'pl-2 pr-1.5'}`}
+            className={`flex items-center gap-1.5 py-0.5 bg-[#16161e] rounded-full border border-[#2a2a38] shrink-0 ${
+              showMobileSettings ? 'px-1.5' : 'pl-2 pr-1.5'
+            }`}
           >
             {!showMobileSettings && (
               <span className="text-[11px] text-white font-medium">P1</span>

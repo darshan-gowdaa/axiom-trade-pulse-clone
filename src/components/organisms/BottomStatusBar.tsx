@@ -7,7 +7,7 @@ import {
   RiPulseLine,
   RiWindowLine,
   RiNotification3Line,
-  RiSettings4Line,
+  RiSettingsLine,
   RiGasStationLine,
   RiCapsuleLine,
   RiBarChartLine,
@@ -17,6 +17,7 @@ import {
   RiPaletteLine,
   RiDiscordFill,
   RiCoinLine,
+  RiSettings3Line,
 } from '@remixicon/react';
 import { SolanaLogo } from '@/components/atoms/SolanaLogo';
 import { NotificationDot, NavButton, OptimizedImage } from '@/components/atoms';
@@ -31,16 +32,16 @@ export function BottomStatusBar({ className, loading }: BottomStatusBarProps) {
   return (
     <div className={`flex items-center justify-between h-6.5 px-7 bg-[#06070b] border-t border-[#1a1b23] text-[11px] shrink-0 ${className || ''}`}>
       <div className="flex items-center gap-2">
-        <button className="flex items-center gap-1 px-2 py-[3px] bg-[rgba(82,111,255,0.15)] border-none rounded-[4px] text-[#526fff] text-[10px] font-medium cursor-pointer whitespace-nowrap">
+        <button className="flex items-center gap-1 px-1 py-[3px] bg-[rgba(82,111,255,0.15)] border-none rounded-[4px] text-[#526fff] text-[10px] font-medium cursor-pointer whitespace-nowrap">
           <RiListSettingsLine className="w-[10px] h-[10px]" />
-          <span>PRESET 1</span>
+          <span className="font-semibold">PRESET 1</span>
         </button>
 
         <WalletSolPill variant="statusBar" walletCount={1} solBalance={0} />
         <div className="w-[1px] h-3 bg-[#1a1a1f]" />
 
         <button className="bg-none border-none p-0 cursor-pointer text-[#6b6b7a] flex">
-          <RiSettings4Line className="w-[11px] h-[11px]" />
+          <RiSettings3Line className="w-[11px] h-[11px]" />
         </button>
 
         <NavButton icon={<RiWalletLine className="w-[11px] h-[11px]" />} label="Wallet" withDot />

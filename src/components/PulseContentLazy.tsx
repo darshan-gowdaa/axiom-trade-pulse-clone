@@ -9,7 +9,6 @@ import { generateMockTokens, INITIAL_TOKENS_COUNT } from '@/utils';
 import { type Token, type ActiveTab } from '@/types';
 import { PulseToolbarSkeleton, TokenColumnSkeleton } from '@/components/skeletons';
 
-// Lazy loaded components
 const PulseToolbar = dynamic(
     () => import('@/components/organisms/PulseToolbar').then(mod => ({ default: mod.PulseToolbar })),
     { loading: () => <PulseToolbarSkeleton />, ssr: false }
@@ -30,7 +29,6 @@ const MobileNavBar = dynamic(
     { ssr: false }
 );
 
-// Prefetch on idle
 const componentImports = [
     () => import('@/components/organisms/PulseToolbar'),
     () => import('@/components/organisms/BottomStatusBar'),
@@ -54,12 +52,9 @@ export function PulseContentLazy() {
 
     useEffect(() => {
         dispatch(setLoading(true));
-        const timer = setTimeout(() => {
-            dispatch(setTokens({ status: 'new', tokens: generateMockTokens(INITIAL_TOKENS_COUNT, 'new') }));
-            dispatch(setTokens({ status: 'finalStretch', tokens: generateMockTokens(INITIAL_TOKENS_COUNT, 'finalStretch') }));
-            dispatch(setTokens({ status: 'migrated', tokens: generateMockTokens(INITIAL_TOKENS_COUNT, 'migrated') }));
-        }, 500);
-        return () => clearTimeout(timer);
+        dispatch(setTokens({ status: 'new', tokens: generateMockTokens(INITIAL_TOKENS_COUNT, 'new') }));
+        dispatch(setTokens({ status: 'finalStretch', tokens: generateMockTokens(INITIAL_TOKENS_COUNT, 'finalStretch') }));
+        dispatch(setTokens({ status: 'migrated', tokens: generateMockTokens(INITIAL_TOKENS_COUNT, 'migrated') }));
     }, [dispatch]);
 
     useEffect(() => {
@@ -98,7 +93,7 @@ export function PulseContentLazy() {
                 <PulseToolbar activeTab={activeTab} onTabChange={handleTabChange} />
             </Suspense>
 
-            <div className={`flex-1 flex overflow-hidden min-h-0 px-2 lg:px-7 gap-1 ${isMobile ? 'pb-[50px] justify-center' : ''}`}>
+            <div className={`flex-1 flex overflow-hidden min-h-0 px-2 lg:px-5 gap-1 ${isMobile ? 'pb-[50px] justify-center' : ''}`}>
                 {isMobile ? (
                     <>
                         {activeTab === 'newPairs' && (
