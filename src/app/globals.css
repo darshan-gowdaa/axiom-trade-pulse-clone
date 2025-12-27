@@ -5,13 +5,73 @@
   --font-mono: var(--font-geist-mono);
 }
 
+@layer base {
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  body {
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  img {
+    content-visibility: auto;
+  }
+}
+
 @layer utilities {
   .scrollbar-hide {
     -ms-overflow-style: none;
-    scrollbar-width: none;  /* Firefox */
+    scrollbar-width: none;
   }
   
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
+
+  .animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    will-change: opacity;
+  }
+
+  .skeleton-wave {
+    position: relative;
+    overflow: hidden;
+    background: #1a1b23;
+  }
+
+  .skeleton-wave::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    animation: skeleton-wave 1.5s infinite;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.04), transparent);
+    will-change: transform;
+  }
+
+  @keyframes skeleton-wave {
+    100% { transform: translateX(100%); }
+  }
+
+  .content-auto {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 500px;
+  }
+
+  .gpu-accelerated {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
 }

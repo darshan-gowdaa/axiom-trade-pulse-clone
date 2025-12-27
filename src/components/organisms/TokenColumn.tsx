@@ -54,9 +54,7 @@ export function TokenColumn({
   );
 
   return (
-    <div
-      className={`w-full flex flex-col h-full min-h-0 bg-[#101114] border-r border-[#1a1b2f] ${className || ''}`}
-    >
+    <div className={`w-full flex flex-col h-full min-h-0 bg-[#101114] border-r border-[#1a1b2f] ${className || ''}`}>
       <div className="hidden lg:flex items-center justify-between px-3 py-1.5 border-b border-[#1a1a1f] bg-[#0c0c10] sticky top-0 z-10 mb-0.5">
         <h2 className="text-[12.5px] font-semibold text-white m-0">{title}</h2>
 
@@ -68,16 +66,14 @@ export function TokenColumn({
             </div>
 
             <SolanaLogo width={10} height={10} />
-
             <div className="w-[1px] h-3 bg-[#2a2a35]" />
 
             {presets.map((preset, index) => (
               <button
                 key={preset.id}
                 onClick={() => handlePresetClick(preset.id)}
-                className={`p-0 px-[1px] text-[10px] font-medium border-none cursor-pointer bg-transparent ${
-                  index === 0 ? 'text-[#526fff]' : 'text-white'
-                }`}
+                className={`p-0 px-[1px] text-[10px] font-medium border-none cursor-pointer bg-transparent ${index === 0 ? 'text-[#526fff]' : 'text-white'
+                  }`}
               >
                 {preset.name}
               </button>
@@ -94,10 +90,7 @@ export function TokenColumn({
       <div
         ref={parentRef}
         className="flex-1 overflow-y-auto scrollbar-thin scrollbar-color-[#2a2a35_transparent]"
-        style={{
-          scrollbarWidth: 'thin',
-          scrollbarColor: '#2a2a35 transparent',
-        }}
+        style={{ scrollbarWidth: 'thin', scrollbarColor: '#2a2a35 transparent' }}
       >
         {isLoading ? (
           <div>
@@ -110,12 +103,7 @@ export function TokenColumn({
             No tokens found
           </div>
         ) : (
-          <div
-            className="w-full relative"
-            style={{
-              height: `${virtualizer.getTotalSize()}px`,
-            }}
-          >
+          <div className="w-full relative" style={{ height: `${virtualizer.getTotalSize()}px` }}>
             {virtualizer.getVirtualItems().map((virtualRow) => {
               const token = tokens[virtualRow.index];
               return (

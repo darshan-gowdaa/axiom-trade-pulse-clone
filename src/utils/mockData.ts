@@ -3,13 +3,11 @@ import { generateId } from './formatters';
 
 const BRAINROT_TERMS = [
   'Skibidi', 'Rizz', 'Fanum', 'Ohio', 'Sigma', 'Gyatt', 'Grimace', 'Kai', 'Livvy', 
-  'Gronk', 'Baby Gronk', 'Mewing', 'Looksmax', 'Chug Jug', 'W', 'L', 'Ratio', 'Based',
-  'Gooning', 'Edging', 'Bussy', 'Coomer', 'Thicc', 'Down Bad', 'Glizzy', 'Throat', 'Hawk Tuah'
+  'Gronk', 'Baby Gronk', 'Mewing', 'Looksmax', 'Chug Jug', 'W', 'L', 'Ratio', 'Based','Gooning', 'Edging', 'Bussy', 'Coomer', 'Thicc', 'Down Bad', 'Glizzy', 'Throat', 'Hawk Tuah'
 ];
 
 const CORPORATE_TERMS = [
-  'Apple', 'Microsoft', 'Nvidia', 'Amazon', 'Google', 'Meta', 'Tesla', 'Berkshire', 
-  'TSMC', 'Visa', 'JPMorgan', 'Walmart', 'Saudi Aramco'
+  'Apple', 'Microsoft', 'Nvidia', 'Amazon', 'Google', 'Meta', 'Tesla', 'Visa', 'JPMorgan', 'Walmart'
 ];
 
 const CRYPTO_TERMS = [
@@ -17,24 +15,22 @@ const CRYPTO_TERMS = [
   'Remilio', 'Pudgy', 'Azuki', 'WIF', 'BONK', 'MOG'
 ];
 
-// User provided static data (Deduplicated and Expanded)
+// Static token data for realistic display
 const STATIC_TOKENS: Partial<Token>[] = [
-  // --- New Pairs (Pulse / Pump V1 / Meteora) ---
+  // New Pairs
   { name: 'Help Find TubTub', symbol: 'TubTub', marketCap: 3400, volume24h: 577, txCount: 6, status: 'new', imageUrl: 'https://image.pollinations.ai/prompt/TubTub%20cute%20cartoon%20mascot%203d' },
   { name: 'MonkeyDLuffy', symbol: 'Luffy', marketCap: 3400, volume24h: 923, txCount: 10, status: 'new', imageUrl: 'https://image.pollinations.ai/prompt/Luffy%20anime%20style%20character' },
   { name: 'Frogy', symbol: 'FROGY', marketCap: 3420, volume24h: 3000, txCount: 28, status: 'new', imageUrl: 'https://image.pollinations.ai/prompt/Frogy%20frog%20meme%20coin' },
   { name: 'bucks', symbol: 'bucks', marketCap: 3430, volume24h: 4000, txCount: 71, status: 'new', imageUrl: 'https://image.pollinations.ai/prompt/bucks%20money%20cash%20green' },
   { name: 'the cult of SOL', symbol: 'INVICTUS', marketCap: 3400, volume24h: 216, txCount: 3, status: 'new', imageUrl: 'https://image.pollinations.ai/prompt/cult%20of%20sol%20invictus%20mysterious' },
   { name: 'Dev is active', symbol: 'AGENT', marketCap: 3400, volume24h: 0, txCount: 3, status: 'new', imageUrl: 'https://image.pollinations.ai/prompt/secret%20agent%20silhouette%20matrix' },
-  
-  // Additional Pulse/New items from text dump
   { name: 'WANTA XMAS', symbol: 'XMAS', marketCap: 49500, volume24h: 11000, txCount: 45, status: 'new', imageUrl: 'https://image.pollinations.ai/prompt/christmas%20santa%20coin%20holiday' },
   { name: 'Olympic Snowflake Mascot', symbol: 'TINA', marketCap: 49900, volume24h: 11000, txCount: 55, status: 'new', imageUrl: 'https://image.pollinations.ai/prompt/winter%20olympic%20snowflake%20mascot' },
   { name: 'Agent City', symbol: 'AGENT_CITY', marketCap: 55000, volume24h: 12000, txCount: 100, status: 'new', imageUrl: 'https://image.pollinations.ai/prompt/cyberpunk%20city%20agent' },
   { name: 'XMASKNIGHT', symbol: 'MEGAKNIGH', marketCap: 57900, volume24h: 15000, txCount: 253, status: 'new', imageUrl: 'https://image.pollinations.ai/prompt/knight%20christmas%20armor' },
   { name: 'OddsLayer', symbol: 'ODD', marketCap: 46500, volume24h: 11000, txCount: 162, status: 'new', imageUrl: 'https://image.pollinations.ai/prompt/odds%20gambling%20dice%20abstract' },
 
-  // --- Final Stretch ---
+  // Final Stretch
   { name: 'Slay House', symbol: 'SLAY', marketCap: 32000, volume24h: 65000, txCount: 911, status: 'finalStretch', imageUrl: 'https://image.pollinations.ai/prompt/slay%20house%20fashion%20runway' },
   { name: 'DUMPSANTA', symbol: 'DUMPSANTA', marketCap: 27400, volume24h: 15000, txCount: 329, status: 'finalStretch', imageUrl: 'https://image.pollinations.ai/prompt/bad%20santa%20cartoon%20funny' },
   { name: 'MULLER', symbol: 'MULLER', marketCap: 25200, volume24h: 233000, txCount: 3460, status: 'finalStretch', imageUrl: 'https://image.pollinations.ai/prompt/muller%20abstract%20art' },
@@ -48,7 +44,6 @@ const STATIC_TOKENS: Partial<Token>[] = [
   { name: 'Luna Rose', symbol: 'LROSE', marketCap: 20800, volume24h: 203000, txCount: 3247, status: 'finalStretch', imageUrl: 'https://image.pollinations.ai/prompt/moon%20rose%20flower%20space' },
 ];
 
-// Helper to generate random when static list is exhausted
 const generateRandomNameAndSymbol = () => {
   const p1 = BRAINROT_TERMS[Math.floor(Math.random() * BRAINROT_TERMS.length)];
   const useCorporate = Math.random() > 0.5;
@@ -89,11 +84,9 @@ export function generateAddress(): string {
 }
 
 function getStaticToken(index: number, desiredStatus: TokenStatus): Token {
-  // 1. Try to find a matching static token
   const candidates = STATIC_TOKENS.filter(t => t.status === desiredStatus);
   const staticData = candidates[index];
 
-  // 2. If we have static data for this index, use it
   if (staticData) {
     return {
       id: generateId(),
@@ -107,7 +100,7 @@ function getStaticToken(index: number, desiredStatus: TokenStatus): Token {
       priceInSol: Math.random() * 0.01 + 0.001,
       priceChange24h: (Math.random() - 0.5) * 20,
       bondingCurveProgress: desiredStatus === 'finalStretch' ? (80 + Math.random() * 20) : (Math.random() * 50),
-      createdAt: Date.now() - (Math.random() * 3600000), // recent
+      createdAt: Date.now() - (Math.random() * 3600000),
       socials: {
         twitter: Math.random() > 0.5 ? `https://twitter.com/${staticData.symbol}` : undefined,
       },
@@ -121,7 +114,7 @@ function getStaticToken(index: number, desiredStatus: TokenStatus): Token {
     };
   }
 
-  // 3. Fallback to Random Generation (preserving old data logic)
+  // Fallback to random generation
   const { name, symbol } = generateRandomNameAndSymbol();
   let marketCap: number;
   let bondingProgress: number;
@@ -168,12 +161,11 @@ export function generateMockTokens(count: number, status: TokenStatus): Token[] 
 }
 
 export function generateNewToken(status: TokenStatus): Token {
-  // Randomly pick a static one or generate new
   if (Math.random() > 0.3) {
      return getStaticToken(Math.floor(Math.random() * STATIC_TOKENS.length), status);
   }
+  
   const { name, symbol } = generateRandomNameAndSymbol();
-  // ... simple random fallback for streaming updates
   return {
       id: generateId(),
       address: generateAddress(),

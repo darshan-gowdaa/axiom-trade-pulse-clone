@@ -1,6 +1,5 @@
-export { PriceChange } from './PriceChange';
-export { SocialLinks } from './SocialLinks';
-export { ProgressBar } from './ProgressBar';
-export { MetricBlock } from './MetricBlock';
-export { ColumnHeader } from './ColumnHeader';
-export { TokenInfo } from './TokenInfo';
+export { TokenAvatarCard } from './TokenAvatarCard';
+export { MetricPill } from './MetricPill';
+export { WalletSolPill } from './WalletSolPill';
+export { ChainSelector } from './ChainSelector';
+export { PresetPill } from './PresetPill';

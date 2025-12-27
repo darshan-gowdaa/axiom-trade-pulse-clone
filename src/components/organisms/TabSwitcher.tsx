@@ -3,6 +3,7 @@
 import { cn } from '@/lib/utils';
 import { type ActiveTab } from '@/types';
 import { Button } from '@/components/atoms';
+import { PULSE_TABS } from '@/utils/constants';
 
 interface TabSwitcherProps {
   activeTab: ActiveTab;
@@ -14,12 +15,6 @@ interface TabSwitcherProps {
   };
   className?: string;
 }
-
-const tabs: { id: ActiveTab; label: string }[] = [
-  { id: 'newPairs', label: 'New Pairs' },
-  { id: 'finalStretch', label: 'Final Stretch' },
-  { id: 'migrated', label: 'Migrated' },
-];
 
 export function TabSwitcher({
   activeTab,
@@ -34,7 +29,7 @@ export function TabSwitcher({
         className
       )}
     >
-      {tabs.map((tab) => (
+      {PULSE_TABS.map((tab) => (
         <Button
           key={tab.id}
           variant={activeTab === tab.id ? 'primary' : 'ghost'}

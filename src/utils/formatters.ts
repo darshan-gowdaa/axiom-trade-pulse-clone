@@ -1,61 +1,30 @@
 import { type Token, type FilterPreset } from '@/types';
 
-/**
- * Format a number as currency (USD)
- */
 export function formatCurrency(value: number, decimals: boolean = true): string {
-  if (value >= 1_000_000_000) {
-    return `$${(value / 1_000_000_000).toFixed(decimals ? 2 : 0)}B`;
-  }
-  if (value >= 1_000_000) {
-    return `$${(value / 1_000_000).toFixed(decimals ? 2 : 0)}M`;
-  }
-  if (value >= 1_000) {
-    return `$${(value / 1_000).toFixed(decimals ? 2 : 0)}K`;
-  }
+  if (value >= 1_000_000_000) return `$${(value / 1_000_000_000).toFixed(decimals ? 2 : 0)}B`;
+  if (value >= 1_000_000) return `$${(value / 1_000_000).toFixed(decimals ? 2 : 0)}M`;
+  if (value >= 1_000) return `$${(value / 1_000).toFixed(decimals ? 2 : 0)}K`;
   return `$${value.toFixed(decimals ? 2 : 0)}`;
 }
 
-/**
- * Format a number with K/M/B suffix
- */
 export function formatCompactNumber(value: number): string {
-  if (value >= 1_000_000_000) {
-    return `${(value / 1_000_000_000).toFixed(1)}B`;
-  }
-  if (value >= 1_000_000) {
-    return `${(value / 1_000_000).toFixed(1)}M`;
-  }
-  if (value >= 1_000) {
-    return `${(value / 1_000).toFixed(1)}K`;
-  }
+  if (value >= 1_000_000_000) return `${(value / 1_000_000_000).toFixed(1)}B`;
+  if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(1)}M`;
+  if (value >= 1_000) return `${(value / 1_000).toFixed(1)}K`;
   return value.toString();
 }
 
-/**
- * Format SOL amount
- */
 export function formatSol(value: number): string {
-  if (value < 0.0001) {
-    return '<0.0001 SOL';
-  }
-  if (value < 1) {
-    return `${value.toFixed(4)} SOL`;
-  }
+  if (value < 0.0001) return '<0.0001 SOL';
+  if (value < 1) return `${value.toFixed(4)} SOL`;
   return `${value.toFixed(2)} SOL`;
 }
 
-/**
- * Format percentage with + or - prefix
- */
 export function formatPercentage(value: number): string {
   const sign = value >= 0 ? '+' : '';
   return `${sign}${value.toFixed(2)}%`;
 }
 
-/**
- * Format time ago from timestamp
- */
 export function formatTimeAgo(timestamp: number): string {
   const now = Date.now();
   const diff = now - timestamp;
@@ -71,25 +40,16 @@ export function formatTimeAgo(timestamp: number): string {
   return `${seconds}s`;
 }
 
-/**
- * Truncate address for display
- */
 export function truncateAddress(address: string, chars: number = 4): string {
   if (address.length <= chars * 2 + 3) return address;
   return `${address.slice(0, chars)}...${address.slice(-chars)}`;
 }
 
-/**
- * Generate a random price change for simulated updates
- */
 export function generateRandomPriceChange(currentPrice: number): number {
-  const changePercent = (Math.random() - 0.5) * 0.1; // -5% to +5%
+  const changePercent = (Math.random() - 0.5) * 0.1;
   return currentPrice * (1 + changePercent);
 }
 
-/**
- * Apply filter preset to tokens
- */
 export function applyFilter(tokens: Token[], preset: FilterPreset): Token[] {
   return tokens.filter(token => {
     if (preset.minMarketCap && token.marketCap < preset.minMarketCap) return false;
@@ -102,9 +62,6 @@ export function applyFilter(tokens: Token[], preset: FilterPreset): Token[] {
   });
 }
 
-/**
- * Sort tokens by field and direction
- */
 export function sortTokens(
   tokens: Token[],
   field: keyof Token | 'createdAt',
@@ -121,9 +78,6 @@ export function sortTokens(
   });
 }
 
-/**
- * Generate random ID
- */
 export function generateId(): string {
   return Math.random().toString(36).substring(2, 11);
 }

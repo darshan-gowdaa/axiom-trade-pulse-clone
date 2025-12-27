@@ -1,5 +1,5 @@
-import { PulseContent } from '@/components/PulseContent';
+import { PulseContentLazy } from '@/components/PulseContentLazy';
 
 export default function PulsePage() {
-  return <PulseContent />;
+  return <PulseContentLazy />;
 }

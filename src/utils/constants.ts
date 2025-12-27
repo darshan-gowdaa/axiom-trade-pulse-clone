@@ -34,6 +34,15 @@ export const NAV_LINKS = [
 ] as const;
 
 /**
+ * Pulse page tabs configuration (shared by PulseToolbar and TabSwitcher)
+ */
+export const PULSE_TABS: { id: 'newPairs' | 'finalStretch' | 'migrated'; label: string }[] = [
+  { id: 'newPairs', label: 'New Pairs' },
+  { id: 'finalStretch', label: 'Final Stretch' },
+  { id: 'migrated', label: 'Migrated' },
+];
+
+/**
  * Supported chain options
  */
 export const CHAINS = [
