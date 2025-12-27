@@ -2,15 +2,15 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { 
-  RiSearchLine, 
-  RiArrowDownSLine, 
-  RiNotification3Line, 
-  RiStarLine, 
-  RiSettings4Line, 
-  RiWalletLine, 
-  RiGlobalLine, 
-  RiMenuLine, 
+import {
+  RiSearchLine,
+  RiArrowDownSLine,
+  RiNotification3Line,
+  RiStarLine,
+  RiSettings4Line,
+  RiWalletLine,
+  RiGlobalLine,
+  RiMenuLine,
   RiFileCopyLine,
   RiFileCopy2Line,
   RiUserSettingsLine,
@@ -55,9 +55,8 @@ export function Header() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`text-[12px] font-medium transition-colors ${
-                  link.active ? 'text-[#526fff]' : 'text-white'
-                }`}
+                className={`text-[12px] font-medium transition-colors ${link.active ? 'text-[#526fff]' : 'text-white'
+                  }`}
               >
                 {link.label}
               </Link>
@@ -68,14 +67,14 @@ export function Header() {
         {/* Middle Section: Search */}
         <div className="flex-1 flex justify-center max-w-[200px] mx-[20px]">
           <div className="relative w-full">
-            <RiSearchLine 
+            <RiSearchLine
               className="absolute left-[12px] top-1/2 -translate-y-1/2 w-[16px] h-[16px] text-[#d4d4d8]"
             />
             <input
               type="text"
               placeholder="Search by token or CA..."
               className="w-full h-[28px] pl-[36px] pr-[36px] border border-[#2a2a38] rounded-[16px] p-2 text-[9.8px] text-gray-200 outline-none placeholder:text-gray-200"
-            />  
+            />
             <kbd className="absolute right-[10px] top-1/2 -translate-y-1/2 text-[10px] text-gray-200 px-[6px] py-[2px] rounded-full border border-[#2a2a38] font-mono">
               /
             </kbd>
@@ -122,8 +121,8 @@ export function Header() {
               <span className="text-white text-[12px] font-bold">O</span>
             </div>
             <div className="flex items-center gap-[4px]">
-              <img 
-                src="https://axiom.trade/images/usdc-perps.svg" 
+              <img
+                src="https://axiom.trade/images/usdc-perps.svg"
                 alt="USDC Perps"
                 className="w-[16px] h-[16px]"
               />
@@ -134,7 +133,7 @@ export function Header() {
 
           {/* Profile Gradient Circle */}
           <div className="relative w-[24px] h-[24px] ml-2">
-            <div 
+            <div
               className="absolute inset-0 rounded-full bg-gradient-to-br from-[#f472b6] via-[#a78bfa] to-[#22d3ee] p-[2px]"
             >
               <div className="w-full h-full rounded-full bg-[#0c0c10]" />
@@ -165,43 +164,43 @@ export function Header() {
 
         {/* Right: Actions Group */}
         <div className="flex items-center gap-1.5 overflow-hidden">
-             {/* Wallet Pill */}
-             <button className="flex items-center gap-1 px-2 py-1.5 bg-[#16161e] border border-[#2a2a38] rounded-full text-[10px] whitespace-nowrap shrink-0">
-                <RiWalletLine className="w-3.5 h-3.5 text-[rgba(255,255,255,0.7)]" />
-                <SolanaLogo width={9} height={9} /> 
-                <span className="text-white font-semibold">0</span>
-                <div className="w-[1px] h-2.5 bg-[#2a2a38] mx-0.5" />
-                <img src="https://axiom.trade/images/usdc-perps.svg" alt="USDC" className="w-3.5 h-3.5" />
-                <span className="text-white font-semibold">0</span>
-                <RiArrowDownSLine className="w-2.5 h-2.5 text-[#6b6b7a]" />
-             </button>
+          {/* Wallet Pill */}
+          <button className="flex items-center gap-1 px-2 py-1 bg-[#16161e] border border-[#2a2a38] rounded-full text-[10px] whitespace-nowrap shrink-0">
+            <RiWalletLine className="w-3.5 h-3.5 text-[rgba(255,255,255,0.7)]" />
+            <SolanaLogo width={9} height={9} />
+            <span className="text-white font-semibold">0</span>
+            <div className="w-[1px] h-2.5 bg-[#2a2a38] mx-0.5" />
+            <img src="https://axiom.trade/images/usdc-perps.svg" alt="USDC" className="w-3.5 h-3.5" />
+            <span className="text-white font-semibold">0</span>
+            <RiArrowDownSLine className="w-2.5 h-2.5 text-[#6b6b7a]" />
+          </button>
 
-             {/* Paste CA */}
-             <button className="flex items-center gap-1 px-2 py-1.5 bg-[#16161e] border border-[#2a2a38] rounded-full text-[10px] text-white font-medium whitespace-nowrap shrink-0">
-                <RiFileCopyLine className="w-3 h-3 text-white" />
-                <span>Paste</span>
-             </button>
+          {/* Paste CA */}
+          <button className="flex items-center gap-1 px-2 py-1 bg-[#16161e] border border-[#2a2a38] rounded-full text-[10px] text-white font-medium whitespace-nowrap shrink-0">
+            <RiFileCopyLine className="w-3 h-3 text-white" />
+            <span>Paste CA</span>
+          </button>
 
-             {/* Search */}
-             <button className="flex items-center justify-center w-7 h-7 bg-[#16161e] rounded-full border border-[#2a2a38] shrink-0">
-                <RiSearchLine className="w-3.5 h-3.5 text-white" />
-             </button>
+          {/* Search */}
+          <button className="flex items-center justify-center w-7 h-7 bg-[#16161e] rounded-full border border-[#2a2a38] shrink-0">
+            <RiSearchLine className="w-3.5 h-3.5 text-white" />
+          </button>
 
-             {/* Profile */}
-             <div className="relative w-7 h-7 shrink-0">
-                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#f472b6] via-[#a78bfa] to-[#22d3ee] p-[1.5px]">
-                  <div className="w-full h-full rounded-full bg-[#0c0c10]" />
-                </div>
-                <button className="absolute inset-[1.5px] rounded-full bg-gradient-to-br from-[#6366f1] via-[#a855f7] to-[#ec4899] border-0 flex items-center justify-center cursor-pointer overflow-hidden p-0">
-                  <span className="text-[9px] font-bold text-white">CO</span>
-                </button>
-                <div className="absolute bottom-[1px] right-[1px] w-1.5 h-1.5 bg-[#14f195] rounded-full border border-[#0c0c10]" />
-             </div>
+          {/* Profile */}
+          <div className="relative w-7 h-7 shrink-0">
+            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#f472b6] via-[#a78bfa] to-[#22d3ee] p-[1.5px]">
+              <div className="w-full h-full rounded-full bg-[#0c0c10]" />
+            </div>
+            <button className="absolute inset-[1.5px] rounded-full bg-gradient-to-br from-[#6366f1] via-[#a855f7] to-[#ec4899] border-0 flex items-center justify-center cursor-pointer overflow-hidden p-0">
+              <span className="text-[9px] font-bold text-white">67</span>
+            </button>
+            <div className="absolute bottom-[1px] right-[1px] w-1.5 h-1.5 bg-[#14f195] rounded-full border border-[#0c0c10]" />
+          </div>
 
-             {/* Menu */}
-             <button className="flex items-center justify-center w-7 h-7 bg-[#16161e] rounded-full border border-[#2a2a38] shrink-0">
-                <RiMenuLine className="w-3.5 h-3.5 text-white" />
-             </button>
+          {/* Menu */}
+          <button className="flex items-center justify-center w-7 h-7 bg-[#16161e] rounded-full border border-[#2a2a38] shrink-0">
+            <RiMenuLine className="w-3.5 h-3.5 text-white" />
+          </button>
         </div>
       </div>
     </header>

@@ -5,7 +5,9 @@ import {
   RiFireLine, 
   RiRadarLine, 
   RiArrowLeftRightLine, 
-  RiAccountBoxLine 
+  RiAccountBoxLine, 
+  RiExchangeLine,
+  RiFolderUserLine
 } from '@remixicon/react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
@@ -14,15 +16,15 @@ const NAV_ITEMS = [
   { label: 'Trending', icon: RiFireLine, href: '/discover' },
   { label: 'Track', icon: RiRadarLine, href: '/trackers' },
   { label: 'Pulse', icon: RiPulseLine, href: '/pulse' },
-  { label: 'Perpetuals', icon: RiArrowLeftRightLine, href: '/perpetuals' },
-  { label: 'Account', icon: RiAccountBoxLine, href: '/portfolio' },
+  { label: 'Perpetuals', icon: RiExchangeLine, href: '/perpetuals' },
+  { label: 'Account', icon: RiFolderUserLine, href: '/portfolio' },
 ];
 
 export function MobileNavBar() {
   const pathname = usePathname();
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 h-[45px] bg-[#0c0c10] border-t border-[#1a1b23] flex items-center w-full z-50 lg:hidden safe-area-bottom">
+    <div className="fixed bottom-0 left-0 right-0 h-[48px] bg-[#0c0c10] border-t border-[#1a1b23] flex items-center w-full z-50 lg:hidden safe-area-bottom p-2">
       {NAV_ITEMS.map((item) => {
         const isActive =
           item.label === 'Pulse'

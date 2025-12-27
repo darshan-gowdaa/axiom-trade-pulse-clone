@@ -210,9 +210,8 @@ function TokenCardComponent({
                   src={token.imageUrl}
                   alt={tokenIdentity.name}
                   fill
-                  className={`object-cover transition-opacity duration-500 ease-in-out ${
-                    imgLoaded ? 'opacity-100' : 'opacity-0'
-                  }`}
+                  className={`object-cover transition-opacity duration-500 ease-in-out ${imgLoaded ? 'opacity-100' : 'opacity-0'
+                    }`}
                   onLoad={() => setImgLoaded(true)}
                   unoptimized
                 />
@@ -319,9 +318,8 @@ function TokenCardComponent({
             {bottomMetrics.map((m, i) => (
               <div
                 key={i}
-                className={`flex items-center gap-1 px-1.5 py-0.5 font-semibold rounded-[99px] border border-[#17181f] text-[10px] whitespace-nowrap shrink-0 ${
-                  i === bottomMetrics.length - 1 ? 'bg-transparent' : ''
-                }`}
+                className={`flex items-center gap-1 px-1.5 py-0.5 font-semibold rounded-[99px] border border-[#17181f] text-[10px] whitespace-nowrap shrink-0 ${i === bottomMetrics.length - 1 ? 'bg-transparent' : ''
+                  }`}
               >
                 <span style={{ color: m.color }} className="flex">
                   {m.icon}
@@ -345,10 +343,13 @@ function TokenCardComponent({
               e.stopPropagation();
               onQuickBuy?.(token);
             }}
-            className="px-1 py-[1px] rounded-xl text-[10px] font-semibold bg-[#526fff] border-none text-black cursor-pointer whitespace-nowrap flex items-center gap-[2px] min-w-[54px] justify-center shrink-0"
+            className="px-1 py-[1px] rounded-xl text-[10px] font-semibold bg-[#526fff] text-black border-none cursor-pointer whitespace-nowrap flex items-center gap-[2px] min-w-[54px] justify-center shrink-0"
           >
-            <RiFlashlightFill className="w-3 h-3 fill-black" /> 0 SOL
+            <RiFlashlightFill className="w-3 h-3 text-black" />
+            <span className="text-black">0 SOL</span>
           </button>
+
+
         </div>
       </div>
     </div>
