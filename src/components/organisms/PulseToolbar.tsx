@@ -43,19 +43,19 @@ export function PulseToolbar({ className, activeTab, onTabChange }: PulseToolbar
           </Tooltip>
           <div className="w-[1px] h-3 bg-[#27272a] shrink-0" />
           <Tooltip content="Watchlist" position="right">
-            <button className="bg-none border-none text-white hover:text-[#a1a1aa] cursor-pointer flex transition-colors shrink-0">
+            <button className="bg-none border-none text-[#636470] hover:text-[#a1a1aa] cursor-pointer flex transition-colors shrink-0">
               <RiStarLine className="w-2.5 h-2.5" />
             </button>
           </Tooltip>
           <Tooltip content="Active Positions" position="right">
-            <button className="bg-none border-none text-[#636470] hover:text-[#a1a1aa] cursor-pointer flex transition-colors shrink-0">
+            <button className="bg-none border-none text-white hover:text-[#a1a1aa] cursor-pointer flex transition-colors shrink-0">
               <RiLineChartLine className="w-3 h-3 ml-1.5" />
             </button>
           </Tooltip>
           <div className="w-[1px] h-3 bg-[#27272a] shrink-0" />
         </div>
 
-        <div className="flex items-center justify-between px-4 lg:px-7 py-2 overflow-visible gap-4 mt-2">
+        <div className="flex items-center justify-between px-4 lg:px-5 py-2 overflow-visible gap-4 mt-2">
           <div className="flex items-center gap-1 shrink-0">
             <span className="text-[15px] font-semibold text-white tracking-wide">Pulse</span>
             <ChainSelector variant="desktop" />

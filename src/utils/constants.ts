@@ -31,6 +31,8 @@ export const NAV_LINKS = [
   { href: '/perpetuals', label: 'Perpetuals', active: false },
   { href: '/yield', label: 'Yield', active: false },
   { href: '/vision', label: 'Vision', active: false },
+  { href: '/portfolio', label: 'Portfolio', active: false },
+  { href: '/rewards', label: 'Rewards', active: false },
 ] as const;
 
 /**

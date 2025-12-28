@@ -1,9 +1,12 @@
 'use client';
 
+import { useState, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import {
   RiSearchLine,
   RiArrowDownSLine,
+  RiArrowLeftSLine,
+  RiArrowRightSLine,
   RiNotification3Line,
   RiStarLine,
   RiWalletLine,
@@ -22,6 +25,30 @@ export function Header() {
   const activeChain = useAppSelector((state) => state.ui.activeChain);
   const isBnb = activeChain === 'bnb';
 
+  const navContainerRef = useRef<HTMLDivElement>(null);
+  const [isNavHovered, setIsNavHovered] = useState(false);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const updateScrollState = useCallback(() => {
+    if (navContainerRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = navContainerRef.current;
+      setCanScrollLeft(scrollLeft > 0);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
+    }
+  }, []);
+
+  const scrollNav = useCallback((direction: 'left' | 'right') => {
+    if (navContainerRef.current) {
+      const scrollAmount = 120;
+      navContainerRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth'
+      });
+      setTimeout(updateScrollState, 300);
+    }
+  }, [updateScrollState]);
+
   return (
     <header className="h-[35px] lg:h-[53px] bg-[#0c0c10] border-b border-[#1a1b23] select-none">
       {/* Desktop */}
@@ -33,17 +60,60 @@ export function Header() {
             <span className="bg-transparent text-[#fcfcfc] text-[13px] font-light p-0 self-end mb-[4px] ml-[2px]">Pro</span>
           </Link>
 
-          <nav className="flex items-center gap-[26px]">
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`text-[12px] font-medium transition-colors ${link.active ? 'text-[#526fff]' : 'text-white'}`}
+          {/* Scrollable Navigation */}
+          <div
+            className="relative flex items-center"
+            onMouseEnter={() => setIsNavHovered(true)}
+            onMouseLeave={() => setIsNavHovered(false)}
+          >
+            {/* Nav Links Container */}
+            <div
+              ref={navContainerRef}
+              className="flex items-center gap-[26px] overflow-x-auto scrollbar-hide max-w-[420px]"
+              onScroll={updateScrollState}
+            >
+              {NAV_LINKS.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`text-[12px] font-medium transition-all duration-150 whitespace-nowrap px-[10px] py-[6px] -mx-[10px] -my-[6px] rounded-[6px] hover:bg-[#1a1f3d] ${link.active ? 'text-[#526fff]' : 'text-white'
+                    }`}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+
+            {/* Left shadow + arrow container */}
+            <div
+              className={`absolute left-0 top-0 bottom-0 w-[44px] flex items-center justify-start z-20 transition-opacity duration-200 ${canScrollLeft ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                }`}
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-[#0c0c10] via-[#0c0c10] to-transparent pointer-events-none" />
+              <button
+                onClick={() => scrollNav('left')}
+                className={`relative z-10 flex items-center justify-center cursor-pointer transition-opacity duration-200 ${isNavHovered ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                  }`}
               >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
+                <RiArrowLeftSLine className="w-[18px] h-[20px] text-[#6b6b7a]" />
+              </button>
+            </div>
+
+            {/* Right shadow + arrow container */}
+            <div
+              className={`absolute right-0 top-0 bottom-0 w-[44px] flex items-center justify-end z-20 transition-opacity duration-200 ${canScrollRight ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                }`}
+            >
+              <div className="absolute inset-0 bg-gradient-to-l from-[#0c0c10] via-[#0c0c10] to-transparent pointer-events-none" />
+              <button
+                onClick={() => scrollNav('right')}
+                className={`relative z-10 flex items-center justify-center cursor-pointer transition-opacity duration-200 ${isNavHovered ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                  }`}
+              >
+                <RiArrowRightSLine className="w-[18px] h-[20px] text-[#6b6b7a]" />
+              </button>
+            </div>
+          </div>
         </div>
 
         <div className="flex-1 flex justify-center max-w-[200px] mx-[20px]">
@@ -60,28 +130,28 @@ export function Header() {
 
         <div className="flex items-center gap-[10px]">
           <button
-            className={`flex items-center gap-[6px] h-[32px] pl-[8px] pr-[6px] border-[1.5px] rounded-full text-[12px] text-white cursor-pointer font-semibold transition-all duration-150 ease-in-out hover:brightness-125 active:scale-[0.96] ${isBnb ? 'shadow-[0_0_12px_rgba(240,185,11,0.2)]' : ''
+            className={`flex items-center gap-[5px] h-[32px] pl-[8px] pr-[6px] border-[1.5px] rounded-full text-[12px] text-white cursor-pointer font-semibold transition-all duration-150 ease-in-out hover:brightness-125 active:scale-[0.96] ${isBnb ? 'shadow-[0_0_12px_rgba(240,185,11,0.2)]' : ''
               }`}
             style={{ borderColor: isBnb ? 'rgba(240, 185, 11, 0.15)' : '#2a2a38' }}
           >
             <ChainLogo width={14} height={14} />
             <span className="font-semibold"><ChainText /></span>
-            <RiArrowDownSLine className="w-[12px] h-[12px] text-[#d4d4d8] font-semibold" />
+            <RiArrowDownSLine className="w-[16px] h-[16px] text-[#d4d4d8] font-semibold" />
           </button>
 
           <button className="h-[28px] px-[11px] py-0 bg-[#526fff] border-0 rounded-[16px] text-[12px] font-[750] text-[#000000] cursor-pointer">
             Deposit
           </button>
 
-          <button className="w-[32px] h-[32px] flex items-center justify-center bg-[#1a1b23] rounded-full border-0 text-[#fcfcfc] cursor-pointer">
+          <button className="w-[32px] h-[32px] flex items-center justify-center bg-[#1a1b23] rounded-full border-0 text-[#fcfcfc] cursor-pointer transition-colors duration-150 hover:bg-[#252630]">
             <RiStarLine className="w-[16px] h-[16px]" />
           </button>
 
-          <button className="relative w-[32px] h-[32px] flex items-center justify-center bg-[#1a1b23] rounded-full border-0 text-[#fcfcfc] cursor-pointer">
+          <button className="relative w-[32px] h-[32px] flex items-center justify-center bg-[#1a1b23] rounded-full border-0 text-[#fcfcfc] cursor-pointer transition-colors duration-150 hover:bg-[#252630]">
             <RiNotification3Line className="w-[16px] h-[16px]" />
           </button>
 
-          <div className="flex items-center gap-[10px] h-[28px] px-[10px] bg-[#22242d] border border-[#2a2a38] rounded-[16px]">
+          <div className="flex items-center gap-[10px] h-[28px] px-[10px] bg-[#22242d] border border-[#2a2a38] rounded-[16px] cursor-pointer transition-colors duration-150 hover:bg-[#2a2c36]">
             <div className="flex items-center gap-[4px]">
               <RiWalletLine className="w-[16px] h-[16px] text-white" />
               <ChainLogo width={14} height={14} />
