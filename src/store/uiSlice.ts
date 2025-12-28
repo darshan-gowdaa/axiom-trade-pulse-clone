@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { type UIState, type DisplaySettings, type ActiveTab, type SortConfig } from '@/types';
+import { type UIState, type DisplaySettings, type ActiveTab, type SortConfig, type Chain } from '@/types';
 
 const defaultDisplaySettings: DisplaySettings = {
   layout: 'compact',
@@ -33,6 +33,8 @@ const initialState: UIState = {
   },
   isDisplaySettingsOpen: false,
   isMobile: false,
+  activeChain: 'sol',
+  isChainLoading: false,
 };
 
 const uiSlice = createSlice({
@@ -68,6 +70,14 @@ const uiSlice = createSlice({
     setIsMobile: (state, action: PayloadAction<boolean>) => {
       state.isMobile = action.payload;
     },
+
+    setActiveChain: (state, action: PayloadAction<Chain>) => {
+      state.activeChain = action.payload;
+    },
+
+    setChainLoading: (state, action: PayloadAction<boolean>) => {
+      state.isChainLoading = action.payload;
+    },
   },
 });
 
@@ -78,6 +88,8 @@ export const {
   setActivePreset,
   toggleDisplaySettings,
   setIsMobile,
+  setActiveChain,
+  setChainLoading,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

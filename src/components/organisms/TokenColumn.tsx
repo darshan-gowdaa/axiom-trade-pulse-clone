@@ -2,12 +2,13 @@
 
 import { useRef, useCallback } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
+import { useAppSelector } from '@/hooks';
 import { type Token, type ActiveTab } from '@/types';
 import { TokenCard } from './TokenCard';
 import { TokenCardSkeleton } from '@/components/atoms';
 import { DEFAULT_PRESETS, VIRTUAL_SCROLL_OVERSCAN } from '@/utils';
 import { RiEqualizer3Fill, RiFlashlightFill } from '@remixicon/react';
-import { SolanaLogo } from '@/components/atoms/SolanaLogo';
+import { ChainLogo } from '@/components/atoms';
 
 interface TokenColumnProps {
   title: string;
@@ -37,6 +38,7 @@ export function TokenColumn({
 }: TokenColumnProps) {
   const parentRef = useRef<HTMLDivElement>(null);
   const presets = DEFAULT_PRESETS[columnType] || [];
+  const isChainLoading = useAppSelector((state) => state.ui.isChainLoading);
 
   // eslint-disable-next-line react-hooks/incompatible-library
   const virtualizer = useVirtualizer({
@@ -65,7 +67,7 @@ export function TokenColumn({
               <span className="text-[10px] text-white mr-4">0</span>
             </div>
 
-            <SolanaLogo width={10} height={10} />
+            <ChainLogo width={10} height={10} />
             <div className="w-[1px] h-3 bg-[#2a2a35]" />
 
             {presets.map((preset, index) => (
@@ -92,7 +94,7 @@ export function TokenColumn({
         className="flex-1 overflow-y-auto scrollbar-thin scrollbar-color-[#2a2a35_transparent]"
         style={{ scrollbarWidth: 'thin', scrollbarColor: '#2a2a35 transparent' }}
       >
-        {isLoading ? (
+        {isLoading || isChainLoading ? (
           <div>
             {Array.from({ length: 10 }).map((_, i) => (
               <TokenCardSkeleton key={i} />

@@ -3,3 +3,4 @@ export { useIsMobile } from './useIsMobile';
 export { useAppDispatch, useAppSelector } from './useRedux';
 export { useTokenCardState } from './useTokenCardState';
 export { useLoadingState, useIntersectionLoader, usePrefetch, prefetchComponent } from './usePerformance';
+export { useChain } from './useChain';

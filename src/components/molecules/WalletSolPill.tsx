@@ -1,7 +1,7 @@
 'use client';
 
 import { RiWalletLine, RiArrowDownSLine } from '@remixicon/react';
-import { SolanaLogo } from '@/components/atoms/SolanaLogo';
+import { ChainLogo } from '@/components/atoms';
 
 type WalletPillVariant = 'default' | 'compact' | 'statusBar';
 
@@ -61,7 +61,7 @@ export function WalletSolPill({
                     <span className={styles.text}>{walletCount}</span>
                 </div>
                 <div className="flex items-center gap-1">
-                    <SolanaLogo width={styles.solanaSize.width} height={styles.solanaSize.height} />
+                    <ChainLogo width={styles.solanaSize.width} height={styles.solanaSize.height} />
                     <span className={styles.text}>{solBalance}</span>
                     {showDropdown && <RiArrowDownSLine className={styles.arrowIcon} />}
                 </div>
@@ -74,7 +74,7 @@ export function WalletSolPill({
         <button className={`${styles.button} ${className}`}>
             <RiWalletLine className={styles.walletIcon} />
             <span className={styles.text}>{walletCount}</span>
-            <SolanaLogo width={styles.solanaSize.width} height={styles.solanaSize.height} />
+            <ChainLogo width={styles.solanaSize.width} height={styles.solanaSize.height} />
             <span className={styles.text}>{solBalance}</span>
             {showDropdown && <RiArrowDownSLine className={styles.arrowIcon} />}
         </button>

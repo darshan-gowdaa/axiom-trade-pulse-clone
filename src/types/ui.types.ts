@@ -47,6 +47,11 @@ export type SortField =
 export type ActiveTab = 'newPairs' | 'finalStretch' | 'migrated';
 
 /**
+ * Supported blockchain chains
+ */
+export type Chain = 'sol' | 'bnb';
+
+/**
  * UI state for the application
  */
 export interface UIState {
@@ -56,4 +61,6 @@ export interface UIState {
   activePresets: Record<ActiveTab, string | null>;
   isDisplaySettingsOpen: boolean;
   isMobile: boolean;
+  activeChain: Chain;
+  isChainLoading: boolean;
 }

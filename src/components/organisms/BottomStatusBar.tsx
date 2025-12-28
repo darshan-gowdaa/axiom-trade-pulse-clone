@@ -19,7 +19,7 @@ import {
   RiCoinLine,
   RiSettings3Line,
 } from '@remixicon/react';
-import { SolanaLogo } from '@/components/atoms/SolanaLogo';
+import { ChainLogo } from '@/components/atoms';
 import { NotificationDot, NavButton, OptimizedImage } from '@/components/atoms';
 import { WalletSolPill } from '@/components/molecules';
 
@@ -69,7 +69,7 @@ export function BottomStatusBar({ className, loading }: BottomStatusBarProps) {
         </div>
 
         <div className="flex items-center gap-[3px]">
-          <SolanaLogo width={11} height={11} />
+          <ChainLogo width={11} height={11} />
           <span className="text-[#14f195] text-[10px]">$189.96</span>
         </div>
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { RiFlashlightFill } from '@remixicon/react';
-import { SolanaLogo } from '@/components/atoms/SolanaLogo';
+import { ChainLogo } from '@/components/atoms';
 
 interface PresetPillProps {
     activePreset?: 'P1' | 'P2' | 'P3';
@@ -21,7 +21,7 @@ export function PresetPill({
             <div className="flex items-center gap-1.5 px-2 border-r border-[#2a2a38]">
                 <RiFlashlightFill className="w-3 h-3 text-[#d4d4d8]" />
                 <span className="text-white text-[11px] font-medium mr-8">{quickBuyAmount}</span>
-                <SolanaLogo width={11} height={11} />
+                <ChainLogo width={11} height={11} />
             </div>
             <div className="flex items-center gap-2 px-2">
                 {PRESETS.map((preset) => (

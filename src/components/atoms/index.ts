@@ -8,4 +8,5 @@ export { NotificationDot } from './NotificationDot';
 export { NavButton } from './NavButton';
 export { OptimizedImage } from './OptimizedImage';
 export { Tooltip } from './Tooltip';
-
+export { ChainLogo } from './ChainLogo';
+export { ChainText } from './ChainText';

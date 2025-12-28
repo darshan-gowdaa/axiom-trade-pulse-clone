@@ -4,9 +4,9 @@ import React, { memo, useState, useMemo } from 'react';
 import { type Token } from '@/types';
 import { formatCurrency, formatCompactNumber, formatTimeAgo } from '@/utils';
 import { getRingColor, getMarketCapColor, generateUserIconColor } from '@/utils/tokenCardHelpers';
-import { useTokenCardState } from '@/hooks';
+import { useTokenCardState, useChain } from '@/hooks';
 import { RiCheckLine, RiUserLine, RiFlashlightFill, RiFileCopyFill } from '@remixicon/react';
-import { SolanaLogo } from '@/components/atoms/SolanaLogo';
+import { ChainLogo, ChainText } from '@/components/atoms';
 import { MetricBlock } from '@/components/atoms/MetricBlock';
 import { TokenAvatarCard, MetricPill } from '@/components/molecules';
 
@@ -26,6 +26,7 @@ function TokenCardComponent({
 }: TokenCardProps) {
   const [copied, setCopied] = useState(false);
   const [userIconColor] = useState(generateUserIconColor);
+  const { activeChain } = useChain();
 
   const {
     tokenIdentity,
@@ -122,9 +123,11 @@ function TokenCardComponent({
         <div className="flex items-center justify-between gap-2">
           <div className="flex-1" />
           <div className="flex items-center gap-1 text-[9px] shrink-0 -mt-1">
-            <span className="text-white flex items-center gap-[2px]">
-              F <SolanaLogo width={9} height={9} /> 0.00₂5
-            </span>
+            {activeChain === 'sol' && (
+              <span className="text-white flex items-center gap-[2px]">
+                F <ChainLogo width={9} height={9} /> 0.00₂5
+              </span>
+            )}
             <span className="text-[#777a8c]">TX</span>
             <span className="text-[#fcfcfc] font-semibold">
               {formatCompactNumber(txCount)}
@@ -156,7 +159,7 @@ function TokenCardComponent({
             className="px-1 py-[1px] rounded-xl text-[10px] font-semibold bg-[#526fff] text-black border-none cursor-pointer whitespace-nowrap flex items-center gap-[2px] min-w-[54px] justify-center shrink-0"
           >
             <RiFlashlightFill className="w-3 h-3 text-black" />
-            <span className="text-black">0 SOL</span>
+            <span className="text-black">0 <ChainText /></span>
           </button>
         </div>
       </div>

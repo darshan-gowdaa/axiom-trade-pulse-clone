@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
 import {
   RiSearchLine,
@@ -12,14 +11,12 @@ import {
   RiFileCopyLine,
   RiUserSettingsLine,
 } from '@remixicon/react';
-import { SolanaLogo } from '@/components/atoms/SolanaLogo';
+import { ChainLogo, ChainText } from '@/components/atoms';
 import { AxiomLogo } from '@/components/atoms/AxiomLogo';
 import { OptimizedImage } from '@/components/atoms';
 import { NAV_LINKS } from '@/utils/constants';
 
 export function Header() {
-  const [chain] = useState<'SOL' | 'BNB'>('SOL');
-
   return (
     <header className="h-[35px] lg:h-[53px] bg-[#0c0c10] border-b border-[#1a1b23] select-none">
       {/* Desktop */}
@@ -58,8 +55,8 @@ export function Header() {
 
         <div className="flex items-center gap-[10px]">
           <button className="flex items-center gap-[6px] h-[28px] px-[12px] border border-[#2a2a38] rounded-[16px] text-[12px] text-white cursor-pointer font-semibold">
-            <SolanaLogo width={14} height={14} />
-            <span className="font-semibold">{chain}</span>
+            <ChainLogo width={14} height={14} />
+            <span className="font-semibold"><ChainText /></span>
             <RiArrowDownSLine className="w-[12px] h-[12px] text-[#d4d4d8] font-semibold" />
           </button>
 
@@ -78,7 +75,7 @@ export function Header() {
           <div className="flex items-center gap-[10px] h-[28px] px-[10px] bg-[#22242d] border border-[#2a2a38] rounded-[16px]">
             <div className="flex items-center gap-[4px]">
               <RiWalletLine className="w-[16px] h-[16px] text-white" />
-              <SolanaLogo width={14} height={14} />
+              <ChainLogo width={14} height={14} />
               <span className="text-white text-[12px] font-bold">O</span>
             </div>
             <div className="flex items-center gap-[4px]">
@@ -113,7 +110,7 @@ export function Header() {
         <div className="flex items-center gap-1.5 overflow-hidden">
           <button className="flex items-center gap-1 px-2 py-1 bg-[#16161e] border border-[#2a2a38] rounded-full text-[10px] whitespace-nowrap shrink-0">
             <RiWalletLine className="w-3.5 h-3.5 text-[rgba(255,255,255,0.7)]" />
-            <SolanaLogo width={9} height={9} />
+            <ChainLogo width={9} height={9} />
             <span className="text-white font-semibold">0</span>
             <div className="w-[1px] h-2.5 bg-[#2a2a38] mx-0.5" />
             <OptimizedImage src="https://axiom.trade/images/usdc-perps.svg" alt="USDC" width={14} height={14} />
