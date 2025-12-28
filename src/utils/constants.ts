@@ -1,8 +1,6 @@
 import { type FilterPreset } from '@/types';
 
-/**
- * Default filter presets for each column
- */
+
 export const DEFAULT_PRESETS: Record<string, FilterPreset[]> = {
   newPairs: [
     { id: 'p1', name: 'P1', minMarketCap: 0, maxMarketCap: 50000 },
@@ -21,9 +19,7 @@ export const DEFAULT_PRESETS: Record<string, FilterPreset[]> = {
   ],
 };
 
-/**
- * Navigation links for the header
- */
+
 export const NAV_LINKS = [
   { href: '/discover', label: 'Discover', active: false },
   { href: '/pulse', label: 'Pulse', active: true },
@@ -35,50 +31,36 @@ export const NAV_LINKS = [
   { href: '/rewards', label: 'Rewards', active: false },
 ] as const;
 
-/**
- * Pulse page tabs configuration (shared by PulseToolbar and TabSwitcher)
- */
+
 export const PULSE_TABS: { id: 'newPairs' | 'finalStretch' | 'migrated'; label: string }[] = [
   { id: 'newPairs', label: 'New Pairs' },
   { id: 'finalStretch', label: 'Final Stretch' },
   { id: 'migrated', label: 'Migrated' },
 ];
 
-/**
- * Supported chain options
- */
+
 export const CHAINS = [
   { id: 'sol', name: 'SOL', icon: '◎' },
   { id: 'bnb', name: 'BNB', icon: '🟡' },
 ] as const;
 
-/**
- * WebSocket simulation interval (ms)
- */
+
 export const WS_UPDATE_INTERVAL = 2000;
 
-/**
- * Number of tokens to generate per column
- */
+
 export const INITIAL_TOKENS_COUNT = 25;
 
-/**
- * Virtual scroll overscan count
- */
+
 export const VIRTUAL_SCROLL_OVERSCAN = 5;
 
-/**
- * Animation durations (ms)
- */
+
 export const ANIMATION = {
   PRICE_FLASH: 300,
   FADE_IN: 200,
   HOVER: 150,
 } as const;
 
-/**
- * Breakpoints matching Tailwind defaults
- */
+
 export const BREAKPOINTS = {
   sm: 640,
   md: 768,

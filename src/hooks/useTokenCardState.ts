@@ -61,7 +61,7 @@ export function useTokenCardState({
   const [timeState, setTimeState] = useState<TimeState>(generateInitialTimeState);
   const [feeValue, setFeeValue] = useState<string>(generateFeeValue);
 
-  // Token identity rotation
+
   useEffect(() => {
     const nameInterval = setInterval(() => {
       const { name, symbol } = generateNameAndSymbol();
@@ -71,7 +71,7 @@ export function useTokenCardState({
     return () => clearInterval(nameInterval);
   }, []);
 
-  // Transaction count updates
+
   useEffect(() => {
     const txInterval = setInterval(() => {
       setTxCount((prev) => prev + Math.floor(Math.random() * 5) + 1);
@@ -80,7 +80,7 @@ export function useTokenCardState({
     return () => clearInterval(txInterval);
   }, []);
 
-  // Market cap updates
+
   useEffect(() => {
     const mcInterval = setInterval(() => {
       setMarketCap((prev) => Math.max(0, prev + prev * (Math.random() * 0.1 - 0.04)));
@@ -89,7 +89,7 @@ export function useTokenCardState({
     return () => clearInterval(mcInterval);
   }, []);
 
-  // Volume updates
+
   useEffect(() => {
     const volInterval = setInterval(() => {
       setVolume((prev) => Math.max(0, prev + prev * (Math.random() * 0.1 - 0.04)));
@@ -98,7 +98,7 @@ export function useTokenCardState({
     return () => clearInterval(volInterval);
   }, []);
 
-  // Metrics and display updates
+
   useEffect(() => {
     const interval = setInterval(() => {
       setTopMetrics(generateTopMetrics());

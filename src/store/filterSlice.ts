@@ -1,36 +1,68 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface FilterState {
+export interface FilterConfig {
   searchKeywords: string;
   excludeKeywords: string;
-  activeTab: string;
+  sortBy: 'mC' | 'volume' | 'tx' | 'liquidity' | null;
+  sortOrder: 'asc' | 'desc';
+  minMC: string;
+  maxMC: string;
+  minVol: string;
+  maxVol: string;
+  minTx: string;
+  maxTx: string;
 }
 
-const initialState: FilterState = {
+interface FilterState {
+  activeModalTab: string; // Tracks which tab is active in the modal
+  filters: Record<string, FilterConfig>; // Keyed by column/tab name
+}
+
+const initialFilterConfig: FilterConfig = {
   searchKeywords: '',
   excludeKeywords: '',
-  activeTab: 'New Pairs',
+  sortBy: null,
+  sortOrder: 'desc',
+  minMC: '',
+  maxMC: '',
+  minVol: '',
+  maxVol: '',
+  minTx: '',
+  maxTx: '',
+};
+
+const initialState: FilterState = {
+  activeModalTab: 'New Pairs',
+  filters: {
+    'New Pairs': { ...initialFilterConfig },
+    'Final Stretch': { ...initialFilterConfig },
+    'Migrated': { ...initialFilterConfig },
+  },
 };
 
 const filterSlice = createSlice({
   name: 'filter',
   initialState,
   reducers: {
-    setSearchKeywords: (state, action: PayloadAction<string>) => {
-      state.searchKeywords = action.payload;
+    setActiveModalTab: (state, action: PayloadAction<string>) => {
+      state.activeModalTab = action.payload;
+      // Ensure the filter entry exists
+      if (!state.filters[action.payload]) {
+        state.filters[action.payload] = { ...initialFilterConfig };
+      }
     },
-    setExcludeKeywords: (state, action: PayloadAction<string>) => {
-      state.excludeKeywords = action.payload;
+    setFilterConfig: (state, action: PayloadAction<{ tab: string; config: Partial<FilterConfig> }>) => {
+      const { tab, config } = action.payload;
+      if (!state.filters[tab]) {
+        state.filters[tab] = { ...initialFilterConfig };
+      }
+      state.filters[tab] = { ...state.filters[tab], ...config };
     },
-    setActiveTab: (state, action: PayloadAction<string>) => {
-      state.activeTab = action.payload;
-    },
-    resetFilters: (state) => {
-      state.searchKeywords = '';
-      state.excludeKeywords = '';
+    resetFilters: (state, action: PayloadAction<string>) => {
+      state.filters[action.payload] = { ...initialFilterConfig };
     },
   },
 });
 
-export const { setSearchKeywords, setExcludeKeywords, setActiveTab, resetFilters } = filterSlice.actions;
+export const { setActiveModalTab, setFilterConfig, resetFilters } = filterSlice.actions;
 export default filterSlice.reducer;

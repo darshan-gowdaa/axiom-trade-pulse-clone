@@ -17,7 +17,8 @@ import {
 import { ChainLogo, ChainText } from '@/components/atoms';
 import { AxiomLogo } from '@/components/atoms/AxiomLogo';
 import { OptimizedImage } from '@/components/atoms';
-import { AvatarDropdown, ChainDropdown } from '@/components/molecules';
+import { AvatarDropdown, ChainDropdown, AccountSettingsDropdown, WalletDropdown } from '@/components/molecules';
+import { MobileMenu } from './MobileMenu';
 import { NAV_LINKS } from '@/utils/constants';
 import { useAppSelector } from '@/hooks';
 
@@ -29,6 +30,7 @@ export function Header() {
   const [isNavHovered, setIsNavHovered] = useState(false);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const updateScrollState = useCallback(() => {
     if (navContainerRef.current) {
@@ -60,13 +62,13 @@ export function Header() {
             <span className="bg-transparent text-[#fcfcfc] text-[13px] font-light p-0 self-end mb-[4px] ml-[2px]">Pro</span>
           </Link>
 
-          {/* Scrollable Navigation */}
+
           <div
             className="relative flex items-center"
             onMouseEnter={() => setIsNavHovered(true)}
             onMouseLeave={() => setIsNavHovered(false)}
           >
-            {/* Nav Links Container */}
+
             <div
               ref={navContainerRef}
               className="flex items-center gap-[26px] overflow-x-auto overflow-y-visible scrollbar-hide max-w-[420px] py-3 -my-3"
@@ -84,7 +86,7 @@ export function Header() {
               ))}
             </div>
 
-            {/* Left shadow + arrow container */}
+
             <div
               className={`absolute left-0 top-0 bottom-0 w-[44px] flex items-center justify-start z-20 transition-opacity duration-200 ${canScrollLeft ? 'opacity-100' : 'opacity-0 pointer-events-none'
                 }`}
@@ -99,7 +101,7 @@ export function Header() {
               </button>
             </div>
 
-            {/* Right shadow + arrow container */}
+
             <div
               className={`absolute right-0 top-0 bottom-0 w-[44px] flex items-center justify-end z-20 transition-opacity duration-200 ${canScrollRight ? 'opacity-100' : 'opacity-0 pointer-events-none'
                 }`}
@@ -153,18 +155,20 @@ export function Header() {
             <RiNotification3Line className="w-[16px] h-[16px]" />
           </button>
 
-          <div className="flex items-center gap-[10px] h-[28px] px-[10px] bg-[#22242d] border border-[#2a2a38] rounded-[16px] cursor-pointer transition-colors duration-150 hover:bg-[#2a2c36]">
-            <div className="flex items-center gap-[4px]">
-              <RiWalletLine className="w-[16px] h-[16px] text-white" />
-              <ChainLogo width={14} height={14} />
-              <span className="text-white text-[12px] font-bold">O</span>
+          <WalletDropdown>
+            <div className="flex items-center gap-[10px] h-[28px] px-[10px] bg-[#22242d] border border-[#2a2a38] rounded-[16px] cursor-pointer transition-colors duration-150 hover:bg-[#2a2c36]">
+              <div className="flex items-center gap-[4px]">
+                <RiWalletLine className="w-[16px] h-[16px] text-white" />
+                <ChainLogo width={14} height={14} />
+                <span className="text-white text-[12px] font-bold">O</span>
+              </div>
+              <div className="flex items-center gap-[4px]">
+                <OptimizedImage src="https://axiom.trade/images/usdc-perps.svg" alt="USDC Perps" width={16} height={16} />
+                <span className="text-white text-[12px] font-bold">O</span>
+                <RiArrowDownSLine className="w-[16px] h-[16px] text-white font-semibold" />
+              </div>
             </div>
-            <div className="flex items-center gap-[4px]">
-              <OptimizedImage src="https://axiom.trade/images/usdc-perps.svg" alt="USDC Perps" width={16} height={16} />
-              <span className="text-white text-[12px] font-bold">O</span>
-              <RiArrowDownSLine className="w-[16px] h-[16px] text-white font-semibold" />
-            </div>
-          </div>
+          </WalletDropdown>
 
           <AvatarDropdown>
             <div className="relative w-[24px] h-[24px] ml-2 cursor-pointer">
@@ -178,9 +182,11 @@ export function Header() {
             </div>
           </AvatarDropdown>
 
-          <button className="w-[32px] h-[32px] flex items-center justify-center bg-[#1a1b23] rounded-full border-0 text-[#fcfcfc] cursor-pointer">
-            <RiUserSettingsLine className="w-[16px] h-[16px]" />
-          </button>
+          <AccountSettingsDropdown>
+            <button className="w-[32px] h-[32px] flex items-center justify-center bg-[#1a1b23] rounded-full border-0 text-[#fcfcfc] cursor-pointer transition-colors duration-150 hover:bg-[#252630]">
+              <RiUserSettingsLine className="w-[16px] h-[16px]" />
+            </button>
+          </AccountSettingsDropdown>
         </div>
       </div>
 
@@ -220,11 +226,15 @@ export function Header() {
             <div className="absolute bottom-[1px] right-[1px] w-1.5 h-1.5 bg-[#14f195] rounded-full border border-[#0c0c10]" />
           </div>
 
-          <button className="flex items-center justify-center w-7 h-7 bg-[#16161e] rounded-full border border-[#2a2a38] shrink-0">
+          <button
+            className="flex items-center justify-center w-7 h-7 bg-[#16161e] rounded-full border border-[#2a2a38] shrink-0"
+            onClick={() => setIsMobileMenuOpen(true)}
+          >
             <RiMenuLine className="w-3.5 h-3.5 text-white" />
           </button>
         </div>
       </div>
+      <MobileMenu isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)} />
     </header>
   );
 }

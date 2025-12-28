@@ -25,14 +25,14 @@ export function useWebSocketSimulation() {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const simulatePriceUpdate = useCallback(() => {
-    // Get all token arrays
+
     const allTokenArrays: { tokens: Token[]; status: TokenStatus }[] = [
       { tokens: tokens.newPairs, status: 'new' },
       { tokens: tokens.finalStretch, status: 'finalStretch' },
       { tokens: tokens.migrated, status: 'migrated' },
     ];
 
-    // Pick a random token to update
+
     const nonEmptyArrays = allTokenArrays.filter(a => a.tokens.length > 0);
     if (nonEmptyArrays.length === 0) return;
 

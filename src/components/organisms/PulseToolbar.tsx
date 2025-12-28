@@ -21,6 +21,8 @@ import { WalletSolPill, ChainSelector, PresetPill, FilterModal } from '@/compone
 import { Tooltip } from '@/components/atoms';
 import { type ActiveTab } from '@/types';
 import { PULSE_TABS } from '@/utils/constants';
+import { useAppDispatch } from '@/hooks';
+import { setActiveModalTab } from '@/store/filterSlice';
 
 interface PulseToolbarProps {
   className?: string;
@@ -31,6 +33,13 @@ interface PulseToolbarProps {
 export function PulseToolbar({ className, activeTab, onTabChange }: PulseToolbarProps) {
   const [showMobileSettings, setShowMobileSettings] = useState(false);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+  const dispatch = useAppDispatch();
+
+  const handleOpenFilter = () => {
+    const currentTabLabel = PULSE_TABS.find(t => t.id === activeTab)?.label || 'New Pairs';
+    dispatch(setActiveModalTab(currentTabLabel));
+    setIsFilterModalOpen(true);
+  };
 
   return (
     <div className={`bg-[#06070b] border-b border-[#1a1b23] ${className || ''}`}>
@@ -163,10 +172,10 @@ export function PulseToolbar({ className, activeTab, onTabChange }: PulseToolbar
               </div>
 
               <button
-                onClick={() => setIsFilterModalOpen(true)}
+                onClick={handleOpenFilter}
                 className="flex items-center gap-2 px-2.5 py-0.5 bg-[#22242d] rounded-full border border-[#2a2a38]"
               >
-                <RiEqualizer3Fill className="w-3.5 h-3.5 text-white" />
+                <RiEqualizer3Line className="w-3.5 h-3.5 text-white" />
                 <span className="text-[11px] text-white font-bold">Filter</span>
                 <RiArrowDownSLine className="w-3.5 h-3.5 text-white" />
               </button>

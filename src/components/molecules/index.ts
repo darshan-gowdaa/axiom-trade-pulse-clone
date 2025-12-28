@@ -5,5 +5,7 @@ export * from './MetricPill';
 export * from './MultiChainBadge';
 export * from './PresetPill';
 export * from './TokenAvatarCard';
+export * from './AccountSettingsDropdown';
+export * from './WalletDropdown';
 export * from './WalletSolPill';
 export * from './FilterModal';

@@ -15,9 +15,8 @@ const CRYPTO_TERMS = [
   'Remilio', 'Pudgy', 'Azuki', 'WIF', 'BONK', 'MOG'
 ];
 
-// Static token data for realistic display
+// Static token data
 const STATIC_TOKENS: Partial<Token>[] = [
-  // New Pairs
   { name: 'Help Find TubTub', symbol: 'TubTub', marketCap: 3400, volume24h: 577, txCount: 6, status: 'new', imageUrl: 'https://image.pollinations.ai/prompt/TubTub%20cute%20cartoon%20mascot%203d' },
   { name: 'MonkeyDLuffy', symbol: 'Luffy', marketCap: 3400, volume24h: 923, txCount: 10, status: 'new', imageUrl: 'https://image.pollinations.ai/prompt/Luffy%20anime%20style%20character' },
   { name: 'Frogy', symbol: 'FROGY', marketCap: 3420, volume24h: 3000, txCount: 28, status: 'new', imageUrl: 'https://image.pollinations.ai/prompt/Frogy%20frog%20meme%20coin' },
@@ -114,7 +113,7 @@ function getStaticToken(index: number, desiredStatus: TokenStatus): Token {
     };
   }
 
-  // Fallback to random generation
+
   const { name, symbol } = generateRandomNameAndSymbol();
   let marketCap: number;
   let bondingProgress: number;
