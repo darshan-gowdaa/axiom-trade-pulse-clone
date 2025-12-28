@@ -14,9 +14,14 @@ import {
 import { ChainLogo, ChainText } from '@/components/atoms';
 import { AxiomLogo } from '@/components/atoms/AxiomLogo';
 import { OptimizedImage } from '@/components/atoms';
+import { AvatarDropdown } from '@/components/molecules';
 import { NAV_LINKS } from '@/utils/constants';
+import { useAppSelector } from '@/hooks';
 
 export function Header() {
+  const activeChain = useAppSelector((state) => state.ui.activeChain);
+  const isBnb = activeChain === 'bnb';
+
   return (
     <header className="h-[35px] lg:h-[53px] bg-[#0c0c10] border-b border-[#1a1b23] select-none">
       {/* Desktop */}
@@ -54,7 +59,11 @@ export function Header() {
         </div>
 
         <div className="flex items-center gap-[10px]">
-          <button className="flex items-center gap-[6px] h-[28px] px-[12px] border border-[#2a2a38] rounded-[16px] text-[12px] text-white cursor-pointer font-semibold">
+          <button
+            className={`flex items-center gap-[6px] h-[32px] pl-[8px] pr-[6px] border-[1.5px] rounded-full text-[12px] text-white cursor-pointer font-semibold transition-all duration-150 ease-in-out hover:brightness-125 active:scale-[0.96] ${isBnb ? 'shadow-[0_0_12px_rgba(240,185,11,0.2)]' : ''
+              }`}
+            style={{ borderColor: isBnb ? 'rgba(240, 185, 11, 0.15)' : '#2a2a38' }}
+          >
             <ChainLogo width={14} height={14} />
             <span className="font-semibold"><ChainText /></span>
             <RiArrowDownSLine className="w-[12px] h-[12px] text-[#d4d4d8] font-semibold" />
@@ -85,15 +94,17 @@ export function Header() {
             </div>
           </div>
 
-          <div className="relative w-[24px] h-[24px] ml-2">
-            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#f472b6] via-[#a78bfa] to-[#22d3ee] p-[2px]">
-              <div className="w-full h-full rounded-full bg-[#0c0c10]" />
+          <AvatarDropdown>
+            <div className="relative w-[24px] h-[24px] ml-2 cursor-pointer">
+              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#f472b6] via-[#a78bfa] to-[#22d3ee] p-[2px]">
+                <div className="w-full h-full rounded-full bg-[#0c0c10]" />
+              </div>
+              <button className="absolute inset-[2px] rounded-full bg-gradient-to-br from-[#6366f1] via-[#a855f7] to-[#ec4899] border-0 flex items-center justify-center cursor-pointer overflow-hidden p-0">
+                <span className="text-[10px] font-bold text-white">67</span>
+              </button>
+              <div className="absolute bottom-0 right-0 w-[10px] h-[10px] bg-[#14f195] rounded-full border-[2px] border-[#0c0c10]" />
             </div>
-            <button className="absolute inset-[2px] rounded-full bg-gradient-to-br from-[#6366f1] via-[#a855f7] to-[#ec4899] border-0 flex items-center justify-center cursor-pointer overflow-hidden p-0">
-              <span className="text-[10px] font-bold text-white">67</span>
-            </button>
-            <div className="absolute bottom-0 right-0 w-[10px] h-[10px] bg-[#14f195] rounded-full border-[2px] border-[#0c0c10]" />
-          </div>
+          </AvatarDropdown>
 
           <button className="w-[32px] h-[32px] flex items-center justify-center bg-[#1a1b23] rounded-full border-0 text-[#fcfcfc] cursor-pointer">
             <RiUserSettingsLine className="w-[16px] h-[16px]" />
