@@ -1,5 +1,6 @@
-import { PulseContentLazy } from '@/components/PulseContentLazy';
+import { redirect } from 'next/navigation';
 
-export default function PulsePage() {
-  return <PulseContentLazy />;
+export default function Home() {
+  redirect('/pulse?chain=sol');
 }
+

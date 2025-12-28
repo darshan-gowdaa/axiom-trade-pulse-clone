@@ -75,14 +75,13 @@ export function Header() {
               onScroll={updateScrollState}
             >
               {NAV_LINKS.map((link) => (
-                <Link
+                <span
                   key={link.href}
-                  href={link.href}
-                  className={`text-[12px] font-medium transition-all duration-150 whitespace-nowrap px-[12px] py-[6px] -mx-[12px] -my-[6px] rounded-md hover:bg-[#1a1f3d] hover:text-[#526fff] ${link.active ? 'text-[#526fff]' : 'text-white'
+                  className={`text-[12px] font-medium transition-all duration-150 whitespace-nowrap px-[12px] py-[6px] -mx-[12px] -my-[6px] rounded-lg cursor-not-allowed hover:bg-[#1a1f3d] hover:text-[#526fff] ${link.active ? 'text-[#526fff]' : 'text-white'
                     }`}
                 >
                   {link.label}
-                </Link>
+                </span>
               ))}
             </div>
 

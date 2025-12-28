@@ -124,9 +124,9 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
 
 function MenuItem({ icon: Icon, label }: { icon: any, label: string }) {
     return (
-        <button className="w-full flex items-center gap-2 px-2 py-2.5 bg-transparent border border-[#2a2a38] rounded-lg hover:bg-[#1a1b23] transition-colors group text-left">
+        <div className="w-full flex items-center gap-2 px-2 py-2.5 bg-transparent border border-[#2a2a38] rounded-lg cursor-not-allowed group text-left">
             <Icon className="w-4.5 h-4.5 text-white flex-shrink-0" />
             <span className="text-[12px] font-semibold text-white flex-1 min-w-0 truncate">{label}</span>
-        </button>
+        </div>
     );
 }
