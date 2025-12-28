@@ -15,7 +15,7 @@ import {
   RiGhostLine,
 } from '@remixicon/react';
 
-export const RING_COLORS = ['#11956e', '#b94b5d', '#fbbf24'];
+export const RING_COLORS = ['#16a34a', '#ef4444', '#fbbf24'];
 
 export interface MetricData {
   icon: React.ReactNode;
@@ -63,7 +63,7 @@ export const generateBottomMetrics = (): MetricData[] =>
     { icon: React.createElement(RiGhostLine, { className: 'w-[10px] h-[10px]' }), suffix: '%', val: randomInRange(10, 99) },
   ].map((m) => ({
     ...m,
-    color: Math.random() > 0.5 ? '#11956e' : '#b94b5d',
+    color: Math.random() > 0.5 ? '#16a34a' : '#ef4444',
   }));
 
 export const generateBarWidths = (): BarWidths => {
@@ -92,7 +92,7 @@ export const getRingColor = (tokenId: string): string =>
   RING_COLORS[tokenId.charCodeAt(0) % RING_COLORS.length];
 
 export const getMarketCapColor = (marketCap: number): string => {
-  if (marketCap > 2000000) return '#11956e'; // Green
+  if (marketCap > 2000000) return '#16a34a'; // Green
   if (marketCap > 1000000) return '#d6bc3a'; // Yellow
   return '#52c5ff'; // Blue
 };

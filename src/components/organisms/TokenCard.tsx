@@ -70,7 +70,7 @@ function TokenCardComponent({
   } else {
     // Bonding color logic: Green if < 50, Red if >= 50
     const isHighBonding = bondingProgress > 49;
-    const tooltipTextColor = isHighBonding ? "text-[#ef4444]" : "text-[#22c55e]";
+    const tooltipTextColor = isHighBonding ? "text-[#ef4444]" : "text-[#16a34a]";
     tooltipContent = <span className={tooltipTextColor}>Bonding: {bondingProgress.toFixed(2)}%</span>;
   }
 
@@ -107,7 +107,7 @@ function TokenCardComponent({
             </div>
 
             <div className="flex items-center gap-1 text-[11px] text-[#777a8c] mt-[1px] overflow-hidden">
-              <span className="text-[#09926A] shrink-0">
+              <span className="text-[#16a34a] shrink-0">
                 {formatTimeAgo(token.createdAt)}
               </span>
               <RiUserLine
@@ -151,8 +151,8 @@ function TokenCardComponent({
               {formatCompactNumber(txCount)}
             </span>
             <div className="flex w-5 h-[2px] rounded-[1px] overflow-hidden">
-              <div className="bg-[#11956e]" style={{ width: `${barWidths.green}%` }} />
-              <div className="bg-[#b94b5d]" style={{ width: `${redBarPct}%` }} />
+              <div className="bg-[#16a34a]" style={{ width: `${barWidths.green}%` }} />
+              <div className="bg-[#ef4444]" style={{ width: `${redBarPct}%` }} />
             </div>
           </div>
         </div>
