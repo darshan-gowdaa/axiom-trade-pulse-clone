@@ -17,7 +17,7 @@ import {
 import { ChainLogo, ChainText } from '@/components/atoms';
 import { AxiomLogo } from '@/components/atoms/AxiomLogo';
 import { OptimizedImage } from '@/components/atoms';
-import { AvatarDropdown } from '@/components/molecules';
+import { AvatarDropdown, ChainDropdown } from '@/components/molecules';
 import { NAV_LINKS } from '@/utils/constants';
 import { useAppSelector } from '@/hooks';
 
@@ -129,15 +129,17 @@ export function Header() {
         </div>
 
         <div className="flex items-center gap-[10px]">
-          <button
-            className={`flex items-center gap-[5px] h-[32px] pl-[8px] pr-[6px] border-[1.5px] rounded-full text-[12px] text-white cursor-pointer font-semibold transition-all duration-150 ease-in-out hover:brightness-125 active:scale-[0.96] ${isBnb ? 'shadow-[0_0_12px_rgba(240,185,11,0.2)]' : ''
-              }`}
-            style={{ borderColor: isBnb ? 'rgba(240, 185, 11, 0.15)' : '#2a2a38' }}
-          >
-            <ChainLogo width={14} height={14} />
-            <span className="font-semibold"><ChainText /></span>
-            <RiArrowDownSLine className="w-[16px] h-[16px] text-[#d4d4d8] font-semibold" />
-          </button>
+          <ChainDropdown>
+            <button
+              className={`flex items-center gap-[5px] h-[32px] pl-[8px] pr-[6px] border-[1.5px] rounded-full text-[12px] text-white cursor-pointer font-semibold transition-all duration-150 ease-in-out hover:brightness-125 active:scale-[0.96] ${isBnb ? 'shadow-[0_0_12px_rgba(240,185,11,0.2)]' : ''
+                }`}
+              style={{ borderColor: isBnb ? 'rgba(240, 185, 11, 0.15)' : '#2a2a38' }}
+            >
+              <ChainLogo width={14} height={14} />
+              <span className="font-semibold"><ChainText /></span>
+              <RiArrowDownSLine className="w-[16px] h-[16px] text-[#d4d4d8] font-semibold" />
+            </button>
+          </ChainDropdown>
 
           <button className="h-[28px] px-[11px] py-0 bg-[#526fff] border-0 rounded-[16px] text-[12px] font-[750] text-[#000000] cursor-pointer">
             Deposit

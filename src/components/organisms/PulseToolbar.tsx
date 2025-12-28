@@ -11,13 +11,13 @@ import {
   RiVolumeUpLine,
   RiCrosshair2Line,
   RiListUnordered,
-  RiEqualizer3Fill,
+  RiEqualizer3Line,
   RiSettings3Line,
   RiKeyboardBoxLine,
   RiBookmark3Line,
   RiListCheck,
 } from '@remixicon/react';
-import { WalletSolPill, ChainSelector, PresetPill } from '@/components/molecules';
+import { WalletSolPill, ChainSelector, PresetPill, FilterModal } from '@/components/molecules';
 import { Tooltip } from '@/components/atoms';
 import { type ActiveTab } from '@/types';
 import { PULSE_TABS } from '@/utils/constants';
@@ -30,6 +30,7 @@ interface PulseToolbarProps {
 
 export function PulseToolbar({ className, activeTab, onTabChange }: PulseToolbarProps) {
   const [showMobileSettings, setShowMobileSettings] = useState(false);
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
 
   return (
     <div className={`bg-[#06070b] border-b border-[#1a1b23] ${className || ''}`}>
@@ -161,7 +162,10 @@ export function PulseToolbar({ className, activeTab, onTabChange }: PulseToolbar
                 <RiQuestionLine className="w-4 h-4 text-[#6b6b7a]" />
               </div>
 
-              <button className="flex items-center gap-2 px-2.5 py-0.5 bg-[#22242d] rounded-full border border-[#2a2a38]">
+              <button
+                onClick={() => setIsFilterModalOpen(true)}
+                className="flex items-center gap-2 px-2.5 py-0.5 bg-[#22242d] rounded-full border border-[#2a2a38]"
+              >
                 <RiEqualizer3Fill className="w-3.5 h-3.5 text-white" />
                 <span className="text-[11px] text-white font-bold">Filter</span>
                 <RiArrowDownSLine className="w-3.5 h-3.5 text-white" />
@@ -175,6 +179,11 @@ export function PulseToolbar({ className, activeTab, onTabChange }: PulseToolbar
           </div>
         )}
       </div>
+
+      <FilterModal
+        isOpen={isFilterModalOpen}
+        onClose={() => setIsFilterModalOpen(false)}
+      />
     </div>
   );
 }

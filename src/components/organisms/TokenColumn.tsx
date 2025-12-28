@@ -1,14 +1,15 @@
 'use client';
 
-import { useRef, useCallback } from 'react';
+import { useRef, useCallback, useState } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { useAppSelector } from '@/hooks';
 import { type Token, type ActiveTab } from '@/types';
 import { TokenCard } from './TokenCard';
 import { TokenCardSkeleton } from '@/components/atoms';
 import { DEFAULT_PRESETS, VIRTUAL_SCROLL_OVERSCAN } from '@/utils';
-import { RiEqualizer3Fill, RiFlashlightFill } from '@remixicon/react';
+import { RiEqualizer3Line, RiFlashlightFill } from '@remixicon/react';
 import { ChainLogo } from '@/components/atoms';
+import { FilterModal } from '@/components/molecules';
 
 interface TokenColumnProps {
   title: string;
@@ -37,12 +38,43 @@ export function TokenColumn({
   className,
 }: TokenColumnProps) {
   const parentRef = useRef<HTMLDivElement>(null);
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const presets = DEFAULT_PRESETS[columnType] || [];
   const isChainLoading = useAppSelector((state) => state.ui.isChainLoading);
 
+  // Filter tokens based on search and exclude keywords
+  const { searchKeywords, excludeKeywords } = useAppSelector((state) => state.filter);
+
+  const filteredTokens = tokens.filter((token) => {
+    if (!searchKeywords && !excludeKeywords) return true;
+
+    const name = token.name.toLowerCase();
+    const symbol = token.symbol.toLowerCase();
+
+    // Check search keywords (one must match)
+    if (searchKeywords) {
+      const searchTerms = searchKeywords.toLowerCase().split(',').map(s => s.trim()).filter(Boolean);
+      const matchesSearch = searchTerms.length === 0 || searchTerms.some(term =>
+        name.includes(term) || symbol.includes(term)
+      );
+      if (!matchesSearch) return false;
+    }
+
+    // Check exclude keywords (none must match)
+    if (excludeKeywords) {
+      const excludeTerms = excludeKeywords.toLowerCase().split(',').map(s => s.trim()).filter(Boolean);
+      const matchesExclude = excludeTerms.some(term =>
+        name.includes(term) || symbol.includes(term)
+      );
+      if (matchesExclude) return false;
+    }
+
+    return true;
+  });
+
   // eslint-disable-next-line react-hooks/incompatible-library
   const virtualizer = useVirtualizer({
-    count: tokens.length,
+    count: filteredTokens.length,
     getScrollElement: () => parentRef.current,
     estimateSize: () => 85,
     overscan: VIRTUAL_SCROLL_OVERSCAN,
@@ -82,8 +114,11 @@ export function TokenColumn({
             ))}
           </div>
 
-          <button className="relative p-1 bg-none border-none text-white cursor-pointer flex items-center">
-            <RiEqualizer3Fill className="w-[12px] h-[12px]" />
+          <button
+            onClick={() => setIsFilterModalOpen(true)}
+            className="relative p-1 bg-none border-none text-white cursor-pointer flex items-center hover:text-[#526fff] transition-colors"
+          >
+            <RiEqualizer3Line className="w-[12px] h-[12px]" />
             <span className="absolute -top-0 -right-0.5 h-1 w-1 rounded-full bg-[#526fff]"></span>
           </button>
         </div>
@@ -100,14 +135,21 @@ export function TokenColumn({
               <TokenCardSkeleton key={i} />
             ))}
           </div>
-        ) : tokens.length === 0 ? (
-          <div className="flex items-center justify-center h-24 text-[#6b6b7a] text-[14px]">
-            No tokens found
+        ) : filteredTokens.length === 0 ? (
+          <div className="flex flex-col items-center justify-center h-full text-[#6b6b7a] space-y-2">
+            <RiEqualizer3Line className="w-8 h-8 opacity-50" />
+            <span className="text-[13px] font-medium">No matching Results</span>
+            <button
+              onClick={() => setIsFilterModalOpen(true)}
+              className="text-[#526fff] text-[11px] hover:underline cursor-pointer"
+            >
+              Adjust Filters
+            </button>
           </div>
         ) : (
           <div className="w-full relative" style={{ height: `${virtualizer.getTotalSize()}px` }}>
             {virtualizer.getVirtualItems().map((virtualRow) => {
-              const token = tokens[virtualRow.index];
+              const token = filteredTokens[virtualRow.index];
               return (
                 <div
                   key={token.id}
@@ -132,6 +174,11 @@ export function TokenColumn({
           </div>
         )}
       </div>
+
+      <FilterModal
+        isOpen={isFilterModalOpen}
+        onClose={() => setIsFilterModalOpen(false)}
+      />
     </div>
   );
 }
