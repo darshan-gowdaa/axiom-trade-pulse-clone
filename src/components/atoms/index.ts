@@ -7,4 +7,5 @@ export { MetricBlock } from './MetricBlock';
 export { NotificationDot } from './NotificationDot';
 export { NavButton } from './NavButton';
 export { OptimizedImage } from './OptimizedImage';
+export { Tooltip } from './Tooltip';
 
