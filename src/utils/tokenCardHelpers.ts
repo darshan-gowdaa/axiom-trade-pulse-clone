@@ -91,8 +91,22 @@ export const updateTimeState = (prev: TimeState): TimeState => {
 export const getRingColor = (tokenId: string): string => 
   RING_COLORS[tokenId.charCodeAt(0) % RING_COLORS.length];
 
-export const getMarketCapColor = (marketCap: number): string => 
-  marketCap > 1000000 ? '#11956e' : '#52c5ff';
+export const getMarketCapColor = (marketCap: number): string => {
+  if (marketCap > 2000000) return '#11956e'; // Green
+  if (marketCap > 1000000) return '#d6bc3a'; // Yellow
+  return '#52c5ff'; // Blue
+};
+
+export const generateFeeValue = (): string => {
+  const subscriptDigit = randomInRange(2, 4);
+  const subscriptMap: Record<number, string> = {
+    2: '₂',
+    3: '₃',
+    4: '₄',
+  };
+  const lastDigit = randomInRange(1, 9);
+  return `0.00${subscriptMap[subscriptDigit]}${lastDigit}`;
+};
 
 export const generateUserIconColor = (): string => 
   Math.random() > 0.5 ? '#51c4fe' : '#777a8c';

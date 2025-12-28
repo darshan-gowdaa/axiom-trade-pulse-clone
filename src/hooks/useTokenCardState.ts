@@ -7,6 +7,7 @@ import {
   generateBarWidths,
   generateInitialTimeState,
   updateTimeState,
+  generateFeeValue,
   type MetricData,
   type TimeState,
   type BarWidths,
@@ -36,6 +37,7 @@ interface TokenSimulationState {
   bottomMetrics: MetricData[];
   barWidths: BarWidths;
   timeState: TimeState;
+  feeValue: string;
 }
 
 export function useTokenCardState({
@@ -57,6 +59,7 @@ export function useTokenCardState({
   const [bottomMetrics, setBottomMetrics] = useState<MetricData[]>(generateBottomMetrics);
   const [barWidths, setBarWidths] = useState<BarWidths>(generateBarWidths);
   const [timeState, setTimeState] = useState<TimeState>(generateInitialTimeState);
+  const [feeValue, setFeeValue] = useState<string>(generateFeeValue);
 
   // Token identity rotation
   useEffect(() => {
@@ -102,6 +105,7 @@ export function useTokenCardState({
       setBottomMetrics(generateBottomMetrics());
       setTimeState(updateTimeState);
       setBarWidths(generateBarWidths());
+      setFeeValue(generateFeeValue());
     }, 5000);
 
     return () => clearInterval(interval);
@@ -116,5 +120,6 @@ export function useTokenCardState({
     bottomMetrics,
     barWidths,
     timeState,
+    feeValue,
   };
 }

@@ -1,17 +1,18 @@
 'use client';
 
-import { useState, useRef, useCallback, type ReactNode } from 'react';
+import { useState, useRef, useCallback, useEffect, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
 const tooltipVariants = cva(
-    'absolute z-[9999] px-1 py-0.5 text-[9px] font-medium text-white bg-[#1a1b23] border border-[#2a2a38] rounded-sm shadow-lg whitespace-nowrap pointer-events-none transition-all duration-150 ease-out',
+    'fixed z-[9999] px-2 py-1.5 text-xs font-medium text-white bg-[#1a1b23] border border-[#2a2a38] rounded-md shadow-lg whitespace-nowrap pointer-events-none transition-opacity duration-150',
     {
         variants: {
             position: {
-                top: 'bottom-full left-1/2 -translate-x-1/2 mb-2 origin-bottom',
-                right: 'left-full top-1/2 -translate-y-1/2 ml-2 origin-left',
-                'bottom-left': 'top-full right-0 mt-2 origin-top-right',
+                top: '-translate-x-1/2 -translate-y-[calc(100%+4px)]',
+                right: 'translate-x-2 -translate-y-1/2',
+                'bottom-left': 'translate-y-2',
             },
         },
         defaultVariants: {
@@ -35,11 +36,59 @@ export function Tooltip({
     delay = 200,
 }: TooltipProps) {
     const [isVisible, setIsVisible] = useState(false);
+    const [coords, setCoords] = useState({ top: 0, left: 0 });
+    const triggerRef = useRef<HTMLDivElement>(null);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    const updatePosition = useCallback(() => {
+        if (!triggerRef.current) return;
+        const rect = triggerRef.current.getBoundingClientRect();
+
+        let top = 0;
+        let left = 0;
+
+        switch (position) {
+            case 'top':
+                top = rect.top;
+                left = rect.left + rect.width / 2;
+                break;
+            case 'right':
+                top = rect.top + rect.height / 2;
+                left = rect.right;
+                break;
+            case 'bottom-left':
+                top = rect.bottom;
+                left = rect.left + rect.width; // Anchor to right edge for bottom-left alignment logic? 
+                // Wait, variant says "top-full right-0". That means relative to parent.
+                // For fixed:
+                // 'bottom-left' usually means "align to bottom, sticking to left" or "on bottom, align left"?
+                // The original variant was: 'top-full right-0 mt-2 origin-top-right'.
+                // "top-full" -> below element. "right-0" -> align right edges.
+                // So it was: Below the element, aligned to its right edge (growing left).
+                // Let's replicate:
+                top = rect.bottom;
+                left = rect.right;
+                break;
+            default:
+                top = rect.top;
+                left = rect.left + rect.width / 2;
+        }
+
+        setCoords({ top, left });
+    }, [position]);
 
     const showTooltip = useCallback(() => {
-        timeoutRef.current = setTimeout(() => setIsVisible(true), delay);
-    }, [delay]);
+        updatePosition();
+        timeoutRef.current = setTimeout(() => {
+            updatePosition(); // Re-calc in case of shifts
+            setIsVisible(true);
+        }, delay);
+    }, [delay, updatePosition]);
 
     const hideTooltip = useCallback(() => {
         if (timeoutRef.current) {
@@ -49,8 +98,21 @@ export function Tooltip({
         setIsVisible(false);
     }, []);
 
+    // Handle scroll/resize updates while visible
+    useEffect(() => {
+        if (isVisible) {
+            window.addEventListener('scroll', updatePosition, true);
+            window.addEventListener('resize', updatePosition);
+            return () => {
+                window.removeEventListener('scroll', updatePosition, true);
+                window.removeEventListener('resize', updatePosition);
+            };
+        }
+    }, [isVisible, updatePosition]);
+
     return (
         <div
+            ref={triggerRef}
             className="relative inline-flex"
             onMouseEnter={showTooltip}
             onMouseLeave={hideTooltip}
@@ -58,17 +120,21 @@ export function Tooltip({
             onBlur={hideTooltip}
         >
             {children}
-            <div
-                role="tooltip"
-                aria-hidden={!isVisible}
-                className={cn(
-                    tooltipVariants({ position }),
-                    isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95',
-                    className
-                )}
-            >
-                {content}
-            </div>
+            {mounted && isVisible && createPortal(
+                <div
+                    role="tooltip"
+                    style={{ top: coords.top, left: coords.left }}
+                    className={cn(
+                        tooltipVariants({ position }),
+                        isVisible ? 'opacity-100' : 'opacity-0',
+                        className
+                    )}
+                >
+                    {content}
+                </div>,
+                document.body
+            )}
         </div>
     );
 }
+

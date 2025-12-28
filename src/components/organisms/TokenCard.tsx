@@ -37,6 +37,7 @@ function TokenCardComponent({
     bottomMetrics,
     barWidths,
     timeState,
+    feeValue,
   } = useTokenCardState({
     initialName: token.name,
     initialSymbol: token.symbol,
@@ -125,7 +126,7 @@ function TokenCardComponent({
           <div className="flex items-center gap-1 text-[9px] shrink-0 -mt-1">
             {activeChain === 'sol' && (
               <span className="text-white flex items-center gap-[2px]">
-                F <ChainLogo width={9} height={9} /> 0.00₂5
+                F <ChainLogo width={9} height={9} /> {feeValue}
               </span>
             )}
             <span className="text-[#777a8c]">TX</span>

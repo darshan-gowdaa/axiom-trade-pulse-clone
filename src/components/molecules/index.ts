@@ -4,3 +4,4 @@ export { WalletSolPill } from './WalletSolPill';
 export { ChainSelector } from './ChainSelector';
 export { PresetPill } from './PresetPill';
 export { AvatarDropdown } from './AvatarDropdown';
+export { MultiChainBadge } from './MultiChainBadge';
