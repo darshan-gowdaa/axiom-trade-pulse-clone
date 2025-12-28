@@ -63,7 +63,7 @@ const NAV_SETTINGS = [
 
 const END_ICONS = [
   { icon: RiWindowLine, tooltip: 'Hide Watchlist Ticker' },
-  { icon: RiNotification3Line, tooltip: 'notification settings' },
+  { icon: RiNotification3Line, tooltip: 'Notification Settings' },
   { icon: RiPaletteLine, tooltip: 'Customize Theme' },
 ];
 

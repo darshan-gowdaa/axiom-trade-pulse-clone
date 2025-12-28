@@ -2,10 +2,8 @@
 
 import dynamic from 'next/dynamic';
 import { useEffect, Suspense } from 'react';
-import { useAppDispatch, useAppSelector, useIsMobile, useWebSocketSimulation, usePrefetch } from '@/hooks';
-import { setTokens, setLoading } from '@/store/tokenSlice';
+import { useAppDispatch, useAppSelector, useIsMobile, useWebSocketSimulation, usePrefetch, useTokens } from '@/hooks';
 import { setActiveTab, setActivePreset, setIsMobile } from '@/store/uiSlice';
-import { generateMockTokens, INITIAL_TOKENS_COUNT } from '@/utils';
 import { type Token, type ActiveTab } from '@/types';
 import { PulseToolbarSkeleton, TokenColumnSkeleton } from '@/components/skeletons';
 
@@ -41,21 +39,22 @@ export function PulseContentLazy() {
     const isMobile = useIsMobile();
     usePrefetch(componentImports);
 
-    const { newPairs, finalStretch, migrated, priceFlash, isLoading } = useAppSelector(
+    const { priceFlash } = useAppSelector(
         (state) => state.tokens
     );
     const { activeTab, displaySettings, activePresets } = useAppSelector(
         (state) => state.ui
     );
 
+    const { data: newPairs = [], isLoading: isNewPairsLoading } = useTokens('new');
+    const { data: finalStretch = [], isLoading: isFinalStretchLoading } = useTokens('finalStretch');
+    const { data: migrated = [], isLoading: isMigratedLoading } = useTokens('migrated');
+
+    const isLoading = isNewPairsLoading || isFinalStretchLoading || isMigratedLoading;
+
     useWebSocketSimulation();
 
-    useEffect(() => {
-        dispatch(setLoading(true));
-        dispatch(setTokens({ status: 'new', tokens: generateMockTokens(INITIAL_TOKENS_COUNT, 'new') }));
-        dispatch(setTokens({ status: 'finalStretch', tokens: generateMockTokens(INITIAL_TOKENS_COUNT, 'finalStretch') }));
-        dispatch(setTokens({ status: 'migrated', tokens: generateMockTokens(INITIAL_TOKENS_COUNT, 'migrated') }));
-    }, [dispatch]);
+    // Removed useEffect that utilized setTokens and setLoading
 
     useEffect(() => {
         dispatch(setIsMobile(isMobile));
