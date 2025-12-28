@@ -8,6 +8,7 @@ import { useTokenCardState, useChain } from '@/hooks';
 import { RiCheckLine, RiUserLine, RiFlashlightFill, RiFileCopyFill } from '@remixicon/react';
 import { ChainLogo, ChainText } from '@/components/atoms';
 import { MetricBlock } from '@/components/atoms/MetricBlock';
+import { Tooltip } from '@/components/atoms/Tooltip';
 import { TokenAvatarCard, MetricPill } from '@/components/molecules';
 
 interface TokenCardProps {
@@ -57,8 +58,24 @@ function TokenCardComponent({
     setTimeout(() => setCopied(false), 1500);
   };
 
-  return (
-    <div className="relative flex items-center px-2 lg:px-3 py-2 border-b border-[#1a1b23] cursor-pointer bg-transparent gap-2 min-h-[64px]">
+  const bondingProgress = token.bondingCurveProgress || 0;
+  // Use a neutral light grey for hover background
+  const hoverClass = "hover:bg-[#252630]";
+
+  // Determine tooltip props based on status and bonding
+  let tooltipContent: React.ReactNode;
+
+  if (token.status === 'migrated') {
+    tooltipContent = <span className="text-[#fafaa5]">Pump VI</span>;
+  } else {
+    // Bonding color logic: Green if < 50, Red if >= 50
+    const isHighBonding = bondingProgress > 49;
+    const tooltipTextColor = isHighBonding ? "text-[#ef4444]" : "text-[#22c55e]";
+    tooltipContent = <span className={tooltipTextColor}>Bonding: {bondingProgress.toFixed(2)}%</span>;
+  }
+
+  const cardContent = (
+    <div className={`relative w-full flex items-center pl-2 lg:pl-3 pr-1 py-2 border-b border-[#1a1b23] cursor-pointer bg-transparent gap-2 min-h-[64px] transition-colors duration-200 mr-2 ${hoverClass}`}>
       <TokenAvatarCard
         symbol={tokenIdentity.symbol}
         name={tokenIdentity.name}
@@ -165,6 +182,17 @@ function TokenCardComponent({
         </div>
       </div>
     </div>
+  );
+
+  return (
+    <Tooltip
+      content={tooltipContent}
+      position="top"
+      className="z-50"
+      containerClassName="relative flex w-full"
+    >
+      {cardContent}
+    </Tooltip>
   );
 }
 

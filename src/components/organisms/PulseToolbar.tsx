@@ -68,13 +68,13 @@ export function PulseToolbar({ className, activeTab, onTabChange }: PulseToolbar
               </button>
             </Tooltip>
 
-            <button className="flex items-center gap-1 px-3 py-0.5 bg-[#22242d] border border-[#27272a] hover:border-[#3f3f46] rounded-full text-white text-[10px] font-bold cursor-pointer transition-colors whitespace-nowrap">
+            <button className="flex items-center gap-1 px-2.5 py-1 bg-[#22242d] border border-[#27272a] hover:border-[#3f3f46] rounded-full text-white text-[10px] font-bold cursor-pointer transition-colors whitespace-nowrap">
               <RiListCheck className="w-3.5 h-3.5 text-white" />
               <span className="mr-1">Display</span>
-              <RiArrowDownSLine className="w-3 h-3 text-white" />
+              <RiArrowDownSLine className="w-3.5 h-3.5 text-white" />
             </button>
 
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-2">
               <Tooltip content="Blacklist dev, handle, keywords">
                 <button className="w-6 h-6 flex items-center justify-center bg-none border-none text-[#bfc0c8] hover:text-white hover:bg-[#1a1b23] rounded-full transition-colors cursor-pointer">
                   <RiBookmark3Line className="w-3 h-3" />

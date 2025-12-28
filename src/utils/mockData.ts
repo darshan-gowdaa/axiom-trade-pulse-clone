@@ -99,7 +99,7 @@ function getStaticToken(index: number, desiredStatus: TokenStatus): Token {
       txCount: staticData.txCount!,
       priceInSol: Math.random() * 0.01 + 0.001,
       priceChange24h: (Math.random() - 0.5) * 20,
-      bondingCurveProgress: desiredStatus === 'finalStretch' ? (80 + Math.random() * 20) : (Math.random() * 50),
+      bondingCurveProgress: Math.random() * 100,
       createdAt: Date.now() - (Math.random() * 3600000),
       socials: {
         twitter: Math.random() > 0.5 ? `https://twitter.com/${staticData.symbol}` : undefined,
@@ -141,7 +141,7 @@ function getStaticToken(index: number, desiredStatus: TokenStatus): Token {
     txCount: Math.floor(Math.random() * 5000) + 100,
     priceInSol: Math.random() * 0.01,
     priceChange24h: (Math.random() - 0.5) * 100,
-    bondingCurveProgress: bondingProgress,
+    bondingCurveProgress: Math.random() * 100,
     createdAt: Date.now() - Math.random() * 86400000,
     socials: {
       twitter: Math.random() > 0.5 ? `https://twitter.com/${symbol}` : undefined,

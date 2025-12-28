@@ -25,6 +25,7 @@ export interface TooltipProps extends VariantProps<typeof tooltipVariants> {
     content: ReactNode;
     children: ReactNode;
     className?: string;
+    containerClassName?: string;
     delay?: number;
 }
 
@@ -33,6 +34,7 @@ export function Tooltip({
     children,
     position = 'top',
     className,
+    containerClassName,
     delay = 200,
 }: TooltipProps) {
     const [isVisible, setIsVisible] = useState(false);
@@ -63,16 +65,7 @@ export function Tooltip({
                 break;
             case 'bottom-left':
                 top = rect.bottom;
-                left = rect.left + rect.width; // Anchor to right edge for bottom-left alignment logic? 
-                // Wait, variant says "top-full right-0". That means relative to parent.
-                // For fixed:
-                // 'bottom-left' usually means "align to bottom, sticking to left" or "on bottom, align left"?
-                // The original variant was: 'top-full right-0 mt-2 origin-top-right'.
-                // "top-full" -> below element. "right-0" -> align right edges.
-                // So it was: Below the element, aligned to its right edge (growing left).
-                // Let's replicate:
-                top = rect.bottom;
-                left = rect.right;
+                left = rect.left + rect.width;
                 break;
             default:
                 top = rect.top;
@@ -113,7 +106,7 @@ export function Tooltip({
     return (
         <div
             ref={triggerRef}
-            className="relative inline-flex"
+            className={cn("relative inline-flex", containerClassName)}
             onMouseEnter={showTooltip}
             onMouseLeave={hideTooltip}
             onFocus={showTooltip}

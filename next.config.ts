@@ -13,7 +13,10 @@ const nextConfig: NextConfig = {
     minimumCacheTTL: 60 * 60 * 24 * 30,
   },
   compress: true,
-  experimental: { optimizeCss: true },
+  allowedDevOrigins: ["10.201.195.215"],
+  experimental: { 
+    // optimizeCss: true,
+  },
   async headers() {
     return [
       {
