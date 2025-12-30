@@ -5,6 +5,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import { Providers } from '@/components/Providers';
 import { HeaderSkeleton } from '@/components/skeletons';
 import './globals.css';
+import { Analytics } from '@vercel/analytics/next';
 
 const Header = dynamic(
   () => import('@/components/organisms/Header').then(mod => ({ default: mod.Header })),
@@ -67,6 +68,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             {children}
           </main>
         </Providers>
+        <Analytics />
       </body>
     </html>
   );
