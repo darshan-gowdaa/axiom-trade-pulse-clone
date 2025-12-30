@@ -4,7 +4,6 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'axiom.trade', pathname: '/images/**' },
-      { protocol: 'https', hostname: 'image.pollinations.ai', pathname: '/**' },
       { protocol: 'https', hostname: 'api.dicebear.com', pathname: '/**' },
     ],
     formats: ['image/avif', 'image/webp'],

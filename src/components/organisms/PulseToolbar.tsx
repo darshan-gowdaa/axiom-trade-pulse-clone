@@ -47,18 +47,18 @@ export function PulseToolbar({ className, activeTab, onTabChange }: PulseToolbar
       <div className="hidden lg:block">
         <div className="flex items-center gap-2.5 px-4 lg:px-9 py-1 border-b border-[#1a1b23] overflow-visible -ml-4">
           <Tooltip content="Settings" position="right">
-            <button className="bg-none border-none text-[#636470] hover:text-[#a1a1aa] cursor-pointer flex transition-colors shrink-0">
+            <button aria-label="Settings" className="bg-none border-none text-[#636470] hover:text-[#a1a1aa] cursor-pointer flex transition-colors shrink-0">
               <RiSettings3Line className="w-3 h-3" />
             </button>
           </Tooltip>
           <div className="w-[1px] h-3 bg-[#27272a] shrink-0" />
           <Tooltip content="Watchlist" position="right">
-            <button className="bg-none border-none text-[#636470] hover:text-[#a1a1aa] cursor-pointer flex transition-colors shrink-0">
+            <button aria-label="Watchlist" className="bg-none border-none text-[#636470] hover:text-[#a1a1aa] cursor-pointer flex transition-colors shrink-0">
               <RiStarLine className="w-2.5 h-2.5" />
             </button>
           </Tooltip>
           <Tooltip content="Active Positions" position="right">
-            <button className="bg-none border-none text-white hover:text-[#a1a1aa] cursor-pointer flex transition-colors shrink-0">
+            <button aria-label="Active Positions" className="bg-none border-none text-white hover:text-[#a1a1aa] cursor-pointer flex transition-colors shrink-0">
               <RiLineChartLine className="w-3 h-3 ml-1.5" />
             </button>
           </Tooltip>
@@ -73,7 +73,7 @@ export function PulseToolbar({ className, activeTab, onTabChange }: PulseToolbar
 
           <div className="flex items-center gap-2.5 shrink-0">
             <Tooltip content="Help with Pulse Filters, Settings">
-              <button className="bg-none border-none text-[#52525b] hover:text-[#a1a1aa] cursor-pointer p-1 flex transition-colors">
+              <button aria-label="Help" className="bg-none border-none text-[#52525b] hover:text-[#a1a1aa] cursor-pointer p-1 flex transition-colors">
                 <RiQuestionLine className="w-4 h-4" />
               </button>
             </Tooltip>
@@ -86,22 +86,22 @@ export function PulseToolbar({ className, activeTab, onTabChange }: PulseToolbar
 
             <div className="flex items-center gap-2">
               <Tooltip content="Blacklist dev, handle, keywords">
-                <button className="w-6 h-6 flex items-center justify-center bg-none border-none text-[#bfc0c8] hover:text-white hover:bg-[#1a1b23] rounded-full transition-colors cursor-pointer">
+                <button aria-label="Blacklist Settings" className="w-6 h-6 flex items-center justify-center bg-none border-none text-[#bfc0c8] hover:text-white hover:bg-[#1a1b23] rounded-full transition-colors cursor-pointer">
                   <RiBookmark3Line className="w-3 h-3" />
                 </button>
               </Tooltip>
               <Tooltip content="Pulse Hotkeys">
-                <button className="w-6 h-6 flex items-center justify-center bg-none border-none text-[#bfc0c8] hover:text-white hover:bg-[#1a1b23] rounded-full transition-colors cursor-pointer">
+                <button aria-label="Hotkeys" className="w-6 h-6 flex items-center justify-center bg-none border-none text-[#bfc0c8] hover:text-white hover:bg-[#1a1b23] rounded-full transition-colors cursor-pointer">
                   <RiKeyboardBoxLine className="w-3 h-3" />
                 </button>
               </Tooltip>
               <Tooltip content="Alerts">
-                <button className="w-6 h-6 flex items-center justify-center bg-none border-none text-[#bfc0c8] hover:text-white hover:bg-[#1a1b23] rounded-full transition-colors cursor-pointer">
+                <button aria-label="Alerts" className="w-6 h-6 flex items-center justify-center bg-none border-none text-[#bfc0c8] hover:text-white hover:bg-[#1a1b23] rounded-full transition-colors cursor-pointer">
                   <RiVolumeUpLine className="w-3 h-3" />
                 </button>
               </Tooltip>
               <Tooltip content="Snipe Settings">
-                <button className="relative w-6 h-6 flex items-center justify-center bg-none border-none text-[#bfc0c8] hover:text-white hover:bg-[#1a1b23] rounded-full transition-colors cursor-pointer">
+                <button aria-label="Snipe Settings" className="relative w-6 h-6 flex items-center justify-center bg-none border-none text-[#bfc0c8] hover:text-white hover:bg-[#1a1b23] rounded-full transition-colors cursor-pointer">
                   <RiCrosshair2Line className="w-3.5 h-3.5" />
                   <RiSettings4Line className="w-2.5 h-2.5 absolute -bottom-0.5 -right-0.5" />
                 </button>
@@ -139,6 +139,7 @@ export function PulseToolbar({ className, activeTab, onTabChange }: PulseToolbar
 
           <button
             onClick={() => setShowMobileSettings(!showMobileSettings)}
+            aria-label="Toggle Mobile Settings"
             className={`flex items-center gap-1.5 py-0.5 bg-[#16161e] rounded-full border border-[#2a2a38] shrink-0 ${showMobileSettings ? 'px-1.5' : 'pl-2 pr-1.5'
               }`}
           >

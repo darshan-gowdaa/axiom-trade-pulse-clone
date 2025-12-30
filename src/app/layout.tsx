@@ -53,9 +53,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className="dark">
       <head>
         <link rel="preconnect" href="https://axiom.trade" />
-        <link rel="preconnect" href="https://image.pollinations.ai" />
         <link rel="dns-prefetch" href="https://axiom.trade" />
-        <link rel="dns-prefetch" href="https://image.pollinations.ai" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased h-screen max-h-screen overflow-hidden flex flex-col bg-[#06070b]`}>
         <Providers>
@@ -68,7 +66,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             {children}
           </main>
         </Providers>
-        <Analytics />
+        {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
   );

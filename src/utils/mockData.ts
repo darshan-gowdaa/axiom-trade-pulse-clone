@@ -3,52 +3,51 @@ import { generateId } from './formatters';
 
 const BRAINROT_TERMS = [
   'Skibidi', 'Rizz', 'Fanum', 'Ohio', 'Sigma', 'Gyatt', 'Grimace', 'Kai', 'Livvy', 
-  'Gronk', 'Baby Gronk', 'Mewing', 'Looksmax', 'Chug Jug', 'W', 'L', 'Ratio', 'Based','Gooning', 'Edging', 'Bussy', 'Coomer', 'Thicc', 'Down Bad', 'Glizzy', 'Throat', 'Hawk Tuah'
+  'Gronk', 'Baby Gronk', 'Mewing', 'Looksmax', 'Chug Jug', 'W', 'L', 'Ratio', 'Based','Gooning', 'Edging', 'Bussy', 'Coomer', 'Thicc', 'Down Bad', 'Glizzy', 'Throat', 'Hawk Tuah', 'Cooked', 'Lock In', 'Crash Out'
 ];
 
 const CORPORATE_TERMS = [
-  'Apple', 'Microsoft', 'Nvidia', 'Amazon', 'Google', 'Meta', 'Tesla', 'Visa', 'JPMorgan', 'Walmart'
+  'Apple', 'Microsoft', 'Nvidia', 'Amazon', 'Google', 'Meta', 'Tesla', 'Visa', 'JPMorgan', 'Walmart', 'BlackRock', 'Vanguard', 'Coinbase', 'Binance'
 ];
 
 const CRYPTO_TERMS = [
   'BTC', 'ETH', 'SOL', 'PEPE', 'DOGE', 'SHIB', 'BAYC', 'MAYC', 'Punk', 'Milady', 
-  'Remilio', 'Pudgy', 'Azuki', 'WIF', 'BONK', 'MOG'
+  'Remilio', 'Pudgy', 'Azuki', 'WIF', 'BONK', 'MOG', 'POPCAT', 'BOME', 'SLERF'
 ];
 
-// Static token data
 const STATIC_TOKENS: Partial<Token>[] = [
-  { name: 'Help Find TubTub', symbol: 'TubTub', marketCap: 3400, volume24h: 577, txCount: 6, status: 'new', imageUrl: 'https://image.pollinations.ai/prompt/TubTub%20cute%20cartoon%20mascot%203d?width=128&height=128&nologo=true' },
-  { name: 'MonkeyDLuffy', symbol: 'Luffy', marketCap: 3400, volume24h: 923, txCount: 10, status: 'new', imageUrl: 'https://image.pollinations.ai/prompt/Luffy%20anime%20style%20character?width=128&height=128&nologo=true' },
-  { name: 'Frogy', symbol: 'FROGY', marketCap: 3420, volume24h: 3000, txCount: 28, status: 'new', imageUrl: 'https://image.pollinations.ai/prompt/Frogy%20frog%20meme%20coin?width=128&height=128&nologo=true' },
-  { name: 'bucks', symbol: 'bucks', marketCap: 3430, volume24h: 4000, txCount: 71, status: 'new', imageUrl: 'https://image.pollinations.ai/prompt/bucks%20money%20cash%20green?width=128&height=128&nologo=true' },
-  { name: 'the cult of SOL', symbol: 'INVICTUS', marketCap: 3400, volume24h: 216, txCount: 3, status: 'new', imageUrl: 'https://image.pollinations.ai/prompt/cult%20of%20sol%20invictus%20mysterious?width=128&height=128&nologo=true' },
-  { name: 'Dev is active', symbol: 'AGENT', marketCap: 3400, volume24h: 0, txCount: 3, status: 'new', imageUrl: 'https://image.pollinations.ai/prompt/secret%20agent%20silhouette%20matrix?width=128&height=128&nologo=true' },
-  { name: 'WANTA XMAS', symbol: 'XMAS', marketCap: 49500, volume24h: 11000, txCount: 45, status: 'new', imageUrl: 'https://image.pollinations.ai/prompt/christmas%20santa%20coin%20holiday?width=128&height=128&nologo=true' },
-  { name: 'Olympic Snowflake Mascot', symbol: 'TINA', marketCap: 49900, volume24h: 11000, txCount: 55, status: 'new', imageUrl: 'https://image.pollinations.ai/prompt/winter%20olympic%20snowflake%20mascot?width=128&height=128&nologo=true' },
-  { name: 'Agent City', symbol: 'AGENT_CITY', marketCap: 55000, volume24h: 12000, txCount: 100, status: 'new', imageUrl: 'https://image.pollinations.ai/prompt/cyberpunk%20city%20agent?width=128&height=128&nologo=true' },
-  { name: 'XMASKNIGHT', symbol: 'MEGAKNIGH', marketCap: 57900, volume24h: 15000, txCount: 253, status: 'new', imageUrl: 'https://image.pollinations.ai/prompt/knight%20christmas%20armor?width=128&height=128&nologo=true' },
-  { name: 'OddsLayer', symbol: 'ODD', marketCap: 46500, volume24h: 11000, txCount: 162, status: 'new', imageUrl: 'https://image.pollinations.ai/prompt/odds%20gambling%20dice%20abstract?width=128&height=128&nologo=true' },
+  { name: 'Help Find TubTub', symbol: 'TubTub', marketCap: 3400, volume24h: 577, txCount: 6, status: 'new', imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=TubTub' },
+  { name: 'MonkeyDLuffy', symbol: 'Luffy', marketCap: 3400, volume24h: 923, txCount: 10, status: 'new', imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=Luffy' },
+  { name: 'Frogy', symbol: 'FROGY', marketCap: 3420, volume24h: 3000, txCount: 28, status: 'new', imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=FROGY' },
+  { name: 'bucks', symbol: 'bucks', marketCap: 3430, volume24h: 4000, txCount: 71, status: 'new', imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=bucks' },
+  { name: 'the cult of SOL', symbol: 'INVICTUS', marketCap: 3400, volume24h: 216, txCount: 3, status: 'new', imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=INVICTUS' },
+  { name: 'Dev is active', symbol: 'AGENT', marketCap: 3400, volume24h: 0, txCount: 3, status: 'new', imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=AGENT' },
+  { name: 'WANTA XMAS', symbol: 'XMAS', marketCap: 49500, volume24h: 11000, txCount: 45, status: 'new', imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=XMAS' },
+  { name: 'Olympic Snowflake Mascot', symbol: 'TINA', marketCap: 49900, volume24h: 11000, txCount: 55, status: 'new', imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=TINA' },
+  { name: 'Agent City', symbol: 'AGENT_CITY', marketCap: 55000, volume24h: 12000, txCount: 100, status: 'new', imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=AGENT_CITY' },
+  { name: 'XMASKNIGHT', symbol: 'MEGAKNIGH', marketCap: 57900, volume24h: 15000, txCount: 253, status: 'new', imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=MEGAKNIGH' },
+  { name: 'OddsLayer', symbol: 'ODD', marketCap: 46500, volume24h: 11000, txCount: 162, status: 'new', imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=ODD' },
 
   // Final Stretch
-  { name: 'Slay House', symbol: 'SLAY', marketCap: 32000, volume24h: 65000, txCount: 911, status: 'finalStretch', imageUrl: 'https://image.pollinations.ai/prompt/slay%20house%20fashion%20runway?width=128&height=128&nologo=true' },
-  { name: 'DUMPSANTA', symbol: 'DUMPSANTA', marketCap: 27400, volume24h: 15000, txCount: 329, status: 'finalStretch', imageUrl: 'https://image.pollinations.ai/prompt/bad%20santa%20cartoon%20funny?width=128&height=128&nologo=true' },
-  { name: 'MULLER', symbol: 'MULLER', marketCap: 25200, volume24h: 233000, txCount: 3460, status: 'finalStretch', imageUrl: 'https://image.pollinations.ai/prompt/muller%20abstract%20art?width=128&height=128&nologo=true' },
-  { name: 'CollabraChain', symbol: 'COLLA', marketCap: 24800, volume24h: 119000, txCount: 1612, status: 'finalStretch', imageUrl: 'https://image.pollinations.ai/prompt/blockchain%20connectivity%20nodes?width=128&height=128&nologo=true' },
-  { name: 'GREEDCOIN', symbol: 'GREED$', marketCap: 22900, volume24h: 14000, txCount: 388, status: 'finalStretch', imageUrl: 'https://image.pollinations.ai/prompt/greed%20money%20gold%20pile?width=128&height=128&nologo=true' },
-  { name: 'Mascarade', symbol: 'Mascarade', marketCap: 11800, volume24h: 16000, txCount: 4172, status: 'finalStretch', imageUrl: 'https://image.pollinations.ai/prompt/venetian%20mask%20masquerade?width=128&height=128&nologo=true' },
-  { name: 'Modex420o', symbol: 'MODEXO', marketCap: 22300, volume24h: 120000, txCount: 1897, status: 'finalStretch', imageUrl: 'https://image.pollinations.ai/prompt/modern%20tech%20logo%20neon?width=128&height=128&nologo=true' },
-  { name: 'SILVER', symbol: 'SILVER', marketCap: 22100, volume24h: 6000, txCount: 71, status: 'finalStretch', imageUrl: 'https://image.pollinations.ai/prompt/silver%20bar%20shiny%20metal?width=128&height=128&nologo=true' },
-  { name: 'TURK', symbol: 'TC', marketCap: 21400, volume24h: 101000, txCount: 1933, status: 'finalStretch', imageUrl: 'https://image.pollinations.ai/prompt/turkey%20flag%20abstract?width=128&height=128&nologo=true' },
-  { name: 'STiFF Coin', symbol: 'STiFF', marketCap: 21400, volume24h: 6000, txCount: 102, status: 'finalStretch', imageUrl: 'https://image.pollinations.ai/prompt/stiff%20stone%20statue?width=128&height=128&nologo=true' },
-  { name: 'Luna Rose', symbol: 'LROSE', marketCap: 20800, volume24h: 203000, txCount: 3247, status: 'finalStretch', imageUrl: 'https://image.pollinations.ai/prompt/moon%20rose%20flower%20space?width=128&height=128&nologo=true' },
+  { name: 'Slay House', symbol: 'SLAY', marketCap: 32000, volume24h: 65000, txCount: 911, status: 'finalStretch', imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=SLAY' },
+  { name: 'DUMPSANTA', symbol: 'DUMPSANTA', marketCap: 27400, volume24h: 15000, txCount: 329, status: 'finalStretch', imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=DUMPSANTA' },
+  { name: 'MULLER', symbol: 'MULLER', marketCap: 25200, volume24h: 233000, txCount: 3460, status: 'finalStretch', imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=MULLER' },
+  { name: 'CollabraChain', symbol: 'COLLA', marketCap: 24800, volume24h: 119000, txCount: 1612, status: 'finalStretch', imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=COLLA' },
+  { name: 'GREEDCOIN', symbol: 'GREED$', marketCap: 22900, volume24h: 14000, txCount: 388, status: 'finalStretch', imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=GREED$' },
+  { name: 'Mascarade', symbol: 'Mascarade', marketCap: 11800, volume24h: 16000, txCount: 4172, status: 'finalStretch', imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=Mascarade' },
+  { name: 'Modex420o', symbol: 'MODEXO', marketCap: 22300, volume24h: 120000, txCount: 1897, status: 'finalStretch', imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=MODEXO' },
+  { name: 'SILVER', symbol: 'SILVER', marketCap: 22100, volume24h: 6000, txCount: 71, status: 'finalStretch', imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=SILVER' },
+  { name: 'TURK', symbol: 'TC', marketCap: 21400, volume24h: 101000, txCount: 1933, status: 'finalStretch', imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=TC' },
+  { name: 'STiFF Coin', symbol: 'STiFF', marketCap: 21400, volume24h: 6000, txCount: 102, status: 'finalStretch', imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=STiFF' },
+  { name: 'Luna Rose', symbol: 'LROSE', marketCap: 20800, volume24h: 203000, txCount: 3247, status: 'finalStretch', imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=LROSE' },
 ];
 
-const generateRandomNameAndSymbol = () => {
-  const p1 = BRAINROT_TERMS[Math.floor(Math.random() * BRAINROT_TERMS.length)];
+export const generateRandomNameAndSymbol = () => {
+  const p1 = BRAINROT_TERMS[Math.floor(Math.random() * BRAINROT_TERMS.length)] || 'Based';
   const useCorporate = Math.random() > 0.5;
   const p2 = useCorporate 
-    ? CORPORATE_TERMS[Math.floor(Math.random() * CORPORATE_TERMS.length)]
-    : CRYPTO_TERMS[Math.floor(Math.random() * CRYPTO_TERMS.length)];
+    ? CORPORATE_TERMS[Math.floor(Math.random() * CORPORATE_TERMS.length)] || 'Coin'
+    : CRYPTO_TERMS[Math.floor(Math.random() * CRYPTO_TERMS.length)] || 'Pepe';
   
   const name = Math.random() > 0.5 ? `${p1} ${p2}` : `${p2} ${p1}`;
   const symbol = name.toUpperCase().replace(/[^A-Z]/g, '').slice(0, 4) + (Math.random() > 0.5 ? 'X' : '');
@@ -134,7 +133,7 @@ function getStaticToken(index: number, desiredStatus: TokenStatus): Token {
     address: generateAddress(),
     name,
     symbol,
-    imageUrl: `https://image.pollinations.ai/prompt/${encodeURIComponent(name + ' logo abstract 3d render vibrant')}?width=128&height=128&nologo=true`,
+      imageUrl: `https://api.dicebear.com/9.x/shapes/svg?seed=${encodeURIComponent(name)}`,
     marketCap,
     volume24h: marketCap * (0.1 + Math.random() * 0.5),
     txCount: Math.floor(Math.random() * 5000) + 100,
@@ -165,12 +164,13 @@ export function generateNewToken(status: TokenStatus): Token {
   }
   
   const { name, symbol } = generateRandomNameAndSymbol();
+  
   return {
       id: generateId(),
       address: generateAddress(),
       name,
       symbol,
-      imageUrl: `https://image.pollinations.ai/prompt/${encodeURIComponent(name + ' logo')}?width=128&height=128&nologo=true`,
+      imageUrl: `https://api.dicebear.com/9.x/shapes/svg?seed=${encodeURIComponent(name)}`,
       marketCap: 10000,
       volume24h: 5000,
       txCount: 10,
