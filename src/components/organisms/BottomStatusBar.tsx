@@ -195,7 +195,7 @@ export function BottomStatusBar({ className, loading }: BottomStatusBarProps) {
             </Tooltip>
           ))}
 
-<Tooltip content="Pulse Settings">
+          <Tooltip content="Pulse Settings">
             <button className="flex items-center gap-[3px] px-1 py-[2px] bg-[#1a1a1f] border-none rounded-[4px] text-[#6b6b7a] hover:text-[#fcfcfcfc] text-[9px] cursor-pointer hover:bg-[#25262e] transition-all">
               <RiPulseLine className="w-[11px] h-[11px] text-[#6b6b7a]" />
               <span className="text-[#fcfcfc]">Pulse</span>
@@ -205,7 +205,7 @@ export function BottomStatusBar({ className, loading }: BottomStatusBarProps) {
             <NavButton icon={<RiBarChartLine className="w-[11px] h-[11px]" />} label="PnL" className={cn(settingsHoverClasses, "text-[8px]")} />
           </Tooltip>
 
-          
+
 
           <div className="w-[1px] h-3 bg-[#1a1a1f] shrink-0 -mr-1" />
 
@@ -233,7 +233,7 @@ export function BottomStatusBar({ className, loading }: BottomStatusBarProps) {
 
           <div className="w-[1px] h-3 bg-[#1a1a1f] shrink-0" />
 
-          <div className={`flex items-center gap-1 px-1.5 py-[2px] rounded-[4px] whitespace-nowrap shrink-0 ${loading ? 'bg-[rgba(248,113,113,0.15)]' : 'bg-[rgba(52,211,153,0.15)]'}`}>
+          <div className={`flex items-center justify-center w-[105px] gap-1 px-1.5 py-[2px] rounded-[4px] whitespace-nowrap shrink-0 ${loading ? 'bg-[rgba(248,113,113,0.15)]' : 'bg-[rgba(52,211,153,0.15)]'}`}>
             <span className={`w-[5px] h-[5px] rounded-full shrink-0 ${loading ? 'bg-[#f87171]' : 'bg-[#34d399]'}`} />
             <span className={`text-[9px] ${loading ? 'text-[#f87171]' : 'text-[#34d399]'}`}>
               {loading ? 'Disconnected' : 'Connection is stable'}
@@ -256,11 +256,11 @@ export function BottomStatusBar({ className, loading }: BottomStatusBarProps) {
           <div className="flex items-center gap-1.5 shrink-0">
             {SOCIAL_ICONS.map((item, idx) => renderIconButton(item, `social-${idx}`))}
 
-              <button className="flex items-center gap-[2px] bg-none border-none text-[#6b6b7a] hover:text-[#fcfcfcfc] cursor-pointer text-[9px] hover:bg-[#1a1a1f] px-1 py-[1.5px] rounded-md transition-all shrink-0">
-                <RiWindowLine className="w-[10px] h-[10px] ml-1" />
-                <span>Docs</span>
-              </button>
-            
+            <button className="flex items-center gap-[2px] bg-none border-none text-[#6b6b7a] hover:text-[#fcfcfcfc] cursor-pointer text-[9px] hover:bg-[#1a1a1f] px-1 py-[1.5px] rounded-md transition-all shrink-0">
+              <RiWindowLine className="w-[10px] h-[10px] ml-1" />
+              <span>Docs</span>
+            </button>
+
           </div>
         </div>
       </div>

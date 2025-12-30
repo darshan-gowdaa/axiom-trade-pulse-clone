@@ -117,7 +117,7 @@ export function Header() {
           </div>
         </div>
 
-        <div className="flex-1 flex justify-center max-w-[200px] mx-[20px]">
+        <div className="flex-1 flex justify-center max-w-[200px] mx-[10px]">
           <div className="relative w-full">
             <RiSearchLine className="absolute left-[12px] top-1/2 -translate-y-1/2 w-[16px] h-[16px] text-[#d4d4d8]" />
             <input
