@@ -101,7 +101,7 @@ Unlike typical clones, this project adheres to a strict **"Pixel-Perfect"** stan
 
 ---
 
-# � Project Structure & Component Architecture
+# Project Structure & Component Architecture
 
 The codebase follows strictly **Atomic Design** principles.
 
@@ -258,15 +258,15 @@ Built on the **Bleeding Edge** of the React ecosystem (2025 Standards).
 ---
 
 # 📊 Performance
-
-On Vercel Deployment: <br>
-<img width="300" height="360" alt="image" src="https://github.com/user-attachments/assets/4ab4cd4b-b0eb-4c95-ba1a-66b59a695a4a" />
+<img src="https://github.com/user-attachments/assets/2f97fd42-c83d-4471-989c-4bfc3fef6614" height="400" /> 
+<img src="https://github.com/user-attachments/assets/22dca8a6-da14-4a9d-b232-e703fbe9ea97" height="400" />
 
 | Metric | Target | Current | Status |
 | :--- | :--- | :--- | :--- |
-| **Lighthouse Score** | 90+ | **96** | ✅ Passing |
-| **FCP (First Contentful Paint)** | < 1.0s | **0.4s** | ✅ Passing |
+| **Lighthouse Score** | 90+ | **99** | ✅ Passing |
+| **FCP (First Contentful Paint)** | < 1.0s | **0.3s** | ✅ Passing |
 | **Interaction Latency** | < 100ms | **20ms** | ✅ Passing |
+| **Layout Shift** | 1 | **0.003** | ✅ Passing |
 
 
 ---
