@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useAppDispatch, useAppSelector, useIsMobile, useWebSocketSimulation, useTokens } from '@/hooks';
+import { useAppDispatch, useAppSelector, useIsMobile, useMobulaWebSocket, useTokens } from '@/hooks';
 import { setActiveTab, setActivePreset, setIsMobile } from '@/store/uiSlice';
 import { TokenColumn, PulseToolbar, BottomStatusBar, MobileNavBar } from '@/components/organisms';
 import { type Token, type ActiveTab } from '@/types';
@@ -13,17 +13,20 @@ export function PulseContent() {
   const { priceFlash } = useAppSelector(
     (state) => state.tokens
   );
-  const { activeTab, displaySettings, activePresets } = useAppSelector(
+  const { activeTab, displaySettings, activePresets, activeChain } = useAppSelector(
     (state) => state.ui
   );
+
+  // Connect to Mobula WebSocket with the active chain
+  const wsState = useMobulaWebSocket(activeChain);
 
   const { data: newPairs = [], isLoading: isNewPairsLoading } = useTokens('new');
   const { data: finalStretch = [], isLoading: isFinalStretchLoading } = useTokens('finalStretch');
   const { data: migrated = [], isLoading: isMigratedLoading } = useTokens('migrated');
 
-  const isLoading = isNewPairsLoading || isFinalStretchLoading || isMigratedLoading;
-
-  useWebSocketSimulation(); // This will need to be updated next
+  // Show loading if no data yet (WebSocket hasn't sent init)
+  const isLoading = (isNewPairsLoading || isFinalStretchLoading || isMigratedLoading)
+    || (newPairs.length === 0 && finalStretch.length === 0 && migrated.length === 0 && !wsState.error);
 
   useEffect(() => {
     dispatch(setIsMobile(isMobile));
@@ -59,6 +62,12 @@ export function PulseContent() {
     <div className="flex-1 flex flex-col overflow-hidden bg-[#06070b]">
       {/* Pulse Toolbar */}
       <PulseToolbar activeTab={activeTab} onTabChange={handleTabChange} />
+
+      {wsState.error && (
+        <div className="px-4 py-1.5 bg-[#1a1a2e] text-[#fbbf24] text-xs text-center">
+          Warning: {wsState.error}
+        </div>
+      )}
 
       {/* Token Columns - Only this section scrolls */}
       <div className={`flex-1 flex overflow-hidden min-h-0 px-2 lg:px-7 gap-1 ${isMobile ? 'pb-[50px] justify-center' : ''}`}>

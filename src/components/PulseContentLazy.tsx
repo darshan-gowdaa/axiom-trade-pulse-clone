@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import { useEffect, Suspense } from 'react';
-import { useAppDispatch, useAppSelector, useIsMobile, useWebSocketSimulation, usePrefetch, useTokens } from '@/hooks';
+import { useAppDispatch, useAppSelector, useIsMobile, useMobulaWebSocket, usePrefetch, useTokens } from '@/hooks';
 import { setActiveTab, setActivePreset, setIsMobile } from '@/store/uiSlice';
 import { type Token, type ActiveTab } from '@/types';
 import { PulseToolbarSkeleton, TokenColumnSkeleton } from '@/components/skeletons';
@@ -42,17 +42,20 @@ export function PulseContentLazy() {
     const { priceFlash } = useAppSelector(
         (state) => state.tokens
     );
-    const { activeTab, displaySettings, activePresets } = useAppSelector(
+    const { activeTab, displaySettings, activePresets, activeChain } = useAppSelector(
         (state) => state.ui
     );
+
+    // Connect to Mobula WebSocket with the active chain
+    const wsState = useMobulaWebSocket(activeChain);
 
     const { data: newPairs = [], isLoading: isNewPairsLoading } = useTokens('new');
     const { data: finalStretch = [], isLoading: isFinalStretchLoading } = useTokens('finalStretch');
     const { data: migrated = [], isLoading: isMigratedLoading } = useTokens('migrated');
 
-    const isLoading = isNewPairsLoading || isFinalStretchLoading || isMigratedLoading;
-
-    useWebSocketSimulation();
+    // Show loading if no data yet (WebSocket hasn't sent init)
+    const isLoading = (isNewPairsLoading || isFinalStretchLoading || isMigratedLoading)
+        || (newPairs.length === 0 && finalStretch.length === 0 && migrated.length === 0 && !wsState.error);
 
     // Removed useEffect that utilized setTokens and setLoading
 
@@ -91,6 +94,12 @@ export function PulseContentLazy() {
             <Suspense fallback={<PulseToolbarSkeleton />}>
                 <PulseToolbar activeTab={activeTab} onTabChange={handleTabChange} />
             </Suspense>
+
+            {wsState.error && (
+                <div className="px-4 py-1.5 bg-[#1a1a2e] text-[#fbbf24] text-xs text-center">
+                    Warning: {wsState.error}
+                </div>
+            )}
 
             <div className={`flex-1 flex overflow-hidden min-h-0 px-2 lg:px-5 gap-1 ${isMobile ? 'pb-[50px] justify-center' : ''}`}>
                 {isMobile ? (

@@ -1,6 +1,6 @@
 'use client';
 
-import { SolanaLogo } from '@/components/atoms/SolanaLogo';
+import Image from 'next/image';
 import { Tooltip } from '@/components/atoms';
 import { useChain } from '@/hooks';
 
@@ -23,7 +23,7 @@ export function ChainSelector({ variant = 'desktop' }: ChainSelectorProps) {
                             }`}
                     >
                         <div className={`transition-opacity duration-300 ${activeChain === 'sol' ? 'opacity-100' : 'opacity-50'}`}>
-                            <SolanaLogo width={15} height={15} />
+                            <Image src="/icons/sol-fill.svg" alt="Solana" width={15} height={15} />
                         </div>
                     </button>
                 </Tooltip>
@@ -35,11 +35,13 @@ export function ChainSelector({ variant = 'desktop' }: ChainSelectorProps) {
                             : 'bg-transparent border-transparent'
                             }`}
                     >
-                        <img
-                            src="https://axiom.trade/images/bnb-fill.svg"
+                        <Image
+                            src="/icons/bnb-fill.svg"
                             alt="BNB"
                             className={`w-3.5 h-3.5 transition-opacity duration-300 ${activeChain === 'bnb' ? 'opacity-100' : 'opacity-50'
                                 }`}
+                            width={14}
+                            height={14}
                         />
                     </button>
                 </Tooltip>
@@ -59,7 +61,7 @@ export function ChainSelector({ variant = 'desktop' }: ChainSelectorProps) {
                         }`}
                 >
                     <div className={`transition-opacity duration-300 ${activeChain === 'sol' ? 'opacity-100' : 'opacity-50'}`}>
-                        <SolanaLogo width={16} height={16} />
+                        <Image src="/icons/sol-fill.svg" alt="Solana" width={16} height={16} />
                     </div>
                 </button>
             </Tooltip>
@@ -71,11 +73,13 @@ export function ChainSelector({ variant = 'desktop' }: ChainSelectorProps) {
                         : 'bg-transparent hover:bg-[#27272a]'
                         }`}
                 >
-                    <img
-                        src="https://axiom.trade/images/bnb-fill.svg"
+                    <Image
+                        src="/icons/bnb-fill.svg"
                         alt="BNB"
                         className={`w-3.5 h-3.5 transition-opacity duration-300 ${activeChain === 'bnb' ? 'opacity-100' : 'opacity-50'
                             }`}
+                        width={14}
+                        height={14}
                     />
                 </button>
             </Tooltip>

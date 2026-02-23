@@ -5,7 +5,7 @@ import { type Token } from '@/types';
 import { formatCurrency, formatCompactNumber, formatTimeAgo } from '@/utils';
 import { getRingColor, getMarketCapColor, generateUserIconColor } from '@/utils/tokenCardHelpers';
 import { useTokenCardState, useChain } from '@/hooks';
-import { RiCheckLine, RiUserLine, RiFlashlightFill, RiFileCopyFill } from '@remixicon/react';
+import { RiCheckLine, RiUserLine, RiFlashlightFill, RiFileCopyFill, RiGlobalLine, RiSpyFill, RiCrosshair2Fill, RiUserStarFill, RiWaterFlashFill, RiTimerFlashLine } from '@remixicon/react';
 import { ChainLogo, ChainText } from '@/components/atoms';
 import { MetricBlock } from '@/components/atoms/MetricBlock';
 import { Tooltip } from '@/components/atoms/Tooltip';
@@ -34,17 +34,18 @@ function TokenCardComponent({
     txCount,
     marketCap,
     volume,
-    topMetrics,
-    bottomMetrics,
     barWidths,
     timeState,
-    feeValue,
   } = useTokenCardState({
     initialName: token.name,
     initialSymbol: token.symbol,
     initialTxCount: token.txCount,
     initialMarketCap: token.marketCap,
     initialVolume: token.volume24h,
+    deployer: token.deployer,
+    buys1h: token.buys1h,
+    sells1h: token.sells1h,
+    createdAt: token.createdAt,
   });
 
   const ringColor = getRingColor(token.id);
@@ -74,12 +75,15 @@ function TokenCardComponent({
     tooltipContent = <span className={tooltipTextColor}>Bonding: {bondingProgress.toFixed(2)}%</span>;
   }
 
+  // Prefer real logo URL from the API
+  const displayImageUrl = token.logoUrl || token.imageUrl;
+
   const cardContent = (
     <div className={`relative w-full flex items-center pl-2 lg:pl-3 pr-1 py-2 border-b border-[#1a1b23] cursor-pointer bg-transparent gap-2 min-h-[64px] transition-colors duration-200 mr-2 ${hoverClass}`}>
       <TokenAvatarCard
         symbol={tokenIdentity.symbol}
         name={tokenIdentity.name}
-        imageUrl={token.imageUrl}
+        imageUrl={displayImageUrl}
         creator={tokenIdentity.creator}
         ringColor={ringColor}
       />
@@ -110,15 +114,35 @@ function TokenCardComponent({
               <span className="text-[#16a34a] shrink-0">
                 {formatTimeAgo(token.createdAt)}
               </span>
-              <RiUserLine
-                className="w-[11px] h-[11px] shrink-0"
-                style={{ color: userIconColor }}
-              />
-              <div className="flex items-center gap-1 overflow-hidden">
-                {topMetrics.map((m, i) => (
-                  <MetricBlock key={i} icon={m.icon} text={m.count ?? 0} textClass="text-[#fcfcfc]" />
-                ))}
-              </div>
+              {typeof token.holdersCount === 'number' && (
+                <div className="flex items-center gap-2 overflow-hidden">
+                  <div className="flex items-center gap-[2px]">
+                    <RiUserLine className="w-[11px] h-[11px] shrink-0" style={{ color: userIconColor }} />
+                    <span className="text-[#fcfcfc]">{formatCompactNumber(token.holdersCount)}</span>
+                  </div>
+
+                  {typeof token.smartTradersCount === 'number' && token.smartTradersCount > 0 && (
+                    <div className="flex items-center gap-[2px]" title="Smart Traders">
+                      <RiUserStarFill className="w-[11px] h-[11px] shrink-0 text-[#fbbf24]" />
+                      <span className="text-[#fcfcfc]">{token.smartTradersCount}</span>
+                    </div>
+                  )}
+
+                  {typeof token.snipersCount === 'number' && token.snipersCount > 0 && (
+                    <div className="flex items-center gap-[2px]" title="Snipers">
+                      <RiCrosshair2Fill className="w-[11px] h-[11px] shrink-0 text-[#ef4444]" />
+                      <span className="text-[#fcfcfc]">{token.snipersCount}</span>
+                    </div>
+                  )}
+
+                  {typeof token.insidersCount === 'number' && token.insidersCount > 0 && (
+                    <div className="flex items-center gap-[2px]" title="Insiders">
+                      <RiSpyFill className="w-[11px] h-[11px] shrink-0 text-[#a855f7]" />
+                      <span className="text-[#fcfcfc]">{token.insidersCount}</span>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
 
@@ -141,9 +165,10 @@ function TokenCardComponent({
         <div className="flex items-center justify-between gap-2">
           <div className="flex-1" />
           <div className="flex items-center gap-1 text-[9px] shrink-0 -mt-1">
-            {activeChain === 'sol' && (
-              <span className="text-white flex items-center gap-[2px]">
-                F <ChainLogo width={9} height={9} /> {feeValue}
+            {typeof token.liquidity === 'number' && (
+              <span className="text-[#777a8c] mr-1 flex items-center gap-[2px]" title="Liquidity">
+                <RiWaterFlashFill className="w-3 h-3 text-[#52c5ff]" />
+                <span className="text-white">${formatCompactNumber(token.liquidity)}</span>
               </span>
             )}
             <span className="text-[#777a8c]">TX</span>
@@ -159,14 +184,39 @@ function TokenCardComponent({
 
         <div className="flex items-center justify-between gap-2 -mt-1">
           <div className="flex items-center gap-1 flex-nowrap overflow-hidden min-w-0">
-            {bottomMetrics.map((m, i) => (
+            {typeof token.priceChange1h === 'number' && (
               <MetricPill
-                key={i}
-                metric={m}
+                metric={{
+                  icon: <span className="font-bold text-[9px]">1H</span>,
+                  val: Math.abs(token.priceChange1h).toFixed(2),
+                  suffix: '%',
+                  color: token.priceChange1h >= 0 ? '#16a34a' : '#ef4444'
+                }}
                 timeState={timeState}
-                isLast={i === bottomMetrics.length - 1}
               />
-            ))}
+            )}
+            {typeof token.priceChange5m === 'number' && (
+              <MetricPill
+                metric={{
+                  icon: <span className="font-bold text-[9px]">5M</span>,
+                  val: Math.abs(token.priceChange5m).toFixed(2),
+                  suffix: '%',
+                  color: token.priceChange5m >= 0 ? '#16a34a' : '#ef4444'
+                }}
+                timeState={timeState}
+              />
+            )}
+            {typeof token.volume5m === 'number' && token.volume5m > 0 && (
+              <MetricPill
+                metric={{
+                  icon: <RiTimerFlashLine className="w-[10px] h-[10px] text-[#fbbf24]" />,
+                  val: `$${formatCompactNumber(token.volume5m)}`,
+                  suffix: ' Vol',
+                  color: '#fbbf24'
+                }}
+                timeState={timeState}
+              />
+            )}
           </div>
 
           <button

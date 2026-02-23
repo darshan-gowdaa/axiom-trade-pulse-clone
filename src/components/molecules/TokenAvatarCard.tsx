@@ -36,6 +36,7 @@ export function TokenAvatarCard({
                             fill
                             className={`object-cover transition-opacity duration-500 ease-in-out z-10 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
                             onLoad={() => setImgLoaded(true)}
+                            onError={() => setImgError(true)}
                             sizes="55px"
                             unoptimized={true}
                         />
@@ -46,9 +47,11 @@ export function TokenAvatarCard({
                     )}
                 </div>
                 <div
-                    className="absolute bottom-[-4px] right-[-4px] w-4 h-4 bg-black rounded-full flex items-center justify-center z-10"
+                    className="absolute bottom-[-4px] right-[-4px] w-4 h-4 bg-black rounded-full flex items-center justify-center z-20"
                     style={{ border: `1.5px solid ${ringColor}` }}
-                />
+                >
+                    <Image src="/icons/pump-small.svg" alt="Pump" width={10} height={10} unoptimized={true} />
+                </div>
             </div>
             <div className="mt-1.5 text-[8px] text-[#555] text-center font-bold">{creator}</div>
         </div>

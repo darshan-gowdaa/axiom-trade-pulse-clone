@@ -2,7 +2,7 @@
 
 import { useSelector } from 'react-redux';
 import { type RootState } from '@/store';
-import { SolanaLogo } from './SolanaLogo';
+import Image from 'next/image';
 
 interface ChainLogoProps {
     className?: string;
@@ -26,12 +26,12 @@ export function ChainLogo({ className, width = 14, height = 14 }: ChainLogoProps
     if (activeChain === 'bnb') {
         return (
             <div style={wrapperStyle} className={className}>
-                <img
-                    src="https://axiom.trade/images/bnb-fill.svg"
+                <Image
+                    src="/icons/bnb-fill.svg"
                     alt="BNB"
                     width={width}
                     height={height}
-                    style={{ width, height, objectFit: 'contain' }}
+                    style={{ objectFit: 'contain' }}
                 />
             </div>
         );
@@ -39,7 +39,13 @@ export function ChainLogo({ className, width = 14, height = 14 }: ChainLogoProps
 
     return (
         <div style={wrapperStyle} className={className}>
-            <SolanaLogo width={width} height={height} />
+            <Image
+                src="/icons/sol-fill.svg"
+                alt="Solana"
+                width={width}
+                height={height}
+                style={{ objectFit: 'contain' }}
+            />
         </div>
     );
 }

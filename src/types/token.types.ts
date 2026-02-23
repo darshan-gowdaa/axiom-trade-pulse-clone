@@ -33,6 +33,47 @@ export interface Token {
   safety: TokenSafety;
   /** Token status */
   status: TokenStatus;
+  // ── Extended fields from real Mobula API ──
+  /** Chain identifier (e.g., "solana:solana") */
+  chainId?: string;
+  /** Liquidity in USD */
+  liquidity?: number;
+  /** Whether the token is fully bonded */
+  bonded?: boolean;
+  /** Number of holders */
+  holdersCount?: number;
+  /** 1h price change % */
+  priceChange1h?: number;
+  /** 5min price change % */
+  priceChange5m?: number;
+  /** 1h volume in USD */
+  volume1h?: number;
+  /** Buy count in 1h */
+  buys1h?: number;
+  /** Sell count in 1h */
+  sells1h?: number;
+  /** 5m volume in USD */
+  volume5m?: number;
+  /** Trades in 5m */
+  trades5m?: number;
+  /** Deployer address */
+  deployer?: string;
+  /** Token source (e.g., "pumpfun") */
+  source?: string;
+  /** Token description */
+  description?: string;
+  /** Direct logo URL from API */
+  logoUrl?: string;
+
+  // Real API holder analysis metrics
+  /** Smart traders count */
+  smartTradersCount?: number;
+  /** Snipers count */
+  snipersCount?: number;
+  /** Fresh traders count */
+  freshTradersCount?: number;
+  /** Insiders count */
+  insidersCount?: number;
 }
 
 /**

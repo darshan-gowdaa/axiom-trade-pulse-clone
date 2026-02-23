@@ -13,24 +13,24 @@ export function MultiChainBadge() {
         >
             <div className="flex items-center gap-[0px] px-[0.5px] py-[0.5px] bg-[#06070b] rounded-full">
                 <OptimizedImage
-                    alt="Pump"
-                    width={9}
-                    height={9}
-                    src="https://axiom.trade/images/pump.svg"
-                    className=""
-                />
-                <OptimizedImage
                     alt="Bonk"
                     width={9}
                     height={9}
-                    src="https://axiom.trade/images/bonk.svg"
+                    src="/icons/bonk.svg"
                     className=""
                 />
                 <OptimizedImage
-                    alt="Virtual Curve"
+                    alt="Pump"
                     width={9}
                     height={9}
-                    src="https://axiom.trade/images/virtual-curve.svg"
+                    src="/icons/pump.svg"
+                    className=""
+                />
+                <OptimizedImage
+                    alt="Bags"
+                    width={9}
+                    height={9}
+                    src="/icons/bags.svg"
                     className=""
                 />
             </div>

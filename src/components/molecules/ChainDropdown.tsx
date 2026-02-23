@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, ReactNode } from 'react';
 import { useChain } from '@/hooks';
-import { SolanaLogo } from '@/components/atoms/SolanaLogo';
+import Image from 'next/image';
 
 interface ChainDropdownProps {
     children: ReactNode;
@@ -46,7 +46,12 @@ export function ChainDropdown({ children }: ChainDropdownProps) {
                             : 'hover:bg-[#1f212c]'
                             }`}
                     >
-                        <SolanaLogo width={16} height={16} />
+                        <Image
+                            src="/icons/sol-fill.svg"
+                            alt="Solana"
+                            width={16}
+                            height={16}
+                        />
                         <span className={`text-[12px] font-medium transition-colors ${activeChain === 'sol' ? 'text-white' : 'text-[#a1a1aa] group-hover:text-white'}`}>
                             Solana
                         </span>
@@ -59,10 +64,12 @@ export function ChainDropdown({ children }: ChainDropdownProps) {
                             : 'hover:bg-[#1f212c]'
                             }`}
                     >
-                        <img
-                            src="https://axiom.trade/images/bnb-fill.svg"
+                        <Image
+                            src="/icons/bnb-fill.svg"
                             alt="BNB"
                             className="w-4 h-4"
+                            width={16}
+                            height={16}
                         />
                         <span className={`text-[12px] font-medium transition-colors ${activeChain === 'bnb' ? 'text-white' : 'text-[#a1a1aa] group-hover:text-white'}`}>
                             BNB

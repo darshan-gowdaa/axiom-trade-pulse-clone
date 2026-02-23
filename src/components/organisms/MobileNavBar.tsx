@@ -1,11 +1,9 @@
 'use client';
 
-import { 
-  RiPulseLine, 
-  RiFireLine, 
-  RiRadarLine, 
-  RiArrowLeftRightLine, 
-  RiAccountBoxLine, 
+import {
+  RiPulseLine,
+  RiFireLine,
+  RiRadarLine,
   RiExchangeLine,
   RiFolderUserLine
 } from '@remixicon/react';
@@ -37,14 +35,12 @@ export function MobileNavBar() {
             className="flex-1 flex flex-col items-center justify-center gap-0.5 no-underline bg-transparent"
           >
             <item.icon
-              className={`w-4 h-4 ${
-                isActive ? 'text-white' : 'text-[#6b6b7a]'
-              }`}
+              className={`w-4 h-4 ${isActive ? 'text-white' : 'text-[#6b6b7a]'
+                }`}
             />
             <span
-              className={`text-[10px] font-medium ${
-                isActive ? 'text-white' : 'text-[#6b6b7a]'
-              }`}
+              className={`text-[10px] font-medium ${isActive ? 'text-white' : 'text-[#6b6b7a]'
+                }`}
             >
               {item.label}
             </span>

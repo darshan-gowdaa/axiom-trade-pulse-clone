@@ -1,18 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import {
-  generateTopMetrics,
-  generateBottomMetrics,
-  generateBarWidths,
-  generateInitialTimeState,
-  updateTimeState,
-  generateFeeValue,
-  type MetricData,
   type TimeState,
   type BarWidths,
 } from '@/utils/tokenCardHelpers';
-import { generateNameAndSymbol, generateCreatorName } from '@/utils/mockData';
 
 interface TokenIdentity {
   name: string;
@@ -20,106 +12,106 @@ interface TokenIdentity {
   creator: string;
 }
 
-interface UseTokenSimulationProps {
+interface UseTokenCardStateProps {
   initialName: string;
   initialSymbol: string;
   initialTxCount: number;
   initialMarketCap: number;
   initialVolume: number;
+  deployer?: string;
+  buys1h?: number;
+  sells1h?: number;
+  createdAt?: number;
 }
 
-interface TokenSimulationState {
+interface TokenCardState {
   tokenIdentity: TokenIdentity;
   txCount: number;
   marketCap: number;
   volume: number;
-  topMetrics: MetricData[];
-  bottomMetrics: MetricData[];
   barWidths: BarWidths;
   timeState: TimeState;
-  feeValue: string;
 }
 
+/**
+ * Formats a deployer address as "XXXX...XXXX" for display.
+ */
+function formatDeployer(deployer?: string): string {
+  if (deployer && deployer.length > 8) {
+    return `${deployer.slice(0, 4)}...${deployer.slice(-4)}`;
+  }
+  if (deployer) return deployer;
+  // Fallback: random creator name
+  const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  const start = Array.from({ length: 4 }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
+  const end = Array.from({ length: 4 }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
+  return `${start}...${end}`;
+}
+
+/**
+ * Computes how long ago a token was created & returns a TimeState.
+ */
+function computeTimeState(createdAt?: number): TimeState {
+  if (!createdAt) return { val: 0, unit: 's' };
+
+  const diffMs = Date.now() - createdAt;
+  const diffSec = Math.floor(diffMs / 1000);
+
+  if (diffSec < 60) return { val: diffSec, unit: 's' };
+  if (diffSec < 3600) return { val: Math.floor(diffSec / 60), unit: 'm' };
+  if (diffSec < 86400) return { val: Math.floor(diffSec / 3600), unit: 'h' };
+  return { val: Math.floor(diffSec / 86400), unit: 'd' };
+}
+
+/**
+ * Hook providing token card display state.
+ * Now driven by real API data — no more simulation intervals.
+ * Values are derived directly from props which are updated by WebSocket.
+ */
 export function useTokenCardState({
   initialName,
   initialSymbol,
   initialTxCount,
   initialMarketCap,
   initialVolume,
-}: UseTokenSimulationProps): TokenSimulationState {
-  const [tokenIdentity, setTokenIdentity] = useState<TokenIdentity>({
+  deployer,
+  buys1h,
+  sells1h,
+  createdAt,
+}: UseTokenCardStateProps): TokenCardState {
+  // Identity is stable — no more cycling names
+  const tokenIdentity = useMemo<TokenIdentity>(() => ({
     name: initialName,
     symbol: initialSymbol,
-    creator: generateCreatorName(),
-  });
-  const [txCount, setTxCount] = useState(initialTxCount);
-  const [marketCap, setMarketCap] = useState(initialMarketCap);
-  const [volume, setVolume] = useState(initialVolume);
-  const [topMetrics, setTopMetrics] = useState<MetricData[]>(generateTopMetrics);
-  const [bottomMetrics, setBottomMetrics] = useState<MetricData[]>(generateBottomMetrics);
-  const [barWidths, setBarWidths] = useState<BarWidths>(generateBarWidths);
-  const [timeState, setTimeState] = useState<TimeState>(generateInitialTimeState);
-  const [feeValue, setFeeValue] = useState<string>(generateFeeValue);
+    creator: formatDeployer(deployer),
+  }), [initialName, initialSymbol, deployer]);
 
+  // Use real values directly
+  const txCount = initialTxCount;
+  const marketCap = initialMarketCap;
+  const volume = initialVolume;
 
-  useEffect(() => {
-    const nameInterval = setInterval(() => {
-      const { name, symbol } = generateNameAndSymbol();
-      setTokenIdentity({ name, symbol, creator: generateCreatorName() });
-    }, 7000);
+  // Bar widths — use real buys/sells ratio if available
+  const barWidths = useMemo<BarWidths>(() => {
+    if (buys1h !== undefined && sells1h !== undefined) {
+      const total = buys1h + sells1h;
+      if (total > 0) {
+        const green = Math.round((buys1h / total) * 100);
+        return { green, red: 100 - green };
+      }
+    }
+    return { green: 50, red: 50 };
+  }, [buys1h, sells1h]);
 
-    return () => clearInterval(nameInterval);
-  }, []);
-
-
-  useEffect(() => {
-    const txInterval = setInterval(() => {
-      setTxCount((prev) => prev + Math.floor(Math.random() * 5) + 1);
-    }, 1000);
-
-    return () => clearInterval(txInterval);
-  }, []);
-
-
-  useEffect(() => {
-    const mcInterval = setInterval(() => {
-      setMarketCap((prev) => Math.max(0, prev + prev * (Math.random() * 0.1 - 0.04)));
-    }, 3000);
-
-    return () => clearInterval(mcInterval);
-  }, []);
-
-
-  useEffect(() => {
-    const volInterval = setInterval(() => {
-      setVolume((prev) => Math.max(0, prev + prev * (Math.random() * 0.1 - 0.04)));
-    }, 3500);
-
-    return () => clearInterval(volInterval);
-  }, []);
-
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTopMetrics(generateTopMetrics());
-      setBottomMetrics(generateBottomMetrics());
-      setTimeState(updateTimeState);
-      setBarWidths(generateBarWidths());
-      setFeeValue(generateFeeValue());
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, []);
+  // Time state — derived from real createdAt
+  const timeState = useMemo<TimeState>(() => computeTimeState(createdAt), [createdAt]);
 
   return {
     tokenIdentity,
     txCount,
     marketCap,
     volume,
-    topMetrics,
-    bottomMetrics,
     barWidths,
     timeState,
-    feeValue,
   };
 }

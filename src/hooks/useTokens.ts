@@ -1,20 +1,21 @@
 import { useQuery } from '@tanstack/react-query';
-import { generateMockTokens } from '@/utils';
 import { type Token, type TokenStatus } from '@/types';
 
-const INITIAL_TOKENS_COUNT = 15;
-
-const fetchTokens = async (status: TokenStatus): Promise<Token[]> => {
-  // Simulate network delay
-  await new Promise((resolve) => setTimeout(resolve, 500));
-  return generateMockTokens(INITIAL_TOKENS_COUNT, status);
-};
-
+/**
+ * Hook to access token data from the React Query cache.
+ * 
+ * Data is populated by the Mobula WebSocket connection (useMobulaWebSocket),
+ * which writes directly to these query keys via queryClient.setQueryData().
+ * 
+ * The queryFn returns an empty array as a fallback — the WebSocket's "init"
+ * message is the real source of initial data.
+ */
 export const useTokens = (status: TokenStatus) => {
   return useQuery({
     queryKey: ['tokens', status],
-    queryFn: () => fetchTokens(status),
-    staleTime: Infinity, // Data is static/mock for now, updates come via socket
+    queryFn: (): Token[] => [],
+    staleTime: Infinity,
     refetchOnWindowFocus: false,
+    refetchOnMount: false,
   });
 };

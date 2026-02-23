@@ -68,3 +68,39 @@ export const BREAKPOINTS = {
   xl: 1280,
   '2xl': 1536,
 } as const;
+
+
+// ── Mobula WebSocket Configuration ──────────────────────────────────────────
+
+export const MOBULA_WS_URL = process.env.NEXT_PUBLIC_MOBULA_WS_URL || 'wss://api.mobula.io';
+export const MOBULA_API_KEY = process.env.NEXT_PUBLIC_MOBULA_API_KEY || '';
+
+/** Maps app chain IDs to Mobula chainId format */
+export const CHAIN_ID_MAP: Record<string, string[]> = {
+  sol: ['solana:solana'],
+  bnb: ['evm:56'],
+};
+
+/** Maps app chain IDs to Mobula pool types */
+export const POOL_TYPES_MAP: Record<string, string[]> = {
+  sol: ['pumpfun'],
+  bnb: ['moonshot-evm'],
+};
+
+/** Maps Mobula view names to app TokenStatus */
+export const MOBULA_VIEW_TO_STATUS: Record<string, string> = {
+  new: 'new',
+  bonding: 'finalStretch',
+  bonded: 'migrated',
+};
+
+/** Maps app TokenStatus back to Mobula view names */
+export const STATUS_TO_MOBULA_VIEW: Record<string, string> = {
+  new: 'new',
+  finalStretch: 'bonding',
+  migrated: 'bonded',
+};
+
+export const WS_RECONNECT_DELAY = 3000;
+export const WS_PING_INTERVAL = 15000;
+export const WS_MAX_RECONNECT_ATTEMPTS = 10;
