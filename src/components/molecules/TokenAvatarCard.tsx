@@ -39,6 +39,8 @@ export function TokenAvatarCard({
                             onError={() => setImgError(true)}
                             sizes="55px"
                             unoptimized={true}
+                            loading="eager"
+                            priority={true}
                         />
                     ) : (
                         <span className="text-[14px] font-bold" style={{ color: ringColor }}>
