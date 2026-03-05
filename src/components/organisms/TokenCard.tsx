@@ -62,7 +62,7 @@ function TokenCardComponent({
     e.stopPropagation();
     navigator.clipboard.writeText(token.address);
     setCopied(true);
-    setTimeout(() => setCopied(false), 1500);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   const bondingProgress = token.bondingCurveProgress || 0;
@@ -128,16 +128,23 @@ function TokenCardComponent({
               <span className="text-[10px] text-[#777a8c] shrink-0 font-semibold">
                 {tokenIdentity.symbol}
               </span>
-              <button
-                onClick={handleCopy}
-                className="bg-none border-none cursor-pointer p-0 flex ml-[2px] shrink-0"
-              >
-                {copied ? (
-                  <RiCheckLine className="w-[12px] h-[12px] text-[#777a8c]" />
-                ) : (
-                  <RiFileCopyFill className="w-[12px] h-[12px] text-[#777a8c]" />
+              <div className="relative flex items-center shrink-0">
+                <button
+                  onClick={handleCopy}
+                  className="bg-none border-none cursor-pointer p-0 flex items-center ml-[2px] shrink-0"
+                >
+                  {copied ? (
+                    <RiCheckLine className="w-[12px] h-[12px] text-[#777a8c]" />
+                  ) : (
+                    <RiFileCopyFill className="w-[12px] h-[12px] text-[#777a8c] hover:text-[#fcfcfc] transition-colors" />
+                  )}
+                </button>
+                {copied && (
+                  <span className="absolute left-full ml-1 text-[10px] text-[#777a8c] font-semibold whitespace-nowrap pointer-events-none">
+                    Copied!
+                  </span>
                 )}
-              </button>
+              </div>
             </div>
 
             {/* Row 2: Time · Holder Counts */}

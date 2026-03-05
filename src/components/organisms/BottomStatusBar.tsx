@@ -19,6 +19,7 @@ import {
   RiSettings3Line,
   RiArrowLeftSLine,
   RiArrowRightSLine,
+  RiEthFill,
 } from '@remixicon/react';
 import { useRef, useState, useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
@@ -43,9 +44,9 @@ const HOVER_CLASSES = {
   endIcon: "bg-none border-none text-[#6b6b7a] hover:text-[#fcfcfcfc] cursor-pointer p-[2px] flex hover:bg-[#1a1a1f] rounded-md transition-all duration-200",
 };
 
-const PRICE_DATA = [
-  { icon: RiBtcFill, label: 'BTC', color: 'text-[#f7931a]', price: '69.67K', tooltip: 'Price of BTC in USD' },
-  { icon: null, label: 'ETH', color: 'text-[#497493]', price: '4167', tooltip: 'Price of ETH in USD', imageSrc: 'https://axiom.trade/images/eth-fill.svg' },
+const PRICE_DATA_CONFIG = [
+  { key: 'bitcoin', icon: RiBtcFill, label: 'BTC', color: 'text-[#f7931a]', tooltip: 'Price of BTC in USD' },
+  { key: 'ethereum', icon: RiEthFill, label: 'ETH', color: 'text-[#497493]', tooltip: 'Price of ETH in USD' },
 ];
 
 const FEE_DATA = [
@@ -71,9 +72,45 @@ const SOCIAL_ICONS = [
   { icon: RiTwitterXLine, tooltip: 'follow us on X' },
 ];
 
-export function BottomStatusBar({ className, loading }: BottomStatusBarProps) {
+function formatStatusPrice(price: number | undefined): string {
+  if (!price) return '...';
+  if (price >= 1000) return price.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+  if (price >= 1) return price.toFixed(2);
+  return price.toFixed(4);
+}
+
+export function BottomStatusBar({ className, loading: externalLoading }: BottomStatusBarProps) {
   const activeChain = useSelector((state: RootState) => state.ui.activeChain);
   const chainName = activeChain === 'bnb' ? 'BNB' : 'SOL';
+  const mobulaKey = activeChain === 'bnb' ? 'binance-coin' : 'solana';
+
+  const [prices, setPrices] = useState<Record<string, number>>({});
+  const [loading, setLoading] = useState(true);
+
+  const fetchPrices = useCallback(async () => {
+    try {
+      const response = await fetch(`https://api.mobula.io/api/1/market/multi-data?assets=bitcoin,ethereum,solana,binance-coin`);
+      const data = await response.json();
+      if (data.data) {
+        setPrices({
+          bitcoin: data.data.bitcoin?.price || 0,
+          ethereum: data.data.ethereum?.price || 0,
+          solana: data.data.solana?.price || 0,
+          'binance-coin': data.data['binance-coin']?.price || 0,
+        });
+      }
+    } catch (error) {
+      console.error('Failed to fetch footer prices:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchPrices();
+    const interval = setInterval(fetchPrices, 30000); // 30s
+    return () => clearInterval(interval);
+  }, [fetchPrices]);
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -106,18 +143,22 @@ export function BottomStatusBar({ className, loading }: BottomStatusBarProps) {
 
   const settingsHoverClasses = cn(HOVER_CLASSES.common, HOVER_CLASSES.settings, "text-[8px]");
 
-  const renderPriceItem = (item: typeof PRICE_DATA[0]) => (
+  const renderPriceItem = (item: typeof PRICE_DATA_CONFIG[0]) => (
     <Tooltip content={item.tooltip} key={item.label}>
       <div className={cn("flex items-center gap-[3px] -mr-2 whitespace-nowrap", HOVER_CLASSES.common)}>
-        {item.icon ? (
+        {item.icon && (
           <item.icon className={`w-[11px] h-[11px] ${item.color}`} />
-        ) : item.imageSrc ? (
-          <OptimizedImage src={item.imageSrc} alt={item.label} width={11} height={11} />
-        ) : null}
-        <span className={`${item.color} text-[9px]`}>{item.price}</span>
+        )}
+        <span className={`${item.color} text-[9px] font-medium`}>{loading ? '...' : formatStatusPrice(prices[item.key])}{item.key === 'bitcoin' || item.key === 'ethereum' ? 'K' : ''}</span>
       </div>
     </Tooltip>
   );
+
+  const formatK = (price: number | undefined) => {
+    if (!price) return '...';
+    if (price >= 1000) return `${(price / 1000).toFixed(2)}K`;
+    return price.toFixed(2);
+  };
 
   const renderFeeItem = (item: typeof FEE_DATA[0]) => (
     <Tooltip content={item.tooltip} key={item.label}>
@@ -212,12 +253,21 @@ export function BottomStatusBar({ className, loading }: BottomStatusBarProps) {
             <MultiChainBadge />
             <div className="w-[1px] h-3 bg-[#1a1a1f] shrink-0 -mr-2" />
 
-            {PRICE_DATA.map(renderPriceItem)}
+            {PRICE_DATA_CONFIG.map(item => (
+              <Tooltip content={item.tooltip} key={item.label}>
+                <div className={cn("flex items-center gap-[3px] -mr-2 whitespace-nowrap", HOVER_CLASSES.common)}>
+                  {item.icon && (
+                    <item.icon className={`w-[11px] h-[11px] ${item.color}`} />
+                  )}
+                  <span className={`${item.color} text-[9px] font-semibold`}>{loading ? '...' : formatK(prices[item.key])}</span>
+                </div>
+              </Tooltip>
+            ))}
 
             <Tooltip content={`Price of ${chainName} in USD`}>
               <div className={cn("flex items-center gap-[3px] -mr-2 whitespace-nowrap", HOVER_CLASSES.common)}>
                 <ChainLogo width={11} height={11} />
-                <span className="text-[#14f195] text-[9px]">$181.6</span>
+                <span className="text-[#14f195] text-[9px] font-semibold">${loading ? '...' : prices[mobulaKey]?.toFixed(1)}</span>
               </div>
             </Tooltip>
           </div>
@@ -232,10 +282,10 @@ export function BottomStatusBar({ className, loading }: BottomStatusBarProps) {
 
           <div className="w-[1px] h-3 bg-[#1a1a1f] shrink-0" />
 
-          <div className={`flex items-center justify-center w-[105px] gap-1 px-1.5 py-[2px] rounded-[4px] whitespace-nowrap shrink-0 ${loading ? 'bg-[rgba(248,113,113,0.15)]' : 'bg-[rgba(52,211,153,0.15)]'}`}>
-            <span className={`w-[5px] h-[5px] rounded-full shrink-0 ${loading ? 'bg-[#f87171]' : 'bg-[#34d399]'}`} />
-            <span className={`text-[9px] ${loading ? 'text-[#f87171]' : 'text-[#34d399]'}`}>
-              {loading ? 'Disconnected' : 'Connection is stable'}
+          <div className={`flex items-center justify-center w-[105px] gap-1 px-1.5 py-[2px] rounded-[4px] whitespace-nowrap shrink-0 ${externalLoading ? 'bg-[rgba(248,113,113,0.15)]' : 'bg-[rgba(52,211,153,0.15)]'}`}>
+            <span className={`w-[5px] h-[5px] rounded-full shrink-0 ${externalLoading ? 'bg-[#f87171]' : 'bg-[#34d399]'}`} />
+            <span className={`text-[9px] ${externalLoading ? 'text-[#f87171]' : 'text-[#34d399]'}`}>
+              {externalLoading ? 'Disconnected' : 'Connection is stable'}
             </span>
           </div>
 
