@@ -147,27 +147,35 @@ function TokenCardComponent({
               </span>
               {typeof token.holdersCount === 'number' && (
                 <div className="flex items-center gap-2 overflow-hidden">
-                  <div className="flex items-center gap-[2px]">
-                    <RiUserLine className="w-[11px] h-[11px] shrink-0" style={{ color: userIconColor }} />
-                    <span className="text-[#fcfcfc]">{formatCompactNumber(token.holdersCount)}</span>
-                  </div>
-                  {typeof token.smartTradersCount === 'number' && token.smartTradersCount > 0 && (
-                    <div className="flex items-center gap-[2px]" title="Smart Traders">
-                      <RiUserStarFill className="w-[11px] h-[11px] shrink-0 text-[#fbbf24]" />
-                      <span className="text-[#fcfcfc]">{token.smartTradersCount}</span>
+                  <Tooltip content="Holders" position="top" containerClassName="shrink-0 flex items-center">
+                    <div className="flex items-center gap-[2px]">
+                      <RiUserLine className="w-[11px] h-[11px] shrink-0" style={{ color: userIconColor }} />
+                      <span className="text-[#fcfcfc]">{formatCompactNumber(token.holdersCount)}</span>
                     </div>
+                  </Tooltip>
+                  {typeof token.smartTradersCount === 'number' && token.smartTradersCount > 0 && (
+                    <Tooltip content="Smart Traders" position="top" containerClassName="shrink-0 flex items-center">
+                      <div className="flex items-center gap-[2px]">
+                        <RiUserStarFill className="w-[11px] h-[11px] shrink-0 text-[#fbbf24]" />
+                        <span className="text-[#fcfcfc]">{token.smartTradersCount}</span>
+                      </div>
+                    </Tooltip>
                   )}
                   {typeof token.snipersCount === 'number' && token.snipersCount > 0 && (
-                    <div className="flex items-center gap-[2px]" title="Snipers">
-                      <RiCrosshair2Fill className="w-[11px] h-[11px] shrink-0 text-[#ef4444]" />
-                      <span className="text-[#fcfcfc]">{token.snipersCount}</span>
-                    </div>
+                    <Tooltip content="Snipers" position="top" containerClassName="shrink-0 flex items-center">
+                      <div className="flex items-center gap-[2px]">
+                        <RiCrosshair2Fill className="w-[11px] h-[11px] shrink-0 text-[#ef4444]" />
+                        <span className="text-[#fcfcfc]">{token.snipersCount}</span>
+                      </div>
+                    </Tooltip>
                   )}
                   {typeof token.insidersCount === 'number' && token.insidersCount > 0 && (
-                    <div className="flex items-center gap-[2px]" title="Insiders">
-                      <RiSpyFill className="w-[11px] h-[11px] shrink-0 text-[#a855f7]" />
-                      <span className="text-[#fcfcfc]">{token.insidersCount}</span>
-                    </div>
+                    <Tooltip content="Insiders" position="top" containerClassName="shrink-0 flex items-center">
+                      <div className="flex items-center gap-[2px]">
+                        <RiSpyFill className="w-[11px] h-[11px] shrink-0 text-[#a855f7]" />
+                        <span className="text-[#fcfcfc]">{token.insidersCount}</span>
+                      </div>
+                    </Tooltip>
                   )}
                 </div>
               )}
@@ -193,7 +201,7 @@ function TokenCardComponent({
 
         {/* Row 3: F $liquidity · N ±change% | TX count · Buy/Sell bar */}
         <div className="flex items-center justify-between w-full gap-2 -mt-0.5">
-          <div className="flex items-center gap-[6px] text-[9px] overflow-hidden min-w-0">
+          <div className="flex items-center gap-[6px] text-[9.8px] overflow-hidden min-w-0">
             {typeof token.liquidity === 'number' && (
               <span className="flex items-center gap-[2px] shrink-0">
                 <RiWaterFlashFill className="w-3 h-3 text-[#52c5ff]" />
@@ -221,26 +229,36 @@ function TokenCardComponent({
         <div className="flex items-center justify-between gap-2 -mt-0.7">
           {totalHolders > 0 ? (
             <div className=" flex items-center gap-[7px] flex-nowrap overflow-hidden min-w-0 text-[9px]">
-              <span className="flex items-center gap-[2px] shrink-0" title="Holders %">
-                <RiUserLine className="w-[10px] h-[10px] text-[#16a34a]" />
-                <span className="text-[#16a34a] font-semibold">{regularPct}%</span>
-              </span>
-              <span className="flex items-center gap-[2px] shrink-0" title="Smart Traders %">
-                <RiUserStarFill className="w-[10px] h-[10px] text-[#fbbf24]" />
-                <span className="text-[#fbbf24] font-semibold">{smartPct}%</span>
-              </span>
-              <span className="flex items-center gap-[2px] shrink-0" title="Snipers %">
-                <RiCrosshair2Fill className="w-[10px] h-[10px] text-[#ef4444]" />
-                <span className="text-[#ef4444] font-semibold">{snipersPct}%</span>
-              </span>
-              <span className="flex items-center gap-[2px] shrink-0" title="Liquidity Locked">
-                <RiShieldCheckFill className="w-[10px] h-[10px] text-[#52c5ff]" />
-                <span className="text-[#52c5ff] font-semibold">{token.safety?.liquidityLocked ? '✓' : '0%'}</span>
-              </span>
-              <span className="flex items-center gap-[2px] shrink-0" title="Insiders %">
-                <RiSpyFill className="w-[10px] h-[10px] text-[#a855f7]" />
-                <span className="text-[#a855f7] font-semibold">{insidersPct}%</span>
-              </span>
+              <Tooltip content="Holders %" position="top" containerClassName="shrink-0 flex items-center">
+                <span className="flex items-center gap-[2px] shrink-0">
+                  <RiUserLine className="w-[10px] h-[10px] text-[#16a34a]" />
+                  <span className="text-[#16a34a] font-semibold">{regularPct}%</span>
+                </span>
+              </Tooltip>
+              <Tooltip content="Smart Traders %" position="top" containerClassName="shrink-0 flex items-center">
+                <span className="flex items-center gap-[2px] shrink-0">
+                  <RiUserStarFill className="w-[10px] h-[10px] text-[#fbbf24]" />
+                  <span className="text-[#fbbf24] font-semibold">{smartPct}%</span>
+                </span>
+              </Tooltip>
+              <Tooltip content="Snipers %" position="top" containerClassName="shrink-0 flex items-center">
+                <span className="flex items-center gap-[2px] shrink-0">
+                  <RiCrosshair2Fill className="w-[10px] h-[10px] text-[#ef4444]" />
+                  <span className="text-[#ef4444] font-semibold">{snipersPct}%</span>
+                </span>
+              </Tooltip>
+              <Tooltip content="Liquidity Locked" position="top" containerClassName="shrink-0 flex items-center">
+                <span className="flex items-center gap-[2px] shrink-0">
+                  <RiShieldCheckFill className="w-[10px] h-[10px] text-[#52c5ff]" />
+                  <span className="text-[#52c5ff] font-semibold">{token.safety?.liquidityLocked ? '✓' : '0%'}</span>
+                </span>
+              </Tooltip>
+              <Tooltip content="Insiders %" position="top" containerClassName="shrink-0 flex items-center">
+                <span className="flex items-center gap-[2px] shrink-0">
+                  <RiSpyFill className="w-[10px] h-[10px] text-[#a855f7]" />
+                  <span className="text-[#a855f7] font-semibold">{insidersPct}%</span>
+                </span>
+              </Tooltip>
             </div>
           ) : (
             <div className="flex-1" />

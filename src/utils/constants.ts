@@ -84,7 +84,7 @@ export const CHAIN_ID_MAP: Record<string, string[]> = {
 /** Maps app chain IDs to Mobula pool types */
 export const POOL_TYPES_MAP: Record<string, string[]> = {
   sol: ['pumpfun'],
-  bnb: ['moonshot-evm'],
+  bnb: ['fourmeme', 'gra.fun'],
 };
 
 /** Maps Mobula view names to app TokenStatus */
