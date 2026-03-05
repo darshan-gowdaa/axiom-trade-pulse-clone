@@ -222,7 +222,7 @@ export function TokenColumn({
         style={{ scrollbarWidth: 'thin', scrollbarColor: '#2a2a35 transparent' }}
       >
         {isLoading || isChainLoading ? (
-          <div>
+          <div className="shimmer-column h-full">
             {Array.from({ length: 10 }).map((_, i) => (
               <TokenCardSkeleton key={i} />
             ))}

@@ -30,45 +30,47 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
-  
+
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
 
-  /* Smooth shimmer animation — GPU-accelerated gradient sweep */
-  .animate-shimmer {
+  /* ── Shimmer: vertical top-to-bottom sweep across entire column ── */
+  .shimmer-column {
     position: relative;
     overflow: hidden;
   }
 
-  .animate-shimmer::after {
+  .shimmer-column::after {
     content: '';
     position: absolute;
     inset: 0;
-    transform: translateX(-100%);
+    z-index: 2;
+    transform: translateY(-100%);
     background: linear-gradient(
-      90deg,
+      180deg,
       transparent 0%,
-      rgba(255, 255, 255, 0.03) 20%,
-      rgba(255, 255, 255, 0.06) 50%,
-      rgba(255, 255, 255, 0.03) 80%,
+      rgba(255, 255, 255, 0.02) 15%,
+      rgba(255, 255, 255, 0.055) 40%,
+      rgba(255, 255, 255, 0.055) 60%,
+      rgba(255, 255, 255, 0.02) 85%,
       transparent 100%
     );
-    animation: shimmer 1.8s ease-in-out infinite;
+    animation: shimmer-vertical 1.4s ease-in-out infinite;
     will-change: transform;
     pointer-events: none;
   }
 
-  @keyframes shimmer {
+  @keyframes shimmer-vertical {
     0% {
-      transform: translateX(-100%);
+      transform: translateY(-100%);
     }
     100% {
-      transform: translateX(100%);
+      transform: translateY(100%);
     }
   }
 
-  /* Container-level shimmer for wrapping skeleton groups */
+  /* Container-level shimmer for wrapping skeleton groups (header, toolbar) */
   .animate-shimmer-container {
     position: relative;
     overflow: hidden;
@@ -88,9 +90,18 @@
       rgba(255, 255, 255, 0.025) 75%,
       transparent 100%
     );
-    animation: shimmer 2s ease-in-out infinite;
+    animation: shimmer-horizontal 1.6s ease-in-out infinite;
     will-change: transform;
     pointer-events: none;
+  }
+
+  @keyframes shimmer-horizontal {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
   }
 
   /* Legacy pulse kept as fallback */
@@ -111,6 +122,11 @@
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+  0%, 100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
 }
