@@ -15,7 +15,7 @@ import {
   RiUserSettingsLine,
 } from '@remixicon/react';
 import { ChainLogo, ChainText } from '@/components/atoms';
-import { AxiomLogo } from '@/components/atoms/AxiomLogo';
+import { MobulaLogo } from '@/components/atoms/MobulaLogo';
 import { OptimizedImage } from '@/components/atoms';
 import { AvatarDropdown, ChainDropdown, AccountSettingsDropdown, WalletDropdown } from '@/components/molecules';
 import { MobileMenu } from './MobileMenu';
@@ -53,13 +53,13 @@ export function Header() {
 
   return (
     <header className="h-[35px] lg:h-[53px] bg-[#0c0c10] border-b border-[#1a1b23] select-none">
-      {/* Desktop */}
-      <div className="hidden lg:flex items-center justify-between px-[24px] h-full">
+
+      <div className="hidden lg:flex items-center justify-between px-[24px] h-full gap">
         <div className="flex items-center">
           <Link href="/" className="flex items-center gap-[1px] no-underline mr-[24px]">
-            <AxiomLogo className="w-[32px] h-[32px] text-white" />
+            <MobulaLogo className="w-[28px] h-[28px] text-white mr-1" />
             <span className="text-white font-medium text-[16px]">mobula</span>
-            <span className="bg-transparent text-[#fcfcfc] text-[13px] font-light p-0 self-end mb-[4px] ml-[2px]">Pro</span>
+            <span className="bg-transparent text-[#fcfcfc] text-[13px] font-light p-0 self-end mb-[3px] ml-[2px]">API</span>
           </Link>
 
 
@@ -189,10 +189,10 @@ export function Header() {
         </div>
       </div>
 
-      {/* Mobile */}
+
       <div className="flex lg:hidden items-center justify-between px-2 h-full overflow-hidden">
         <Link href="/" className="flex items-center no-underline shrink-0">
-          <AxiomLogo className="w-[20px] h-[20px] text-white" />
+          <MobulaLogo className="w-[20px] h-[20px] text-white" />
         </Link>
 
         <div className="flex items-center gap-1.5 overflow-hidden">

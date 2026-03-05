@@ -5,23 +5,30 @@ import { type Token } from '@/types';
 import { formatCurrency, formatCompactNumber, formatTimeAgo } from '@/utils';
 import { getRingColor, getMarketCapColor, generateUserIconColor } from '@/utils/tokenCardHelpers';
 import { useTokenCardState, useAppSelector } from '@/hooks';
-import { RiCheckLine, RiUserLine, RiFlashlightFill, RiFileCopyFill, RiSpyFill, RiCrosshair2Fill, RiUserStarFill, RiWaterFlashFill, RiTimerFlashLine } from '@remixicon/react';
+import {
+  RiCheckLine, RiUserLine, RiFlashlightFill, RiFileCopyFill,
+  RiSpyFill, RiCrosshair2Fill, RiUserStarFill, RiWaterFlashFill,
+  RiShieldCheckFill,
+} from '@remixicon/react';
 import { ChainText } from '@/components/atoms';
 import { Tooltip } from '@/components/atoms/Tooltip';
-import { TokenAvatarCard, MetricPill } from '@/components/molecules';
+import { TokenAvatarCard } from '@/components/molecules';
 
 interface TokenCardProps {
   token: Token;
   showDecimals?: boolean;
   onQuickBuy?: (token: Token) => void;
-  index?: number;
+}
+
+function holderPct(count: number | undefined, total: number | undefined): number {
+  if (!count || !total || total === 0) return 0;
+  return Math.min(Math.round((count / total) * 100), 100);
 }
 
 function TokenCardComponent({
   token,
   showDecimals = true,
   onQuickBuy,
-  index,
 }: TokenCardProps) {
   const [copied, setCopied] = useState(false);
   const [userIconColor] = useState(generateUserIconColor);
@@ -35,7 +42,6 @@ function TokenCardComponent({
     marketCap,
     volume,
     barWidths,
-    timeState,
   } = useTokenCardState({
     initialName: token.name,
     initialSymbol: token.symbol,
@@ -60,26 +66,44 @@ function TokenCardComponent({
   };
 
   const bondingProgress = token.bondingCurveProgress || 0;
-  // Use a neutral light grey for hover background
   const hoverClass = "hover:bg-[#252630]";
 
-  // Determine tooltip props based on status and bonding
+  // ── Tooltip: real bonding data ──
   let tooltipContent: React.ReactNode;
-
   if (token.status === 'migrated') {
-    tooltipContent = <span className="text-[#fafaa5]">Pump VI</span>;
+    tooltipContent = (
+      <span className="text-[#fbbf24]">        Bonded ✓ {bondingProgress > 0 ? `(${bondingProgress.toFixed(2)}%)` : ''}
+      </span>
+    );
   } else {
-    // Bonding color logic: Green if < 50, Red if >= 50
-    const isHighBonding = bondingProgress > 49;
-    const tooltipTextColor = isHighBonding ? "text-[#ef4444]" : "text-[#16a34a]";
-    tooltipContent = <span className={tooltipTextColor}>Bonding: {bondingProgress.toFixed(2)}%</span>;
+    const bondColor =
+      bondingProgress <= 30 ? '#16a34a' :
+        bondingProgress <= 60 ? '#eab308' :
+          bondingProgress <= 80 ? '#f97316' :
+            '#ef4444';
+    tooltipContent = (
+      <span style={{ color: bondColor }}>
+        Bonding: {bondingProgress.toFixed(2)}%
+      </span>
+    );
   }
 
   // Prefer real logo URL from the API
   const displayImageUrl = token.logoUrl || token.imageUrl;
 
-  // Prioritize images for the first 8 items in the virtual list
-  const isPriority = index !== undefined && index < 8;
+  // ── Holder % breakdown (relative to total holdersCount) ──
+  const totalHolders = token.holdersCount || 0;
+  const smartPct = holderPct(token.smartTradersCount, totalHolders);
+  const snipersPct = holderPct(token.snipersCount, totalHolders);
+  const insidersPct = holderPct(token.insidersCount, totalHolders);
+  const freshPct = holderPct(token.freshTradersCount, totalHolders);
+  // "Regular" holders = everyone else
+  const regularPct = totalHolders > 0 ? Math.max(0, 100 - smartPct - snipersPct - insidersPct - freshPct) : 0;
+
+  // Net price change — use 1h or 24h
+  const netChange = token.priceChange1h ?? token.priceChange24h ?? 0;
+  const netColor = netChange >= 0 ? '#16a34a' : '#ef4444';
+  const netSign = netChange >= 0 ? '+' : '';
 
   const cardContent = (
     <div className={`relative w-full flex items-center pl-2 lg:pl-3 pr-1 py-2 border-b border-[#1a1b23] cursor-pointer bg-transparent gap-2 min-h-[64px] transition-colors duration-200 mr-2 ${hoverClass}`}>
@@ -89,10 +113,12 @@ function TokenCardComponent({
         imageUrl={displayImageUrl}
         creator={tokenIdentity.creator}
         ringColor={ringColor}
-        priority={isPriority}
+        exchangeLogo={token.exchangeLogo}
+        exchangeName={token.exchangeName}
       />
 
       <div className="flex-1 min-w-0 flex flex-col gap-1 justify-center">
+        {/* Row 1: Name · Symbol · Copy | MC · Vol */}
         <div className="flex items-start justify-between gap-2">
           <div className="flex flex-col min-w-0 pr-2">
             <div className="flex items-center gap-1.5 min-w-0">
@@ -114,7 +140,8 @@ function TokenCardComponent({
               </button>
             </div>
 
-            <div className="flex items-center gap-1 text-[11px] text-[#777a8c] mt-[1px] overflow-hidden">
+            {/* Row 2: Time · Holder Counts */}
+            <div className="flex items-center gap-1 text-[9.8px] text-[#777a8c] mt-[1px] overflow-hidden">
               <span className="text-[#16a34a] shrink-0">
                 {formatTimeAgo(token.createdAt)}
               </span>
@@ -124,21 +151,18 @@ function TokenCardComponent({
                     <RiUserLine className="w-[11px] h-[11px] shrink-0" style={{ color: userIconColor }} />
                     <span className="text-[#fcfcfc]">{formatCompactNumber(token.holdersCount)}</span>
                   </div>
-
                   {typeof token.smartTradersCount === 'number' && token.smartTradersCount > 0 && (
                     <div className="flex items-center gap-[2px]" title="Smart Traders">
                       <RiUserStarFill className="w-[11px] h-[11px] shrink-0 text-[#fbbf24]" />
                       <span className="text-[#fcfcfc]">{token.smartTradersCount}</span>
                     </div>
                   )}
-
                   {typeof token.snipersCount === 'number' && token.snipersCount > 0 && (
                     <div className="flex items-center gap-[2px]" title="Snipers">
                       <RiCrosshair2Fill className="w-[11px] h-[11px] shrink-0 text-[#ef4444]" />
                       <span className="text-[#fcfcfc]">{token.snipersCount}</span>
                     </div>
                   )}
-
                   {typeof token.insidersCount === 'number' && token.insidersCount > 0 && (
                     <div className="flex items-center gap-[2px]" title="Insiders">
                       <RiSpyFill className="w-[11px] h-[11px] shrink-0 text-[#a855f7]" />
@@ -150,6 +174,7 @@ function TokenCardComponent({
             </div>
           </div>
 
+          {/* MC · Vol (right side) */}
           <div className="flex flex-col items-end gap-[1px] shrink-0">
             <div className="flex items-center gap-[3px]">
               <span className="text-[9px] text-[#777a8c]">MC</span>
@@ -166,62 +191,60 @@ function TokenCardComponent({
           </div>
         </div>
 
-        <div className="flex items-center justify-between gap-2">
-          <div className="flex-1" />
-          <div className="flex items-center gap-1 text-[9px] shrink-0 -mt-1">
+        {/* Row 3: F $liquidity · N ±change% | TX count · Buy/Sell bar */}
+        <div className="flex items-center justify-between w-full gap-2 -mt-0.5">
+          <div className="flex items-center gap-[6px] text-[9px] overflow-hidden min-w-0">
             {typeof token.liquidity === 'number' && (
-              <span className="text-[#777a8c] mr-1 flex items-center gap-[2px]" title="Liquidity">
+              <span className="flex items-center gap-[2px] shrink-0">
                 <RiWaterFlashFill className="w-3 h-3 text-[#52c5ff]" />
-                <span className="text-white">${formatCompactNumber(token.liquidity)}</span>
+                <span className="text-white font-semibold">${formatCompactNumber(token.liquidity)}</span>
               </span>
             )}
-            <span className="text-[#777a8c]">TX</span>
-            <span className="text-[#fcfcfc] font-semibold">
-              {formatCompactNumber(txCount)}
+            <span className="shrink-0" style={{ color: netColor }}>
+              <span className="text-[#777a8c]">N</span>{' '}
+              <span className="font-semibold">{netSign}{Math.min(Math.abs(netChange), 9999).toFixed(2)}%</span>
             </span>
-            <div className="flex w-5 h-[2px] rounded-[1px] overflow-hidden">
+          </div>
+          <div className="flex items-center gap-[6px] text-[9px] shrink-0">
+            <span className="flex items-center gap-[2px] shrink-0">
+              <span className="text-[#777a8c]">TX</span>
+              <span className="text-[#fcfcfc] font-semibold">{formatCompactNumber(txCount)}</span>
+            </span>
+            <div className="flex w-[60px] sm:w-[70px] h-[4px] rounded-[2px] overflow-hidden shrink-0">
               <div className="bg-[#16a34a]" style={{ width: `${barWidths.green}%` }} />
               <div className="bg-[#ef4444]" style={{ width: `${redBarPct}%` }} />
             </div>
           </div>
         </div>
 
-        <div className="flex items-center justify-between gap-2 -mt-1">
-          <div className="flex items-center gap-1 flex-nowrap overflow-hidden min-w-0">
-            {typeof token.priceChange1h === 'number' && (
-              <MetricPill
-                metric={{
-                  icon: <span className="font-bold text-[9px]">1H</span>,
-                  val: Math.min(Math.abs(token.priceChange1h), 999.99).toFixed(2),
-                  suffix: '%',
-                  color: token.priceChange1h >= 0 ? '#16a34a' : '#ef4444'
-                }}
-                timeState={timeState}
-              />
-            )}
-            {typeof token.priceChange5m === 'number' && (
-              <MetricPill
-                metric={{
-                  icon: <span className="font-bold text-[9px]">5M</span>,
-                  val: Math.min(Math.abs(token.priceChange5m), 999.99).toFixed(2),
-                  suffix: '%',
-                  color: token.priceChange5m >= 0 ? '#16a34a' : '#ef4444'
-                }}
-                timeState={timeState}
-              />
-            )}
-            {typeof token.volume5m === 'number' && token.volume5m > 0 && (
-              <MetricPill
-                metric={{
-                  icon: <RiTimerFlashLine className="w-[10px] h-[10px] text-[#fbbf24]" />,
-                  val: `$${formatCompactNumber(token.volume5m)}`,
-                  suffix: ' Vol',
-                  color: '#fbbf24'
-                }}
-                timeState={timeState}
-              />
-            )}
-          </div>
+        {/* Row 4 (last): Holder % breakdown · Quick-buy button */}
+        <div className="flex items-center justify-between gap-2 -mt-0.7">
+          {totalHolders > 0 ? (
+            <div className=" flex items-center gap-[7px] flex-nowrap overflow-hidden min-w-0 text-[9px]">
+              <span className="flex items-center gap-[2px] shrink-0" title="Holders %">
+                <RiUserLine className="w-[10px] h-[10px] text-[#16a34a]" />
+                <span className="text-[#16a34a] font-semibold">{regularPct}%</span>
+              </span>
+              <span className="flex items-center gap-[2px] shrink-0" title="Smart Traders %">
+                <RiUserStarFill className="w-[10px] h-[10px] text-[#fbbf24]" />
+                <span className="text-[#fbbf24] font-semibold">{smartPct}%</span>
+              </span>
+              <span className="flex items-center gap-[2px] shrink-0" title="Snipers %">
+                <RiCrosshair2Fill className="w-[10px] h-[10px] text-[#ef4444]" />
+                <span className="text-[#ef4444] font-semibold">{snipersPct}%</span>
+              </span>
+              <span className="flex items-center gap-[2px] shrink-0" title="Liquidity Locked">
+                <RiShieldCheckFill className="w-[10px] h-[10px] text-[#52c5ff]" />
+                <span className="text-[#52c5ff] font-semibold">{token.safety?.liquidityLocked ? '✓' : '0%'}</span>
+              </span>
+              <span className="flex items-center gap-[2px] shrink-0" title="Insiders %">
+                <RiSpyFill className="w-[10px] h-[10px] text-[#a855f7]" />
+                <span className="text-[#a855f7] font-semibold">{insidersPct}%</span>
+              </span>
+            </div>
+          ) : (
+            <div className="flex-1" />
+          )}
 
           <button
             onClick={(e) => {
@@ -231,7 +254,7 @@ function TokenCardComponent({
             className="px-1 py-[1px] rounded-xl text-[10px] font-semibold bg-[#526fff] text-black border-none cursor-pointer whitespace-nowrap flex items-center gap-[2px] min-w-[54px] justify-center shrink-0"
           >
             <RiFlashlightFill className="w-3 h-3 text-black" />
-            <span className="text-black">0 <ChainText /></span>
+            <span className="text-black">0.1 <ChainText /></span>
           </button>
         </div>
       </div>

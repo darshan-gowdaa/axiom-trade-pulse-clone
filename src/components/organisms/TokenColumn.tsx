@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useCallback, useState } from 'react';
+import { useRef, useCallback, useState, useMemo } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { useAppSelector } from '@/hooks';
 import { type Token, type ActiveTab } from '@/types';
@@ -42,7 +42,7 @@ export function TokenColumn({
   const presets = DEFAULT_PRESETS[columnType] || [];
   const isChainLoading = useAppSelector((state) => state.ui.isChainLoading);
 
-  // Filter tokens based on search and exclude keywords
+  // get active filters
   const { filters } = useAppSelector((state) => state.filter);
 
   const tabName = columnType === 'newPairs' ? 'New Pairs' : columnType === 'finalStretch' ? 'Final Stretch' : 'Migrated';
@@ -69,16 +69,21 @@ export function TokenColumn({
     return parseFloat(str) || 0;
   };
 
-  // Deduplicate tokens by ID — defense against WebSocket race conditions
-  const uniqueTokens = Array.from(
-    new Map(tokens.map((t) => [t.id, t])).values()
-  );
+  // deduplicate tokens by ID
+  const uniqueTokens = useMemo(() => {
+    const seen = new Set();
+    return tokens.filter((t) => {
+      if (seen.has(t.id)) return false;
+      seen.add(t.id);
+      return true;
+    });
+  }, [tokens]);
 
   const filteredTokens = uniqueTokens.filter((token) => {
-    // 0. Exclude tokens where MC, Volume, AND TX are all effectively zero
+    // exclude dead tokens
     if (token.marketCap < 1 && token.volume24h < 1 && token.txCount < 1) return false;
 
-    // 1. Keyword Search
+    // search
     if (searchKeywords) {
       const searchTerms = searchKeywords.toLowerCase().split(',').map(s => s.trim()).filter(Boolean);
       const name = token.name.toLowerCase();
@@ -89,7 +94,7 @@ export function TokenColumn({
       if (!matchesSearch) return false;
     }
 
-    // 2. Exclude Keywords
+    // exclude
     if (excludeKeywords) {
       const excludeTerms = excludeKeywords.toLowerCase().split(',').map(s => s.trim()).filter(Boolean);
       const name = token.name.toLowerCase();
@@ -100,16 +105,25 @@ export function TokenColumn({
       if (matchesExclude) return false;
     }
 
-    // 3. Ranges
+    // range filters
     if (minMC && parseValue(token.marketCap) < parseValue(minMC)) return false;
     if (maxMC && parseValue(token.marketCap) > parseValue(maxMC)) return false;
-
 
     if (minVol && parseValue(token.volume24h) < parseValue(minVol)) return false;
     if (maxVol && parseValue(token.volume24h) > parseValue(maxVol)) return false;
 
     if (minTx && parseValue(token.txCount) < parseValue(minTx)) return false;
     if (maxTx && parseValue(token.txCount) > parseValue(maxTx)) return false;
+
+    // presets
+    if (activePreset) {
+      const preset = presets.find(p => p.id === activePreset);
+      if (preset) {
+        if (preset.minMarketCap && token.marketCap < preset.minMarketCap) return false;
+        if (preset.maxMarketCap && token.marketCap > preset.maxMarketCap) return false;
+        if (preset.minBondingProgress && (token.bondingCurveProgress || 0) < preset.minBondingProgress) return false;
+      }
+    }
 
     return true;
   }).sort((a, b) => {
@@ -132,9 +146,12 @@ export function TokenColumn({
         valB = parseValue(b.txCount);
         break;
       case 'liquidity':
-
-        valA = 0;
-        valB = 0;
+        valA = parseValue(a.liquidity);
+        valB = parseValue(b.liquidity);
+        break;
+      case 'bondingCurveProgress':
+        valA = a.bondingCurveProgress || 0;
+        valB = b.bondingCurveProgress || 0;
         break;
     }
 
@@ -171,7 +188,7 @@ export function TokenColumn({
           <div className="flex items-center gap-1.5 px-2 py-[3px] border border-[#2a2a35] rounded-full bg-transparent">
             <div className="flex items-center gap-[3px]">
               <RiFlashlightFill className="w-3 h-3 text-[#6b6b7a]" />
-              <span className="text-[10px] text-white mr-4">0</span>
+              <span className="text-[10px] text-white mr-4">{filteredTokens.length}</span>
             </div>
 
             <ChainLogo width={10} height={10} />
@@ -241,7 +258,6 @@ export function TokenColumn({
                     token={token}
                     showDecimals={showDecimals}
                     onQuickBuy={onQuickBuy}
-                    index={virtualRow.index}
                   />
                 </div>
               );

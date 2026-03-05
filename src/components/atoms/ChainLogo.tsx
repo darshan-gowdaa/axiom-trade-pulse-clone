@@ -3,6 +3,7 @@
 import { useSelector } from 'react-redux';
 import { type RootState } from '@/store';
 import Image from 'next/image';
+import { useState, useEffect } from 'react';
 
 interface ChainLogoProps {
     className?: string;
@@ -12,8 +13,13 @@ interface ChainLogoProps {
 
 export function ChainLogo({ className, width = 14, height = 14 }: ChainLogoProps) {
     const activeChain = useSelector((state: RootState) => state.ui.activeChain);
+    const [mounted, setMounted] = useState(false);
 
-    // Wrapper ensures consistent sizing
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+
     const wrapperStyle = {
         width,
         height,
@@ -23,7 +29,10 @@ export function ChainLogo({ className, width = 14, height = 14 }: ChainLogoProps
         flexShrink: 0,
     };
 
-    if (activeChain === 'bnb') {
+    // SSR default
+    const chainToRender = !mounted ? 'sol' : activeChain;
+
+    if (chainToRender === 'bnb') {
         return (
             <div style={wrapperStyle} className={className}>
                 <Image

@@ -16,71 +16,74 @@ const VIEW_TO_STATUS: Record<string, TokenStatus> = {
  */
 export function transformMobulaToken(
   data: MobulaTokenDataSchema,
-  viewName: string
+  viewName: string,
+  existingToken?: Token
 ): Token {
-  const t = data.token;
+  const t = data.token || {};
   const status = VIEW_TO_STATUS[viewName] || 'new';
 
   return {
     // Core identity
-    id: t.address,
-    address: t.address,
-    name: t.name || 'Unknown',
-    symbol: t.symbol || '???',
-    imageUrl: t.logo || t.originLogoUrl || `https://api.dicebear.com/9.x/shapes/svg?seed=${encodeURIComponent(t.address)}`,
+    id: t.address || existingToken?.id || '',
+    address: t.address || existingToken?.address || '',
+    name: t.name || existingToken?.name || 'Unknown',
+    symbol: t.symbol || existingToken?.symbol || '???',
+    imageUrl: t.logo || t.originLogoUrl || existingToken?.imageUrl || `https://api.dicebear.com/9.x/shapes/svg?seed=${encodeURIComponent(t.address || 'seed')}`,
 
     // Market data
-    marketCap: data.market_cap || data.latest_market_cap || t.marketCap || 0,
-    volume24h: data.volume_24h || 0,
-    txCount: data.trades_1h || 0,
-    priceInSol: data.latest_price || t.price || 0,
-    priceChange24h: data.price_change_24h || 0,
-    bondingCurveProgress: t.bondingPercentage ?? (t.bonded ? 100 : 0),
+    marketCap: data.market_cap || data.latest_market_cap || t.marketCap || existingToken?.marketCap || 0,
+    volume24h: data.volume_24h || existingToken?.volume24h || 0,
+    txCount: data.trades_1h || existingToken?.txCount || 0,
+    priceInSol: data.latest_price || t.price || existingToken?.priceInSol || 0,
+    priceChange24h: data.price_change_24h ?? existingToken?.priceChange24h ?? 0,
+    bondingCurveProgress: t.bondingPercentage ?? (t.bonded ? 100 : (existingToken?.bondingCurveProgress ?? 0)),
 
     // Timestamps
-    createdAt: data.created_at ? new Date(data.created_at).getTime() : Date.now(),
+    createdAt: data.created_at ? new Date(data.created_at).getTime() : (existingToken?.createdAt || Date.now()),
 
     // Socials
     socials: {
-      twitter: data.socials?.twitter || undefined,
-      telegram: data.socials?.telegram || undefined,
-      website: data.socials?.website || undefined,
-      discord: (data.socials?.others as Record<string, string>)?.discord || undefined,
+      twitter: data.socials?.twitter || existingToken?.socials?.twitter,
+      telegram: data.socials?.telegram || existingToken?.socials?.telegram,
+      website: data.socials?.website || existingToken?.socials?.website,
+      discord: (data.socials?.others as Record<string, string>)?.discord || existingToken?.socials?.discord,
     },
 
     // Safety/Security
     safety: {
-      isVerified: data.dexscreenerListed === true,
-      auditScore: computeAuditScore(data),
-      liquidityLocked: data.security?.lpLocked ?? false,
-      contractRenounced: data.security?.mintDisabled ?? false,
+      isVerified: data.dexscreenerListed ?? existingToken?.safety?.isVerified ?? false,
+      auditScore: data.security ? computeAuditScore(data) : (existingToken?.safety?.auditScore ?? 0),
+      liquidityLocked: data.security?.lpLocked ?? existingToken?.safety?.liquidityLocked ?? false,
+      contractRenounced: data.security?.mintDisabled ?? existingToken?.safety?.contractRenounced ?? false,
     },
 
     // Status
     status,
 
     // Extended real API fields
-    chainId: t.chainId,
-    liquidity: t.liquidity,
-    bonded: t.bonded,
-    holdersCount: t.holdersCount,
-    priceChange1h: data.price_change_1h,
-    priceChange5m: data.price_change_5min,
-    volume1h: data.volume_1h,
-    buys1h: data.buys_1h,
-    sells1h: data.sells_1h,
-    volume5m: data.volume_5min,
-    trades5m: data.trades_5min,
-    deployer: t.deployer || undefined,
-    source: t.source || undefined,
-    description: data.description || undefined,
-    logoUrl: t.logo || t.originLogoUrl || undefined,
+    chainId: t.chainId || existingToken?.chainId,
+    liquidity: t.liquidity || existingToken?.liquidity,
+    bonded: t.bonded ?? existingToken?.bonded,
+    holdersCount: t.holdersCount ?? existingToken?.holdersCount,
+    priceChange1h: data.price_change_1h ?? existingToken?.priceChange1h,
+    priceChange5m: data.price_change_5min ?? existingToken?.priceChange5m,
+    volume1h: data.volume_1h ?? existingToken?.volume1h,
+    buys1h: data.buys_1h ?? existingToken?.buys1h,
+    sells1h: data.sells_1h ?? existingToken?.sells1h,
+    volume5m: data.volume_5min ?? existingToken?.volume5m,
+    trades5m: data.trades_5min ?? existingToken?.trades5m,
+    deployer: t.deployer || existingToken?.deployer,
+    source: t.source || existingToken?.source,
+    description: data.description || existingToken?.description,
+    logoUrl: t.logo || t.originLogoUrl || existingToken?.logoUrl,
+    exchangeLogo: t.exchange?.logo || existingToken?.exchangeLogo,
+    exchangeName: t.exchange?.name || existingToken?.exchangeName,
 
     // Holder breakdown
-    smartTradersCount: t.smartTradersCount,
-    snipersCount: t.snipersCount,
-    freshTradersCount: t.freshTradersCount,
-    insidersCount: t.insidersCount,
+    smartTradersCount: t.smartTradersCount ?? existingToken?.smartTradersCount,
+    snipersCount: t.snipersCount ?? existingToken?.snipersCount,
+    freshTradersCount: t.freshTradersCount ?? existingToken?.freshTradersCount,
+    insidersCount: t.insidersCount ?? existingToken?.insidersCount,
   };
 }
 
@@ -104,7 +107,13 @@ function computeAuditScore(data: MobulaTokenDataSchema): number {
  */
 export function transformMobulaTokens(
   dataArray: MobulaTokenDataSchema[],
-  viewName: string
+  viewName: string,
+  existingTokens?: Token[]
 ): Token[] {
-  return dataArray.map((d) => transformMobulaToken(d, viewName));
+  const existingMap = new Map(existingTokens?.map(t => [t.id, t]) || []);
+  return dataArray.map((d) => {
+    const address = d.token?.address;
+    const existing = address ? existingMap.get(address) : undefined;
+    return transformMobulaToken(d, viewName, existing);
+  });
 }

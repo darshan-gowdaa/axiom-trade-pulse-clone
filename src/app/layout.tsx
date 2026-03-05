@@ -33,11 +33,11 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: 'Axiom Trade - Pulse',
+  title: 'Mobula - Pulse',
   description: 'Real-time token discovery and trading platform on Solana',
   keywords: ['Solana', 'DEX', 'Token', 'Trading', 'DeFi', 'Crypto'],
   openGraph: {
-    title: 'Axiom Trade - Pulse',
+    title: 'Mobula - Pulse',
     description: 'Real-time token discovery and trading platform on Solana',
     type: 'website',
   },

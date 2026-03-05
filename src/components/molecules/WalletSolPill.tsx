@@ -52,7 +52,7 @@ export function WalletSolPill({
 }: WalletSolPillProps) {
     const styles = VARIANT_STYLES[variant];
 
-    // For compact variant, use grouped layout
+    // compact layout
     if (variant === 'compact') {
         return (
             <button className={`${styles.button} ${className}`}>
@@ -69,7 +69,7 @@ export function WalletSolPill({
         );
     }
 
-    // Default and statusBar use flat layout
+    // default and statusBar layout
     return (
         <button className={`${styles.button} ${className}`}>
             <RiWalletLine className={styles.walletIcon} />

@@ -64,6 +64,10 @@ export interface Token {
   description?: string;
   /** Direct logo URL from API */
   logoUrl?: string;
+  /** Exchange/source logo URL (e.g. PumpFun pill icon) */
+  exchangeLogo?: string;
+  /** Exchange/source name (e.g. "PumpFun") */
+  exchangeName?: string;
 
   // Real API holder analysis metrics
   /** Smart traders count */

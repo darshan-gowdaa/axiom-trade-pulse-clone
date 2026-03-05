@@ -5,7 +5,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch } from './useRedux';
 import { updateTokenPrice, clearPriceFlash, addToken } from '@/store/tokenSlice';
 import { type Token, type TokenStatus } from '@/types';
-import type { MobulaInitMessage, MobulaNewTokenMessage, MobulaSubscribePayload } from '@/types/mobula.types';
+import type { MobulaInitMessage, MobulaNewTokenMessage, MobulaSubscribePayload, MobulaTokenDataSchema } from '@/types/mobula.types';
 import { transformMobulaToken, transformMobulaTokens } from '@/utils/mobulaTransformer';
 import {
   MOBULA_WS_URL,
@@ -25,14 +25,7 @@ interface WebSocketState {
   reconnectAttempts: number;
 }
 
-/**
- * Defers a callback outside the current React render cycle.
- * This prevents flushSync errors when dispatching to Redux or updating
- * React Query cache from WebSocket message handlers.
- */
-function defer(fn: () => void) {
-  setTimeout(fn, 0);
-}
+
 
 /**
  * Real-time WebSocket hook connected to Mobula Pulse Stream v2.
@@ -78,180 +71,204 @@ export function useMobulaWebSocket(chain: Chain): WebSocketState {
     };
   }, []);
 
+
+
+  /**
+   * Centralized function to update/move tokens in the query cache.
+   * This handles merging partial updates with existing data from ANY list.
+   */
+  const updateTokensInLists = useCallback(
+    (rawUpdates: { data: MobulaTokenDataSchema, viewName: string }[]) => {
+      const allStatuses: TokenStatus[] = ['new', 'finalStretch', 'migrated'];
+
+      // 1. First, get a map of ALL existing tokens across ALL lists to find the best source for merging
+      const globalExistingMap = new Map<string, Token>();
+      allStatuses.forEach(status => {
+        const list = queryClient.getQueryData<Token[]>(['tokens', status]) || [];
+        list.forEach(t => {
+          if (!globalExistingMap.has(t.id)) {
+            globalExistingMap.set(t.id, t);
+          }
+        });
+      });
+
+      // 2. Transform the raw updates into full Token objects using the best existing data
+      const transformedUpdates = rawUpdates.map(({ data, viewName }) => {
+        const address = data.token?.address;
+        const existing = address ? globalExistingMap.get(address) : undefined;
+        return transformMobulaToken(data, viewName, existing);
+      });
+
+      // 3. Update each list
+      allStatuses.forEach((status) => {
+        queryClient.setQueryData<Token[]>(['tokens', status], (old = []) => {
+          const tokenMap = new Map(old.map((t) => [t.id, t]));
+          let hasChanged = false;
+
+          transformedUpdates.forEach((token) => {
+            const exists = tokenMap.has(token.id);
+
+            if (token.status === status) {
+              // Should be in this list
+              const existingToken = tokenMap.get(token.id);
+              // Only update if it's different or doesn't exist
+              if (!existingToken || JSON.stringify(existingToken) !== JSON.stringify(token)) {
+                tokenMap.set(token.id, token);
+                hasChanged = true;
+              }
+            } else if (exists) {
+              // Should NOT be in this list - remove if present
+              tokenMap.delete(token.id);
+              hasChanged = true;
+            }
+          });
+
+          if (!hasChanged) return old;
+
+          // Rebuild ordered list preserving existing order
+          const finalTokens: Token[] = [];
+          old.forEach(oldT => {
+            if (tokenMap.has(oldT.id)) {
+              finalTokens.push(tokenMap.get(oldT.id)!);
+              tokenMap.delete(oldT.id);
+            }
+          });
+
+          // Add remaining NEW tokens (ones that weren't in 'old') to the front
+          const newTokensToAdd: Token[] = [];
+          transformedUpdates.forEach(newT => {
+            if (tokenMap.has(newT.id) && newT.status === status) {
+              newTokensToAdd.push(newT);
+              tokenMap.delete(newT.id);
+            }
+          });
+          finalTokens.unshift(...newTokensToAdd);
+
+          return finalTokens;
+        });
+      });
+
+      // 4. Return the updates for other uses (like price flash)
+      return transformedUpdates;
+    },
+    [queryClient]
+  );
+
   /**
    * Handle the "init" message — populates all 3 columns with initial data.
-   * Deferred to avoid triggering React state updates during an active render.
    */
   const handleInit = useCallback(
     (msg: MobulaInitMessage) => {
-      defer(() => {
-        const payload = msg.payload;
-        for (const [viewName, viewData] of Object.entries(payload)) {
-          const status = MOBULA_VIEW_TO_STATUS[viewName] as TokenStatus | undefined;
-          if (!status || !viewData?.data) continue;
-          const tokens = transformMobulaTokens(viewData.data, viewName);
-          // Deduplicate by token ID (address) — API may send duplicates
-          const uniqueTokens = Array.from(
-            new Map(tokens.map((t) => [t.id, t])).values()
-          );
-          queryClient.setQueryData<Token[]>(['tokens', status], uniqueTokens);
-        }
-        console.log('[Mobula] Initial data loaded successfully');
-      });
+      const payload = msg.payload;
+      for (const [viewName, viewData] of Object.entries(payload)) {
+        const status = MOBULA_VIEW_TO_STATUS[viewName] as TokenStatus | undefined;
+        if (!status || !viewData?.data) continue;
+
+        const tokens = transformMobulaTokens(viewData.data, viewName);
+        // Deduplicate by token ID (address)
+        const seen = new Set();
+        const uniqueTokens = tokens.filter(t => {
+          if (seen.has(t.id)) return false;
+          seen.add(t.id);
+          return true;
+        });
+
+        queryClient.setQueryData<Token[]>(['tokens', status], uniqueTokens);
+      }
+      console.log('[Mobula] Initial data loaded');
     },
     [queryClient]
   );
 
   /**
-   * Handle "new-token" message — adds a single new token to a view.
-   * Deferred to avoid triggering React state updates during an active render.
+   * Handle "new-token" message.
    */
   const handleNewToken = useCallback(
     (msg: MobulaNewTokenMessage) => {
-      defer(() => {
-        const { viewName, token: tokenData } = msg.payload;
-        const status = MOBULA_VIEW_TO_STATUS[viewName] as TokenStatus | undefined;
-        if (!status || !tokenData) return;
+      const { viewName, token: tokenData } = msg.payload;
+      if (!tokenData) return;
 
-        const newToken = transformMobulaToken(tokenData, viewName);
-
-        // Update cache first
-        queryClient.setQueryData<Token[]>(['tokens', status], (old) => {
-          if (!old) return [newToken];
-          const exists = old.some((t) => t.id === newToken.id);
-          if (exists) return old;
-          return [newToken, ...old];
-        });
-
-        // Dispatch to Redux separately — never inside setQueryData updater
-        dispatch(addToken({ status, token: newToken }));
-      });
+      const [newToken] = updateTokensInLists([{ data: tokenData, viewName }]);
+      dispatch(addToken({ status: newToken.status, token: newToken }));
     },
-    [queryClient, dispatch]
+    [dispatch, updateTokensInLists]
   );
 
   /**
-   * Handle "update" messages — batch updates of existing tokens in their views.
-   * (Kept for backward compatibility, though the API primarily sends "update-token".)
+   * Handle "update" messages — batch updates.
    */
   const handleUpdate = useCallback(
-    (payload: Record<string, { data: Array<Record<string, unknown>> }>) => {
-      defer(() => {
-        for (const [viewName, viewData] of Object.entries(payload)) {
-          const status = MOBULA_VIEW_TO_STATUS[viewName] as TokenStatus | undefined;
-          if (!status || !viewData?.data) continue;
+    (payload: Record<string, { data: MobulaTokenDataSchema[] }>) => {
+      const allRawUpdates: { data: MobulaTokenDataSchema, viewName: string }[] = [];
 
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const updatedTokens = transformMobulaTokens(viewData.data as any, viewName);
+      for (const [viewName, viewData] of Object.entries(payload)) {
+        if (!viewData?.data) continue;
+        viewData.data.forEach(d => {
+          allRawUpdates.push({ data: d, viewName });
+        });
+      }
 
-          queryClient.setQueryData<Token[]>(['tokens', status], (old) => {
-            if (!old) return updatedTokens;
-
-            const updatedMap = new Map(updatedTokens.map((t) => [t.id, t]));
-            const existingIds = new Set(old.map((t) => t.id));
-            let hasChanges = false;
-
-            const merged = old.map((existing) => {
-              const updated = updatedMap.get(existing.id);
-              if (updated) {
-                updatedMap.delete(existing.id);
-                hasChanges = true;
-                return updated;
-              }
-              return existing;
-            });
-
-            const newEntries = Array.from(updatedMap.values()).filter(
-              (t) => !existingIds.has(t.id)
-            );
-            if (newEntries.length > 0) hasChanges = true;
-
-            return hasChanges ? [...newEntries, ...merged] : old;
-          });
-        }
-      });
+      if (allRawUpdates.length > 0) {
+        updateTokensInLists(allRawUpdates);
+      }
     },
-    [queryClient]
+    [updateTokensInLists]
   );
 
   /**
    * Handle "update-token" messages — real-time per-token updates.
-   * Same payload format as "new-token": { viewName, token }.
-   * This is the primary update mechanism (~5 messages/sec).
    */
   const handleUpdateToken = useCallback(
     (msg: MobulaNewTokenMessage) => {
-      defer(() => {
-        const { viewName, token: tokenData } = msg.payload;
-        const status = MOBULA_VIEW_TO_STATUS[viewName] as TokenStatus | undefined;
-        if (!status || !tokenData) return;
+      const { viewName, token: tokenData } = msg.payload;
+      if (!tokenData) return;
 
-        const updatedToken = transformMobulaToken(tokenData, viewName);
+      // Find current version to check for price change
+      const address = tokenData.token?.address;
+      const allStatuses: TokenStatus[] = ['new', 'finalStretch', 'migrated'];
+      let existing: Token | undefined;
 
-        // Collect price change info before updating cache
-        let priceChange: { oldPrice: number; newPrice: number } | null = null;
+      for (const s of allStatuses) {
+        const list = queryClient.getQueryData<Token[]>(['tokens', s]);
+        existing = list?.find(t => t.id === address);
+        if (existing) break;
+      }
 
-        queryClient.setQueryData<Token[]>(['tokens', status], (old) => {
-          if (!old) return [updatedToken];
+      const [updatedToken] = updateTokensInLists([{ data: tokenData, viewName }]);
 
-          let found = false;
-          const updated = old.map((existing) => {
-            if (existing.id === updatedToken.id) {
-              found = true;
-              // Track price change for flash animation
-              if (existing.priceInSol !== updatedToken.priceInSol) {
-                priceChange = {
-                  oldPrice: existing.priceInSol,
-                  newPrice: updatedToken.priceInSol,
-                };
-              }
-              return updatedToken;
-            }
-            return existing;
-          });
-
-          // If not found in current view, add it (token may have moved views)
-          if (!found) return [updatedToken, ...old];
-          return updated;
-        });
-
-        // Dispatch price flash to Redux AFTER setQueryData
-        const pChange = priceChange as { oldPrice: number; newPrice: number } | null;
-        if (pChange) {
-          dispatch(
-            updateTokenPrice({
-              tokenId: updatedToken.id,
-              status,
-              newPrice: pChange.newPrice,
-              oldPrice: pChange.oldPrice,
-            })
-          );
-          setTimeout(() => {
-            dispatch(clearPriceFlash(updatedToken.id));
-          }, 300);
-        }
-      });
+      // Price flash logic
+      if (existing && existing.priceInSol !== updatedToken.priceInSol) {
+        dispatch(
+          updateTokenPrice({
+            tokenId: updatedToken.id,
+            status: updatedToken.status,
+            newPrice: updatedToken.priceInSol,
+            oldPrice: existing.priceInSol,
+          })
+        );
+        setTimeout(() => {
+          dispatch(clearPriceFlash(updatedToken.id));
+        }, 300);
+      }
     },
-    [queryClient, dispatch]
+    [queryClient, dispatch, updateTokensInLists]
   );
 
   /**
-   * Handle "remove-token" messages — remove a token from a view.
+   * Handle "remove-token" messages.
    */
   const handleRemoveToken = useCallback(
     (msg: { payload: { viewName: string; token: { token: { address: string } } } }) => {
-      defer(() => {
-        const { viewName, token: tokenData } = msg.payload;
-        const status = MOBULA_VIEW_TO_STATUS[viewName] as TokenStatus | undefined;
-        if (!status) return;
+      const { viewName, token: tokenData } = msg.payload;
+      const status = MOBULA_VIEW_TO_STATUS[viewName] as TokenStatus | undefined;
+      if (!status) return;
 
-        const address = tokenData?.token?.address;
-        if (!address) return;
+      const address = tokenData?.token?.address;
+      if (!address) return;
 
-        queryClient.setQueryData<Token[]>(['tokens', status], (old) => {
-          if (!old) return [];
-          return old.filter((t) => t.id !== address);
-        });
+      queryClient.setQueryData<Token[]>(['tokens', status], (old) => {
+        if (!old) return [];
+        return old.filter((t) => t.id !== address);
       });
     },
     [queryClient]

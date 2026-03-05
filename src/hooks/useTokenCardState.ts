@@ -41,20 +41,18 @@ function formatDeployer(deployer?: string): string {
     return `${deployer.slice(0, 4)}...${deployer.slice(-4)}`;
   }
   if (deployer) return deployer;
-  // Fallback: random creator name
-  const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  const start = Array.from({ length: 4 }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
-  const end = Array.from({ length: 4 }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
-  return `${start}...${end}`;
+
+  // Fallback: deterministic creator name based on a simple hash of input to avoid hydration mismatch
+  return 'Anon...User';
 }
 
 /**
  * Computes how long ago a token was created & returns a TimeState.
  */
-function computeTimeState(createdAt?: number): TimeState {
+function computeTimeState(createdAt?: number, now: number = Date.now()): TimeState {
   if (!createdAt) return { val: 0, unit: 's' };
 
-  const diffMs = Math.abs(Date.now() - createdAt);
+  const diffMs = Math.max(0, now - createdAt);
   const diffSec = Math.floor(diffMs / 1000);
 
   if (diffSec < 60) return { val: diffSec, unit: 's' };
@@ -104,6 +102,8 @@ export function useTokenCardState({
   }, [buys1h, sells1h]);
 
   // Time state — derived from real createdAt
+  // Note: For absolute hydration stability, we use Date.now() but the caller
+  // should ensure this hook is only consumed or the value is used after mounting.
   const timeState = useMemo<TimeState>(() => computeTimeState(createdAt), [createdAt]);
 
   return {

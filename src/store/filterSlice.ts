@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 export interface FilterConfig {
   searchKeywords: string;
   excludeKeywords: string;
-  sortBy: 'mC' | 'volume' | 'tx' | 'liquidity' | null;
+  sortBy: 'mC' | 'volume' | 'tx' | 'liquidity' | 'bondingCurveProgress' | null;
   sortOrder: 'asc' | 'desc';
   minMC: string;
   maxMC: string;

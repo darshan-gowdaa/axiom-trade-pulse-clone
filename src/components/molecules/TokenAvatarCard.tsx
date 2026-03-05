@@ -9,7 +9,8 @@ interface TokenAvatarCardProps {
     imageUrl: string;
     creator: string;
     ringColor: string;
-    priority?: boolean;
+    exchangeLogo?: string;
+    exchangeName?: string;
 }
 
 export function TokenAvatarCard({
@@ -18,19 +19,27 @@ export function TokenAvatarCard({
     imageUrl,
     creator,
     ringColor,
-    priority = false,
+    exchangeLogo,
+    exchangeName,
 }: TokenAvatarCardProps) {
     const [imgError, setImgError] = useState(false);
     const [imgLoaded, setImgLoaded] = useState(false);
+    const [badgeError, setBadgeError] = useState(false);
+
+    // fallback to local pump icon if no exchange logo
+    const badgeSrc = (!badgeError && exchangeLogo) || '/icons/pump-small.svg';
+    const badgeAlt = exchangeName || 'Exchange';
 
     return (
         <div className="shrink-0 w-[55px] relative">
             <div className="relative w-[55px] h-[55px]">
+
                 <div
-                    className="absolute inset-[-2px] rounded-[3px]"
+                    className="absolute inset-[-2px] rounded-lg"
                     style={{ border: `1.5px solid ${ringColor}`, boxShadow: `0 0 4px ${ringColor}40` }}
                 />
-                <div className="absolute inset-[1px] rounded-[2px] overflow-hidden flex items-center justify-center bg-[#1a1b23]">
+
+                <div className="absolute inset-[1px] rounded-[6px] overflow-hidden flex items-center justify-center bg-[#1a1b23]">
                     {!imgError ? (
                         <Image
                             src={imageUrl}
@@ -41,8 +50,7 @@ export function TokenAvatarCard({
                             onError={() => setImgError(true)}
                             sizes="55px"
                             unoptimized={true}
-                            loading={priority ? "eager" : "lazy"}
-                            priority={priority}
+                            loading="lazy"
                         />
                     ) : (
                         <span className="text-[14px] font-bold" style={{ color: ringColor }}>
@@ -50,20 +58,20 @@ export function TokenAvatarCard({
                         </span>
                     )}
                 </div>
-                {/* Pump.fun Medicine Logo Badge */}
+
                 <div
-                    className="absolute bottom-[-2px] right-[-4px] min-w-[20px] h-[14px] px-1 bg-black rounded-full flex items-center justify-center z-20 overflow-hidden"
+                    className="absolute bottom-[-3px] right-[-3px] w-[18px] h-[18px] bg-black rounded-full flex items-center justify-center z-20 overflow-hidden"
                     style={{ border: `1.5px solid ${ringColor}` }}
                 >
                     <Image
-                        src="/icons/pump-small.svg"
-                        alt="Pump"
-                        width={14}
-                        height={8}
+                        src={badgeSrc}
+                        alt={badgeAlt}
+                        width={12}
+                        height={12}
                         className="object-contain"
                         unoptimized={true}
-                        priority={priority}
-                        loading={priority ? "eager" : "lazy"}
+                        loading="lazy"
+                        onError={() => setBadgeError(true)}
                     />
                 </div>
             </div>

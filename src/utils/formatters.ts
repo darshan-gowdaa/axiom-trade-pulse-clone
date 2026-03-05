@@ -28,11 +28,12 @@ export function formatPercentage(value: number): string {
   return `${sign}${value.toFixed(2)}%`;
 }
 
-export function formatTimeAgo(timestamp: number): string {
-  const now = Date.now();
-  const diff = Math.abs(now - timestamp);
+export function formatTimeAgo(timestamp: number, now: number = Date.now()): string {
+  const diff = Math.max(0, now - timestamp);
 
   const seconds = Math.floor(diff / 1000);
+  if (seconds < 2) return 'just now';
+
   const minutes = Math.floor(seconds / 60);
   const hours = Math.floor(minutes / 60);
   const days = Math.floor(hours / 24);

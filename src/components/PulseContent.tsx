@@ -7,9 +7,14 @@ import { setActiveTab, setActivePreset, setIsMobile } from '@/store/uiSlice';
 import { type Token, type ActiveTab } from '@/types';
 import { PulseToolbarSkeleton, TokenColumnSkeleton } from '@/components/skeletons';
 
-/** Deduplicate tokens by ID (address) — keeps last occurrence */
+// dedup tokens by ID
 function dedup(tokens: Token[]): Token[] {
-    return Array.from(new Map(tokens.map((t) => [t.id, t])).values());
+    const seen = new Set();
+    return tokens.filter((t) => {
+        if (seen.has(t.id)) return false;
+        seen.add(t.id);
+        return true;
+    });
 }
 
 const PulseToolbar = dynamic(
@@ -48,23 +53,21 @@ export function PulseContent() {
         (state) => state.ui
     );
 
-    // Connect to Mobula WebSocket with the active chain
+    // connect websocket
     const wsState = useMobulaWebSocket(activeChain);
 
     const { data: rawNewPairs = [], isLoading: isNewPairsLoading } = useTokens('new');
     const { data: rawFinalStretch = [], isLoading: isFinalStretchLoading } = useTokens('finalStretch');
     const { data: rawMigrated = [], isLoading: isMigratedLoading } = useTokens('migrated');
 
-    // Deduplicate tokens by address before passing to columns
+    // dedup tokens
     const newPairs = useMemo(() => dedup(rawNewPairs), [rawNewPairs]);
     const finalStretch = useMemo(() => dedup(rawFinalStretch), [rawFinalStretch]);
     const migrated = useMemo(() => dedup(rawMigrated), [rawMigrated]);
 
-    // Show loading if no data yet (WebSocket hasn't sent init)
+    // check loading state
     const isLoading = (isNewPairsLoading || isFinalStretchLoading || isMigratedLoading)
         || (newPairs.length === 0 && finalStretch.length === 0 && migrated.length === 0 && !wsState.error);
-
-    // Removed useEffect that utilized setTokens and setLoading
 
     useEffect(() => {
         dispatch(setIsMobile(isMobile));

@@ -43,7 +43,7 @@ export function PulseToolbar({ className, activeTab, onTabChange }: PulseToolbar
 
   return (
     <div className={`bg-[#06070b] border-b border-[#1a1b23] ${className || ''}`}>
-      {/* Desktop */}
+
       <div className="hidden lg:block">
         <div className="flex items-center gap-2.5 px-4 lg:px-9 py-1 border-b border-[#1a1b23] overflow-visible -ml-4">
           <Tooltip content="Settings" position="right">
@@ -115,7 +115,7 @@ export function PulseToolbar({ className, activeTab, onTabChange }: PulseToolbar
         </div>
       </div>
 
-      {/* Mobile */}
+
       <div className="flex flex-col lg:hidden w-full">
         <div className="flex items-center justify-between px-2 py-1 w-full gap-2">
           <ChainSelector variant="mobile" />

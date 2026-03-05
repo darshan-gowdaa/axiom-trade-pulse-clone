@@ -49,7 +49,7 @@ export function ChainSelector({ variant = 'desktop' }: ChainSelectorProps) {
         );
     }
 
-    // Desktop variant
+    // desktop variant
     return (
         <div className="flex items-center gap-1 p-1">
             <Tooltip content="Solana">

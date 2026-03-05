@@ -79,7 +79,7 @@ export function Tooltip({
     const showTooltip = useCallback(() => {
         updatePosition();
         timeoutRef.current = setTimeout(() => {
-            updatePosition(); // Re-calc in case of shifts
+            updatePosition();
             setIsVisible(true);
         }, delay);
     }, [delay, updatePosition]);
@@ -92,7 +92,7 @@ export function Tooltip({
         setIsVisible(false);
     }, []);
 
-    // Handle scroll/resize updates while visible
+    // watch scroll/resize
     useEffect(() => {
         if (isVisible) {
             window.addEventListener('scroll', updatePosition, true);
