@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector, useIsMobile, useMobulaWebSocket, usePre
 import { setActiveTab, setActivePreset, setIsMobile } from '@/store/uiSlice';
 import { type Token, type ActiveTab } from '@/types';
 import { PulseToolbarSkeleton, TokenColumnSkeleton } from '@/components/skeletons';
+import { TokenColumn } from '@/components/organisms/TokenColumn';
 
 // dedup tokens by ID
 function dedup(tokens: Token[]): Token[] {
@@ -27,10 +28,8 @@ const BottomStatusBar = dynamic(
     { ssr: false }
 );
 
-const TokenColumn = dynamic(
-    () => import('@/components/organisms/TokenColumn').then(mod => ({ default: mod.TokenColumn })),
-    { loading: () => <TokenColumnSkeleton className="flex-1" />, ssr: false }
-);
+// TokenColumn imported directly (not dynamically) — it's critical path content
+// that must render ASAP to show data the instant WebSocket delivers it.
 
 const MobileNavBar = dynamic(
     () => import('@/components/organisms/MobileNavBar').then(mod => ({ default: mod.MobileNavBar })),
@@ -115,81 +114,69 @@ export function PulseContent() {
                 {isMobile ? (
                     <>
                         {activeTab === 'newPairs' && (
-                            <Suspense fallback={<TokenColumnSkeleton className={mobileClassName} />}>
-                                <TokenColumn
-                                    title="New Pairs"
-                                    columnType="newPairs"
-                                    tokens={newPairs}
-                                    activePreset={activePresets.newPairs}
-                                    onPresetClick={(id) => handlePresetClick('newPairs', id)}
-                                    className={mobileClassName}
-                                    {...columnProps}
-                                />
-                            </Suspense>
-                        )}
-                        {activeTab === 'finalStretch' && (
-                            <Suspense fallback={<TokenColumnSkeleton className={mobileClassName} />}>
-                                <TokenColumn
-                                    title="Final Stretch"
-                                    columnType="finalStretch"
-                                    tokens={finalStretch}
-                                    activePreset={activePresets.finalStretch}
-                                    onPresetClick={(id) => handlePresetClick('finalStretch', id)}
-                                    className={mobileClassName}
-                                    {...columnProps}
-                                />
-                            </Suspense>
-                        )}
-                        {activeTab === 'migrated' && (
-                            <Suspense fallback={<TokenColumnSkeleton className={mobileClassName} />}>
-                                <TokenColumn
-                                    title="Migrated"
-                                    columnType="migrated"
-                                    tokens={migrated}
-                                    activePreset={activePresets.migrated}
-                                    onPresetClick={(id) => handlePresetClick('migrated', id)}
-                                    className={mobileClassName}
-                                    {...columnProps}
-                                />
-                            </Suspense>
-                        )}
-                        <MobileNavBar />
-                    </>
-                ) : (
-                    <>
-                        <Suspense fallback={<TokenColumnSkeleton className="flex-1" />}>
                             <TokenColumn
                                 title="New Pairs"
                                 columnType="newPairs"
                                 tokens={newPairs}
                                 activePreset={activePresets.newPairs}
                                 onPresetClick={(id) => handlePresetClick('newPairs', id)}
-                                className="flex-1"
+                                className={mobileClassName}
                                 {...columnProps}
                             />
-                        </Suspense>
-                        <Suspense fallback={<TokenColumnSkeleton className="flex-1" />}>
+                        )}
+                        {activeTab === 'finalStretch' && (
                             <TokenColumn
                                 title="Final Stretch"
                                 columnType="finalStretch"
                                 tokens={finalStretch}
                                 activePreset={activePresets.finalStretch}
                                 onPresetClick={(id) => handlePresetClick('finalStretch', id)}
-                                className="flex-1"
+                                className={mobileClassName}
                                 {...columnProps}
                             />
-                        </Suspense>
-                        <Suspense fallback={<TokenColumnSkeleton className="flex-1" />}>
+                        )}
+                        {activeTab === 'migrated' && (
                             <TokenColumn
                                 title="Migrated"
                                 columnType="migrated"
                                 tokens={migrated}
                                 activePreset={activePresets.migrated}
                                 onPresetClick={(id) => handlePresetClick('migrated', id)}
-                                className="flex-1"
+                                className={mobileClassName}
                                 {...columnProps}
                             />
-                        </Suspense>
+                        )}
+                        <MobileNavBar />
+                    </>
+                ) : (
+                    <>
+                        <TokenColumn
+                            title="New Pairs"
+                            columnType="newPairs"
+                            tokens={newPairs}
+                            activePreset={activePresets.newPairs}
+                            onPresetClick={(id) => handlePresetClick('newPairs', id)}
+                            className="flex-1"
+                            {...columnProps}
+                        />
+                        <TokenColumn
+                            title="Final Stretch"
+                            columnType="finalStretch"
+                            tokens={finalStretch}
+                            activePreset={activePresets.finalStretch}
+                            onPresetClick={(id) => handlePresetClick('finalStretch', id)}
+                            className="flex-1"
+                            {...columnProps}
+                        />
+                        <TokenColumn
+                            title="Migrated"
+                            columnType="migrated"
+                            tokens={migrated}
+                            activePreset={activePresets.migrated}
+                            onPresetClick={(id) => handlePresetClick('migrated', id)}
+                            className="flex-1"
+                            {...columnProps}
+                        />
                     </>
                 )}
             </div>

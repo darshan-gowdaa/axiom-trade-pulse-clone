@@ -101,6 +101,6 @@ export const STATUS_TO_MOBULA_VIEW: Record<string, string> = {
   migrated: 'bonded',
 };
 
-export const WS_RECONNECT_DELAY = 3000;
+export const WS_RECONNECT_DELAY = 1000;
 export const WS_PING_INTERVAL = 15000;
 export const WS_MAX_RECONNECT_ATTEMPTS = 10;

@@ -54,6 +54,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link rel="preconnect" href="https://axiom.trade" />
         <link rel="dns-prefetch" href="https://axiom.trade" />
+        <link rel="preconnect" href="https://api.mobula.io" />
+        <link rel="dns-prefetch" href="https://api.mobula.io" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased h-screen max-h-screen overflow-hidden flex flex-col bg-[#06070b]`}>
         <Providers>

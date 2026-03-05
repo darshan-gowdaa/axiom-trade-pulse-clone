@@ -2,7 +2,7 @@
 
 export function HeaderSkeleton() {
     return (
-        <header className="h-[35px] lg:h-[53px] bg-[#0c0c10] border-b border-[#1a1b23] select-none animate-pulse">
+        <header className="h-[35px] lg:h-[53px] bg-[#0c0c10] border-b border-[#1a1b23] select-none animate-shimmer-container">
             {/* Desktop */}
             <div className="hidden lg:flex items-center justify-between px-[24px] h-full">
                 <div className="flex items-center gap-6">

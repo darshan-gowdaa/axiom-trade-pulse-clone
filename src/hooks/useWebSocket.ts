@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useCallback, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useCallback, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch } from './useRedux';
 import { updateTokenPrice, clearPriceFlash, addToken } from '@/store/tokenSlice';
@@ -443,8 +443,10 @@ export function useMobulaWebSocket(chain: Chain): WebSocketState {
     }
   }, [cleanup, buildSubscription, startPing, handleMessage]);
 
-  // Main effect: connect on mount or when chain changes
-  useEffect(() => {
+  // Use useLayoutEffect to start WebSocket connection BEFORE browser paint
+  // This fires synchronously after DOM mutations, saving ~16-32ms vs useEffect
+  // which defers until after paint
+  useLayoutEffect(() => {
     mountedRef.current = true;
 
     // Clear existing data when chain switches

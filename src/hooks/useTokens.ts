@@ -14,6 +14,7 @@ export const useTokens = (status: TokenStatus) => {
   return useQuery({
     queryKey: ['tokens', status],
     queryFn: (): Token[] => [],
+    initialData: [] as Token[],
     staleTime: Infinity,
     refetchOnWindowFocus: false,
     refetchOnMount: false,

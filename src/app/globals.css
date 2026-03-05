@@ -35,29 +35,68 @@
     display: none;
   }
 
-  .animate-pulse {
-    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-    will-change: opacity;
-  }
-
-  .skeleton-wave {
+  /* Smooth shimmer animation — GPU-accelerated gradient sweep */
+  .animate-shimmer {
     position: relative;
     overflow: hidden;
-    background: #1a1b23;
   }
 
-  .skeleton-wave::after {
+  .animate-shimmer::after {
     content: '';
     position: absolute;
     inset: 0;
     transform: translateX(-100%);
-    animation: skeleton-wave 1.5s infinite;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.04), transparent);
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.03) 20%,
+      rgba(255, 255, 255, 0.06) 50%,
+      rgba(255, 255, 255, 0.03) 80%,
+      transparent 100%
+    );
+    animation: shimmer 1.8s ease-in-out infinite;
     will-change: transform;
+    pointer-events: none;
   }
 
-  @keyframes skeleton-wave {
-    100% { transform: translateX(100%); }
+  @keyframes shimmer {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  /* Container-level shimmer for wrapping skeleton groups */
+  .animate-shimmer-container {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .animate-shimmer-container::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    transform: translateX(-100%);
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.025) 25%,
+      rgba(255, 255, 255, 0.05) 50%,
+      rgba(255, 255, 255, 0.025) 75%,
+      transparent 100%
+    );
+    animation: shimmer 2s ease-in-out infinite;
+    will-change: transform;
+    pointer-events: none;
+  }
+
+  /* Legacy pulse kept as fallback */
+  .animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    will-change: opacity;
   }
 
   .content-auto {

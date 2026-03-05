@@ -2,7 +2,7 @@
 
 export function PulseToolbarSkeleton() {
     return (
-        <div className="bg-[#06070b] border-b border-[#1a1b23] animate-pulse">
+        <div className="bg-[#06070b] border-b border-[#1a1b23] animate-shimmer-container">
 
             <div className="hidden lg:block">
                 <div className="flex items-center gap-2.5 px-4 lg:px-9 py-1 border-b border-[#1a1b23] overflow-visible -ml-4">
