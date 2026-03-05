@@ -4,30 +4,30 @@ import React, { memo, useState, useMemo } from 'react';
 import { type Token } from '@/types';
 import { formatCurrency, formatCompactNumber, formatTimeAgo } from '@/utils';
 import { getRingColor, getMarketCapColor, generateUserIconColor } from '@/utils/tokenCardHelpers';
-import { useTokenCardState, useChain } from '@/hooks';
-import { RiCheckLine, RiUserLine, RiFlashlightFill, RiFileCopyFill, RiGlobalLine, RiSpyFill, RiCrosshair2Fill, RiUserStarFill, RiWaterFlashFill, RiTimerFlashLine } from '@remixicon/react';
-import { ChainLogo, ChainText } from '@/components/atoms';
-import { MetricBlock } from '@/components/atoms/MetricBlock';
+import { useTokenCardState, useAppSelector } from '@/hooks';
+import { RiCheckLine, RiUserLine, RiFlashlightFill, RiFileCopyFill, RiSpyFill, RiCrosshair2Fill, RiUserStarFill, RiWaterFlashFill, RiTimerFlashLine } from '@remixicon/react';
+import { ChainText } from '@/components/atoms';
 import { Tooltip } from '@/components/atoms/Tooltip';
 import { TokenAvatarCard, MetricPill } from '@/components/molecules';
 
 interface TokenCardProps {
   token: Token;
-  flashDirection?: 'up' | 'down' | null;
   showDecimals?: boolean;
   onQuickBuy?: (token: Token) => void;
+  index?: number;
 }
 
 function TokenCardComponent({
   token,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  flashDirection,
   showDecimals = true,
   onQuickBuy,
+  index,
 }: TokenCardProps) {
   const [copied, setCopied] = useState(false);
   const [userIconColor] = useState(generateUserIconColor);
-  const { activeChain } = useChain();
+
+  // Directly select this token's flash direction to avoid O(N) re-renders
+  useAppSelector((state) => state.tokens.priceFlash[token.id]);
 
   const {
     tokenIdentity,
@@ -78,6 +78,9 @@ function TokenCardComponent({
   // Prefer real logo URL from the API
   const displayImageUrl = token.logoUrl || token.imageUrl;
 
+  // Prioritize images for the first 8 items in the virtual list
+  const isPriority = index !== undefined && index < 8;
+
   const cardContent = (
     <div className={`relative w-full flex items-center pl-2 lg:pl-3 pr-1 py-2 border-b border-[#1a1b23] cursor-pointer bg-transparent gap-2 min-h-[64px] transition-colors duration-200 mr-2 ${hoverClass}`}>
       <TokenAvatarCard
@@ -86,6 +89,7 @@ function TokenCardComponent({
         imageUrl={displayImageUrl}
         creator={tokenIdentity.creator}
         ringColor={ringColor}
+        priority={isPriority}
       />
 
       <div className="flex-1 min-w-0 flex flex-col gap-1 justify-center">
@@ -188,7 +192,7 @@ function TokenCardComponent({
               <MetricPill
                 metric={{
                   icon: <span className="font-bold text-[9px]">1H</span>,
-                  val: Math.abs(token.priceChange1h).toFixed(2),
+                  val: Math.min(Math.abs(token.priceChange1h), 999.99).toFixed(2),
                   suffix: '%',
                   color: token.priceChange1h >= 0 ? '#16a34a' : '#ef4444'
                 }}
@@ -199,7 +203,7 @@ function TokenCardComponent({
               <MetricPill
                 metric={{
                   icon: <span className="font-bold text-[9px]">5M</span>,
-                  val: Math.abs(token.priceChange5m).toFixed(2),
+                  val: Math.min(Math.abs(token.priceChange5m), 999.99).toFixed(2),
                   suffix: '%',
                   color: token.priceChange5m >= 0 ? '#16a34a' : '#ef4444'
                 }}

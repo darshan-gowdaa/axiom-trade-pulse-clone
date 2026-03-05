@@ -1,4 +1,4 @@
-export { useWebSocketSimulation, useMobulaWebSocket } from './useWebSocket';
+export { useMobulaWebSocket } from './useWebSocket';
 export { useIsMobile } from './useIsMobile';
 export { useAppDispatch, useAppSelector } from './useRedux';
 export { useTokens } from './useTokens';

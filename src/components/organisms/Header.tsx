@@ -58,7 +58,7 @@ export function Header() {
         <div className="flex items-center">
           <Link href="/" className="flex items-center gap-[1px] no-underline mr-[24px]">
             <AxiomLogo className="w-[32px] h-[32px] text-white" />
-            <span className="text-white font-medium text-[20px]">AXIOM</span>
+            <span className="text-white font-medium text-[16px]">mobula</span>
             <span className="bg-transparent text-[#fcfcfc] text-[13px] font-light p-0 self-end mb-[4px] ml-[2px]">Pro</span>
           </Link>
 

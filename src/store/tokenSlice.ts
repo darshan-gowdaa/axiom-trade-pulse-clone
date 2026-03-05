@@ -18,11 +18,12 @@ const tokenSlice = createSlice({
     // Kept to trigger lastUpdated if needed, but array logic removed
     addToken: (
       state,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       action: PayloadAction<{ status: TokenStatus; token: Token }>
     ) => {
       state.lastUpdated = Date.now();
     },
-    
+
     updateTokenPrice: (
       state,
       action: PayloadAction<{
@@ -33,14 +34,14 @@ const tokenSlice = createSlice({
       }>
     ) => {
       const { tokenId, newPrice, oldPrice } = action.payload;
-      
+
       // Determine flash direction
       const flashDirection = newPrice > oldPrice ? 'up' : 'down';
       state.priceFlash[tokenId] = flashDirection;
-      
+
       state.lastUpdated = Date.now();
     },
-    
+
     clearPriceFlash: (state, action: PayloadAction<string>) => {
       state.priceFlash[action.payload] = null;
     },

@@ -1,154 +1,197 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useAppDispatch, useAppSelector, useIsMobile, useMobulaWebSocket, useTokens } from '@/hooks';
+import dynamic from 'next/dynamic';
+import { useEffect, useMemo, Suspense } from 'react';
+import { useAppDispatch, useAppSelector, useIsMobile, useMobulaWebSocket, usePrefetch, useTokens } from '@/hooks';
 import { setActiveTab, setActivePreset, setIsMobile } from '@/store/uiSlice';
-import { TokenColumn, PulseToolbar, BottomStatusBar, MobileNavBar } from '@/components/organisms';
 import { type Token, type ActiveTab } from '@/types';
+import { PulseToolbarSkeleton, TokenColumnSkeleton } from '@/components/skeletons';
+
+/** Deduplicate tokens by ID (address) — keeps last occurrence */
+function dedup(tokens: Token[]): Token[] {
+    return Array.from(new Map(tokens.map((t) => [t.id, t])).values());
+}
+
+const PulseToolbar = dynamic(
+    () => import('@/components/organisms/PulseToolbar').then(mod => ({ default: mod.PulseToolbar })),
+    { loading: () => <PulseToolbarSkeleton />, ssr: false }
+);
+
+const BottomStatusBar = dynamic(
+    () => import('@/components/organisms/BottomStatusBar').then(mod => ({ default: mod.BottomStatusBar })),
+    { ssr: false }
+);
+
+const TokenColumn = dynamic(
+    () => import('@/components/organisms/TokenColumn').then(mod => ({ default: mod.TokenColumn })),
+    { loading: () => <TokenColumnSkeleton className="flex-1" />, ssr: false }
+);
+
+const MobileNavBar = dynamic(
+    () => import('@/components/organisms/MobileNavBar').then(mod => ({ default: mod.MobileNavBar })),
+    { ssr: false }
+);
+
+const componentImports = [
+    () => import('@/components/organisms/PulseToolbar'),
+    () => import('@/components/organisms/BottomStatusBar'),
+    () => import('@/components/organisms/TokenColumn'),
+    () => import('@/components/organisms/MobileNavBar'),
+];
 
 export function PulseContent() {
-  const dispatch = useAppDispatch();
-  const isMobile = useIsMobile();
+    const dispatch = useAppDispatch();
+    const isMobile = useIsMobile();
+    usePrefetch(componentImports);
 
-  const { priceFlash } = useAppSelector(
-    (state) => state.tokens
-  );
-  const { activeTab, displaySettings, activePresets, activeChain } = useAppSelector(
-    (state) => state.ui
-  );
-
-  // Connect to Mobula WebSocket with the active chain
-  const wsState = useMobulaWebSocket(activeChain);
-
-  const { data: newPairs = [], isLoading: isNewPairsLoading } = useTokens('new');
-  const { data: finalStretch = [], isLoading: isFinalStretchLoading } = useTokens('finalStretch');
-  const { data: migrated = [], isLoading: isMigratedLoading } = useTokens('migrated');
-
-  // Show loading if no data yet (WebSocket hasn't sent init)
-  const isLoading = (isNewPairsLoading || isFinalStretchLoading || isMigratedLoading)
-    || (newPairs.length === 0 && finalStretch.length === 0 && migrated.length === 0 && !wsState.error);
-
-  useEffect(() => {
-    dispatch(setIsMobile(isMobile));
-  }, [dispatch, isMobile]);
-
-  const handleTabChange = (tab: ActiveTab) => {
-    dispatch(setActiveTab(tab));
-  };
-
-  const handlePresetClick = (columnType: ActiveTab, presetId: string) => {
-    const currentPreset = activePresets[columnType];
-    dispatch(
-      setActivePreset({
-        tab: columnType,
-        presetId: currentPreset === presetId ? null : presetId,
-      })
+    const { activeTab, displaySettings, activePresets, activeChain } = useAppSelector(
+        (state) => state.ui
     );
-  };
 
-  const handleQuickBuy = (token: Token) => {
-    console.log('Quick buy:', token.symbol);
-  };
+    // Connect to Mobula WebSocket with the active chain
+    const wsState = useMobulaWebSocket(activeChain);
 
-  const columnProps = {
-    isLoading,
-    showDecimals: displaySettings.showDecimals,
-    onQuickBuy: handleQuickBuy,
-  };
+    const { data: rawNewPairs = [], isLoading: isNewPairsLoading } = useTokens('new');
+    const { data: rawFinalStretch = [], isLoading: isFinalStretchLoading } = useTokens('finalStretch');
+    const { data: rawMigrated = [], isLoading: isMigratedLoading } = useTokens('migrated');
 
-  const mobileClassName = 'w-full max-w-4xl border-l border-b border-[#1a1a1f] mx-auto';
+    // Deduplicate tokens by address before passing to columns
+    const newPairs = useMemo(() => dedup(rawNewPairs), [rawNewPairs]);
+    const finalStretch = useMemo(() => dedup(rawFinalStretch), [rawFinalStretch]);
+    const migrated = useMemo(() => dedup(rawMigrated), [rawMigrated]);
 
-  return (
-    <div className="flex-1 flex flex-col overflow-hidden bg-[#06070b]">
-      {/* Pulse Toolbar */}
-      <PulseToolbar activeTab={activeTab} onTabChange={handleTabChange} />
+    // Show loading if no data yet (WebSocket hasn't sent init)
+    const isLoading = (isNewPairsLoading || isFinalStretchLoading || isMigratedLoading)
+        || (newPairs.length === 0 && finalStretch.length === 0 && migrated.length === 0 && !wsState.error);
 
-      {wsState.error && (
-        <div className="px-4 py-1.5 bg-[#1a1a2e] text-[#fbbf24] text-xs text-center">
-          Warning: {wsState.error}
+    // Removed useEffect that utilized setTokens and setLoading
+
+    useEffect(() => {
+        dispatch(setIsMobile(isMobile));
+    }, [dispatch, isMobile]);
+
+    const handleTabChange = (tab: ActiveTab) => {
+        dispatch(setActiveTab(tab));
+    };
+
+    const handlePresetClick = (columnType: ActiveTab, presetId: string) => {
+        const currentPreset = activePresets[columnType];
+        dispatch(
+            setActivePreset({
+                tab: columnType,
+                presetId: currentPreset === presetId ? null : presetId,
+            })
+        );
+    };
+
+    const handleQuickBuy = (token: Token) => {
+        console.log('Quick buy:', token.symbol);
+    };
+
+    const columnProps = {
+        isLoading,
+        showDecimals: displaySettings.showDecimals,
+        onQuickBuy: handleQuickBuy,
+    };
+
+    const mobileClassName = 'w-full max-w-4xl border-l border-b border-[#1a1a1f] mx-auto';
+
+    return (
+        <div className="flex-1 flex flex-col overflow-hidden bg-[#06070b]">
+            <Suspense fallback={<PulseToolbarSkeleton />}>
+                <PulseToolbar activeTab={activeTab} onTabChange={handleTabChange} />
+            </Suspense>
+
+            {wsState.error && (
+                <div className="px-4 py-1.5 bg-[#1a1a2e] text-[#fbbf24] text-xs text-center">
+                    Warning: {wsState.error}
+                </div>
+            )}
+
+            <div className={`flex-1 flex overflow-hidden min-h-0 px-2 lg:px-5 gap-1 ${isMobile ? 'pb-[50px] justify-center' : ''}`}>
+                {isMobile ? (
+                    <>
+                        {activeTab === 'newPairs' && (
+                            <Suspense fallback={<TokenColumnSkeleton className={mobileClassName} />}>
+                                <TokenColumn
+                                    title="New Pairs"
+                                    columnType="newPairs"
+                                    tokens={newPairs}
+                                    activePreset={activePresets.newPairs}
+                                    onPresetClick={(id) => handlePresetClick('newPairs', id)}
+                                    className={mobileClassName}
+                                    {...columnProps}
+                                />
+                            </Suspense>
+                        )}
+                        {activeTab === 'finalStretch' && (
+                            <Suspense fallback={<TokenColumnSkeleton className={mobileClassName} />}>
+                                <TokenColumn
+                                    title="Final Stretch"
+                                    columnType="finalStretch"
+                                    tokens={finalStretch}
+                                    activePreset={activePresets.finalStretch}
+                                    onPresetClick={(id) => handlePresetClick('finalStretch', id)}
+                                    className={mobileClassName}
+                                    {...columnProps}
+                                />
+                            </Suspense>
+                        )}
+                        {activeTab === 'migrated' && (
+                            <Suspense fallback={<TokenColumnSkeleton className={mobileClassName} />}>
+                                <TokenColumn
+                                    title="Migrated"
+                                    columnType="migrated"
+                                    tokens={migrated}
+                                    activePreset={activePresets.migrated}
+                                    onPresetClick={(id) => handlePresetClick('migrated', id)}
+                                    className={mobileClassName}
+                                    {...columnProps}
+                                />
+                            </Suspense>
+                        )}
+                        <MobileNavBar />
+                    </>
+                ) : (
+                    <>
+                        <Suspense fallback={<TokenColumnSkeleton className="flex-1" />}>
+                            <TokenColumn
+                                title="New Pairs"
+                                columnType="newPairs"
+                                tokens={newPairs}
+                                activePreset={activePresets.newPairs}
+                                onPresetClick={(id) => handlePresetClick('newPairs', id)}
+                                className="flex-1"
+                                {...columnProps}
+                            />
+                        </Suspense>
+                        <Suspense fallback={<TokenColumnSkeleton className="flex-1" />}>
+                            <TokenColumn
+                                title="Final Stretch"
+                                columnType="finalStretch"
+                                tokens={finalStretch}
+                                activePreset={activePresets.finalStretch}
+                                onPresetClick={(id) => handlePresetClick('finalStretch', id)}
+                                className="flex-1"
+                                {...columnProps}
+                            />
+                        </Suspense>
+                        <Suspense fallback={<TokenColumnSkeleton className="flex-1" />}>
+                            <TokenColumn
+                                title="Migrated"
+                                columnType="migrated"
+                                tokens={migrated}
+                                activePreset={activePresets.migrated}
+                                onPresetClick={(id) => handlePresetClick('migrated', id)}
+                                className="flex-1"
+                                {...columnProps}
+                            />
+                        </Suspense>
+                    </>
+                )}
+            </div>
+
+            {!isMobile && <BottomStatusBar loading={isLoading} />}
         </div>
-      )}
-
-      {/* Token Columns - Only this section scrolls */}
-      <div className={`flex-1 flex overflow-hidden min-h-0 px-2 lg:px-7 gap-1 ${isMobile ? 'pb-[50px] justify-center' : ''}`}>
-        {isMobile ? (
-          <>
-            {activeTab === 'newPairs' && (
-              <TokenColumn
-                title="New Pairs"
-                columnType="newPairs"
-                tokens={newPairs}
-                priceFlash={priceFlash}
-                activePreset={activePresets.newPairs}
-                onPresetClick={(id) => handlePresetClick('newPairs', id)}
-                className={mobileClassName}
-                {...columnProps}
-              />
-            )}
-            {activeTab === 'finalStretch' && (
-              <TokenColumn
-                title="Final Stretch"
-                columnType="finalStretch"
-                tokens={finalStretch}
-                priceFlash={priceFlash}
-                activePreset={activePresets.finalStretch}
-                onPresetClick={(id) => handlePresetClick('finalStretch', id)}
-                className={mobileClassName}
-                {...columnProps}
-              />
-            )}
-            {activeTab === 'migrated' && (
-              <TokenColumn
-                title="Migrated"
-                columnType="migrated"
-                tokens={migrated}
-                priceFlash={priceFlash}
-                activePreset={activePresets.migrated}
-                onPresetClick={(id) => handlePresetClick('migrated', id)}
-                className={mobileClassName}
-                {...columnProps}
-              />
-            )}
-            <MobileNavBar />
-          </>
-        ) : (
-          <>
-            <TokenColumn
-              title="New Pairs"
-              columnType="newPairs"
-              tokens={newPairs}
-              priceFlash={priceFlash}
-              activePreset={activePresets.newPairs}
-              onPresetClick={(id) => handlePresetClick('newPairs', id)}
-              className="flex-1"
-              {...columnProps}
-            />
-            <TokenColumn
-              title="Final Stretch"
-              columnType="finalStretch"
-              tokens={finalStretch}
-              priceFlash={priceFlash}
-              activePreset={activePresets.finalStretch}
-              onPresetClick={(id) => handlePresetClick('finalStretch', id)}
-              className="flex-1"
-              {...columnProps}
-            />
-            <TokenColumn
-              title="Migrated"
-              columnType="migrated"
-              tokens={migrated}
-              priceFlash={priceFlash}
-              activePreset={activePresets.migrated}
-              onPresetClick={(id) => handlePresetClick('migrated', id)}
-              className="flex-1"
-              {...columnProps}
-            />
-          </>
-        )}
-      </div>
-
-      {/* Bottom Status Bar - Sticky at bottom - Hide on Mobile */}
-      {!isMobile && <BottomStatusBar loading={isLoading} />}
-    </div>
-  );
+    );
 }

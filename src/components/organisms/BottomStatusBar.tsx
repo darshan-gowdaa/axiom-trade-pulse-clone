@@ -7,7 +7,6 @@ import {
   RiPulseLine,
   RiWindowLine,
   RiNotification3Line,
-  RiSettingsLine,
   RiGasStationLine,
   RiCapsuleLine,
   RiBarChartLine,
@@ -129,7 +128,7 @@ export function BottomStatusBar({ className, loading }: BottomStatusBarProps) {
     </Tooltip>
   );
 
-  const renderIconButton = (item: { icon: any; tooltip: string }, key?: string) => (
+  const renderIconButton = (item: { icon: React.ElementType; tooltip: string }, key?: string) => (
     <Tooltip content={item.tooltip} key={key}>
       <button className={HOVER_CLASSES.endIcon}>
         <item.icon className="w-3 h-3 text-[#fcfcfc]" />

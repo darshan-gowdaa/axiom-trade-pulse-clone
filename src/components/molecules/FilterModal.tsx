@@ -27,6 +27,7 @@ export const FilterModal: React.FC<FilterModalProps> = ({ isOpen, onClose }) => 
 
     useEffect(() => {
         if (isOpen && filters[activeModalTab]) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setLocalConfig(filters[activeModalTab]);
         }
     }, [isOpen, activeModalTab, filters]);
@@ -64,7 +65,7 @@ export const FilterModal: React.FC<FilterModalProps> = ({ isOpen, onClose }) => 
         { name: 'Migrated', count: 3 },
     ];
 
-    const updateConfig = (key: keyof FilterConfig, value: any) => {
+    const updateConfig = (key: keyof FilterConfig, value: string | number) => {
         setLocalConfig(prev => ({ ...prev, [key]: value }));
     };
 

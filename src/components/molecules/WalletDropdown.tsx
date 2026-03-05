@@ -71,7 +71,7 @@ export function WalletDropdown({ children }: WalletDropdownProps) {
 
 
                             <div className="flex items-center gap-1">
-                                <img src="/icons/usdc-perps.svg" alt="USDC" width={18} height={18} loading="lazy" />
+                                <OptimizedImage src="/icons/usdc-perps.svg" alt="USDC" width={18} height={18} />
                                 <span className="text-[14px] font-semibold text-white">0</span>
                             </div>
                         </div>

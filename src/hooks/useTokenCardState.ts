@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useMemo } from 'react';
 import {
   type TimeState,
   type BarWidths,
@@ -54,7 +54,7 @@ function formatDeployer(deployer?: string): string {
 function computeTimeState(createdAt?: number): TimeState {
   if (!createdAt) return { val: 0, unit: 's' };
 
-  const diffMs = Date.now() - createdAt;
+  const diffMs = Math.abs(Date.now() - createdAt);
   const diffSec = Math.floor(diffMs / 1000);
 
   if (diffSec < 60) return { val: diffSec, unit: 's' };

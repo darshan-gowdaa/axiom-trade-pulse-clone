@@ -17,7 +17,6 @@ interface TokenColumnProps {
   title: string;
   columnType: ActiveTab;
   tokens: Token[];
-  priceFlash: Record<string, 'up' | 'down' | null>;
   isLoading?: boolean;
   activePreset?: string | null;
   showDecimals?: boolean;
@@ -30,7 +29,6 @@ export function TokenColumn({
   title,
   columnType,
   tokens,
-  priceFlash,
   isLoading = false,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   activePreset,
@@ -71,7 +69,15 @@ export function TokenColumn({
     return parseFloat(str) || 0;
   };
 
-  const filteredTokens = tokens.filter((token) => {
+  // Deduplicate tokens by ID — defense against WebSocket race conditions
+  const uniqueTokens = Array.from(
+    new Map(tokens.map((t) => [t.id, t])).values()
+  );
+
+  const filteredTokens = uniqueTokens.filter((token) => {
+    // 0. Exclude tokens where MC, Volume, AND TX are all effectively zero
+    if (token.marketCap < 1 && token.volume24h < 1 && token.txCount < 1) return false;
+
     // 1. Keyword Search
     if (searchKeywords) {
       const searchTerms = searchKeywords.toLowerCase().split(',').map(s => s.trim()).filter(Boolean);
@@ -233,9 +239,9 @@ export function TokenColumn({
                 >
                   <TokenCard
                     token={token}
-                    flashDirection={priceFlash[token.id]}
                     showDecimals={showDecimals}
                     onQuickBuy={onQuickBuy}
+                    index={virtualRow.index}
                   />
                 </div>
               );

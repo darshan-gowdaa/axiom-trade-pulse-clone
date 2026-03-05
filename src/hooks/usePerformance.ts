@@ -10,7 +10,7 @@ interface UseLoadingStateOptions {
 export function useLoadingState(options: UseLoadingStateOptions = {}) {
   const { initialLoading = true, minLoadingTime = 300 } = options;
   const [isLoading, setIsLoading] = useState(initialLoading);
-  const [startTime] = useState(Date.now());
+  const [startTime] = useState(() => Date.now());
 
   const finishLoading = () => {
     const elapsed = Date.now() - startTime;
