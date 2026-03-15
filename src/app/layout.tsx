@@ -96,7 +96,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   };
 
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="dark" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://axiom.trade" />
         <link rel="dns-prefetch" href="https://axiom.trade" />
@@ -105,6 +105,64 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var wsUrl = "${process.env.NEXT_PUBLIC_MOBULA_WS_URL || 'wss://api.mobula.io'}";
+                  var apiKey = "${process.env.NEXT_PUBLIC_MOBULA_API_KEY || ''}";
+                  if (!apiKey) return;
+
+                  var ws = new WebSocket(wsUrl);
+                  window.mobulaWs = ws;
+                  window.mobulaWsQueue = [];
+                  window.mobulaWsHandler = null;
+
+                  ws.onopen = function() {
+                    ws.send(JSON.stringify({
+                      type: 'pulse-v2',
+                      authorization: apiKey,
+                      payload: {
+                        model: 'default',
+                        assetMode: true,
+                        // Defaults to Solana for initial load speed
+                        chainId: ['solana:solana'],
+                        poolTypes: ['pumpfun'],
+                        compressed: false
+                      }
+                    }));
+                    window.mobulaWsPingInterval = setInterval(function() {
+                      if (ws.readyState === 1) {
+                        ws.send(JSON.stringify({ event: 'ping' }));
+                      }
+                    }, 15000);
+                  };
+
+                  ws.onmessage = function(event) {
+                    if (window.mobulaWsHandler) {
+                      window.mobulaWsHandler(event);
+                    } else {
+                      window.mobulaWsQueue.push(event);
+                    }
+                  };
+
+                  ws.onerror = function(err) {
+                    // Ignore WebSocket pre-init errors
+                  };
+
+                  ws.onclose = function() {
+                    if (window.mobulaWsPingInterval) {
+                      clearInterval(window.mobulaWsPingInterval);
+                    }
+                  };
+                } catch (e) {
+                  // Ignore pre-init errors
+                }
+              })();
+            `
+          }}
         />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased h-screen max-h-screen overflow-hidden flex flex-col bg-[#06070b]`}>

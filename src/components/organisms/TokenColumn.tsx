@@ -30,7 +30,6 @@ export function TokenColumn({
   columnType,
   tokens,
   isLoading = false,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   activePreset,
   showDecimals = true,
   onPresetClick,

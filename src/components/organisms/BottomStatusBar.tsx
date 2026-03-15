@@ -25,7 +25,7 @@ import { useRef, useState, useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import { ChainLogo, Tooltip } from '@/components/atoms';
-import { NavButton, OptimizedImage } from '@/components/atoms';
+import { NavButton } from '@/components/atoms';
 import { WalletSolPill, MultiChainBadge } from '@/components/molecules';
 import { cn } from '@/lib/utils';
 
@@ -72,12 +72,6 @@ const SOCIAL_ICONS = [
   { icon: RiTwitterXLine, tooltip: 'follow us on X' },
 ];
 
-function formatStatusPrice(price: number | undefined): string {
-  if (!price) return '...';
-  if (price >= 1000) return price.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 });
-  if (price >= 1) return price.toFixed(2);
-  return price.toFixed(4);
-}
 
 export function BottomStatusBar({ className, loading: externalLoading }: BottomStatusBarProps) {
   const activeChain = useSelector((state: RootState) => state.ui.activeChain);
@@ -99,8 +93,8 @@ export function BottomStatusBar({ className, loading: externalLoading }: BottomS
           'binance-coin': data.data['binance-coin']?.price || 0,
         });
       }
-    } catch (error) {
-      console.error('Failed to fetch footer prices:', error);
+    } catch {
+      // Failed to fetch footer prices, fallback handles the UI state silently
     } finally {
       setLoading(false);
     }
@@ -143,16 +137,6 @@ export function BottomStatusBar({ className, loading: externalLoading }: BottomS
 
   const settingsHoverClasses = cn(HOVER_CLASSES.common, HOVER_CLASSES.settings, "text-[8px]");
 
-  const renderPriceItem = (item: typeof PRICE_DATA_CONFIG[0]) => (
-    <Tooltip content={item.tooltip} key={item.label}>
-      <div className={cn("flex items-center gap-[3px] -mr-2 whitespace-nowrap", HOVER_CLASSES.common)}>
-        {item.icon && (
-          <item.icon className={`w-[11px] h-[11px] ${item.color}`} />
-        )}
-        <span className={`${item.color} text-[9px] font-medium`}>{loading ? '...' : formatStatusPrice(prices[item.key])}{item.key === 'bitcoin' || item.key === 'ethereum' ? 'K' : ''}</span>
-      </div>
-    </Tooltip>
-  );
 
   const formatK = (price: number | undefined) => {
     if (!price) return '...';

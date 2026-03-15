@@ -11,11 +11,10 @@ interface ChainTextProps {
 export function ChainText({ className }: ChainTextProps) {
     const activeChain = useSelector((state: RootState) => state.ui.activeChain);
     const [mounted, setMounted] = useState(false);
-
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setMounted(true);
     }, []);
-
     // SSR placeholder
     if (!mounted) return <span className={className}>SOL</span>;
 

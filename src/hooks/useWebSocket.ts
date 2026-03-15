@@ -25,6 +25,15 @@ interface WebSocketState {
   reconnectAttempts: number;
 }
 
+declare global {
+  interface Window {
+    mobulaWs?: WebSocket | null;
+    mobulaWsQueue?: MessageEvent[];
+    mobulaWsHandler?: ((ev: MessageEvent) => void) | null;
+    mobulaWsPingInterval?: NodeJS.Timeout | number | null;
+  }
+}
+
 
 
 /**
@@ -175,7 +184,7 @@ export function useMobulaWebSocket(chain: Chain): WebSocketState {
 
         queryClient.setQueryData<Token[]>(['tokens', status], uniqueTokens);
       }
-      console.log('[Mobula] Initial data loaded');
+
     },
     [queryClient]
   );
@@ -309,8 +318,8 @@ export function useMobulaWebSocket(chain: Chain): WebSocketState {
           default:
             break;
         }
-      } catch (err) {
-        console.error('[Mobula] Failed to parse message:', err);
+      } catch {
+        // ignore parse errors silently
       }
     },
     [handleInit, handleNewToken, handleUpdateToken, handleUpdate, handleRemoveToken]
@@ -345,6 +354,18 @@ export function useMobulaWebSocket(chain: Chain): WebSocketState {
       wsRef.current.onmessage = null;
       wsRef.current.onerror = null;
       wsRef.current.onclose = null;
+
+      if (typeof window !== 'undefined') {
+        window.mobulaWsHandler = null;
+        if (window.mobulaWs === wsRef.current) {
+          window.mobulaWs = null;
+        }
+        if (window.mobulaWsPingInterval) {
+            clearInterval(window.mobulaWsPingInterval as NodeJS.Timeout);
+            window.mobulaWsPingInterval = null;
+        }
+      }
+
       if (
         wsRef.current.readyState === WebSocket.OPEN ||
         wsRef.current.readyState === WebSocket.CONNECTING
@@ -369,13 +390,37 @@ export function useMobulaWebSocket(chain: Chain): WebSocketState {
         error: 'Mobula API key is missing. Check your .env.local file.',
         isConnected: false,
       }));
-      console.error('[Mobula] API key is missing. Add NEXT_PUBLIC_MOBULA_API_KEY to .env.local');
+
       return;
     }
 
     try {
-      const ws = new WebSocket(MOBULA_WS_URL);
-      wsRef.current = ws;
+      let ws: WebSocket;
+      const isPreInitialized = typeof window !== 'undefined' && window.mobulaWs && window.mobulaWs.readyState !== WebSocket.CLOSED;
+
+      if (isPreInitialized && window.mobulaWs) {
+
+        ws = window.mobulaWs;
+        wsRef.current = ws;
+
+        // If it was already open, we're already connected
+        if (ws.readyState === WebSocket.OPEN) {
+          setState({
+            isConnected: true,
+            error: null,
+            reconnectAttempts: 0,
+          });
+
+          // Resend subscription to assure correct chain parameters just in case
+          const subscription = buildSubscription();
+          ws.send(JSON.stringify(subscription));
+
+          startPing(ws);
+        }
+      } else {
+        ws = new WebSocket(MOBULA_WS_URL);
+        wsRef.current = ws;
+      }
 
       ws.onopen = () => {
         if (!mountedRef.current) return;
@@ -393,20 +438,30 @@ export function useMobulaWebSocket(chain: Chain): WebSocketState {
           reconnectAttempts: 0,
         });
 
-        console.log('[Mobula] WebSocket connected. Receiving live token data.');
+
       };
 
       ws.onmessage = handleMessage;
+      
+      if (typeof window !== 'undefined') {
+        window.mobulaWsHandler = handleMessage;
+        
+        // Process queued messages
+        if (window.mobulaWsQueue && window.mobulaWsQueue.length > 0) {
 
-      ws.onerror = (err) => {
+          window.mobulaWsQueue.forEach(msg => handleMessage(msg));
+          window.mobulaWsQueue = [];
+        }
+      }
+
+      ws.onerror = () => {
         // Log only — onclose fires right after and handles reconnect logic
-        console.error('[Mobula] WebSocket error:', err);
       };
 
-      ws.onclose = (event) => {
+      ws.onclose = () => {
         if (!mountedRef.current) return;
 
-        console.log(`[Mobula] WebSocket closed (code: ${event.code})`);
+
 
         setState((prev) => {
           const nextAttempts = prev.reconnectAttempts + 1;
@@ -414,7 +469,7 @@ export function useMobulaWebSocket(chain: Chain): WebSocketState {
 
           if (shouldReconnect) {
             const delay = WS_RECONNECT_DELAY * Math.min(nextAttempts, 5);
-            console.log(`[Mobula] Reconnecting in ${delay}ms (attempt ${nextAttempts})`);
+
             reconnectTimeoutRef.current = setTimeout(connect, delay);
           }
 
@@ -431,8 +486,8 @@ export function useMobulaWebSocket(chain: Chain): WebSocketState {
           };
         });
       };
-    } catch (err) {
-      console.error('[Mobula] Failed to create WebSocket connection:', err);
+    } catch {
+      // silent fallback handled in state
       if (mountedRef.current) {
         setState((prev) => ({
           ...prev,

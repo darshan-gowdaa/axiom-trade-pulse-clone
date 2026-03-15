@@ -5,7 +5,7 @@ import { useEffect, useMemo, Suspense } from 'react';
 import { useAppDispatch, useAppSelector, useIsMobile, useMobulaWebSocket, usePrefetch, useTokens } from '@/hooks';
 import { setActiveTab, setActivePreset, setIsMobile } from '@/store/uiSlice';
 import { type Token, type ActiveTab } from '@/types';
-import { PulseToolbarSkeleton, TokenColumnSkeleton } from '@/components/skeletons';
+import { PulseToolbarSkeleton } from '@/components/skeletons';
 import { TokenColumn } from '@/components/organisms/TokenColumn';
 
 // dedup tokens by ID
@@ -86,8 +86,9 @@ export function PulseContent() {
         );
     };
 
-    const handleQuickBuy = (token: Token) => {
-        console.log('Quick buy:', token.symbol);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const handleQuickBuy = (_token: Token) => {
+
     };
 
     const columnProps = {

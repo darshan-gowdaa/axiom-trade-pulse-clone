@@ -14,11 +14,10 @@ interface ChainLogoProps {
 export function ChainLogo({ className, width = 14, height = 14 }: ChainLogoProps) {
     const activeChain = useSelector((state: RootState) => state.ui.activeChain);
     const [mounted, setMounted] = useState(false);
-
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setMounted(true);
     }, []);
-
 
     const wrapperStyle = {
         width,
@@ -40,7 +39,7 @@ export function ChainLogo({ className, width = 14, height = 14 }: ChainLogoProps
                     alt="BNB"
                     width={width}
                     height={height}
-                    style={{ objectFit: 'contain' }}
+                    className="object-contain"
                 />
             </div>
         );
