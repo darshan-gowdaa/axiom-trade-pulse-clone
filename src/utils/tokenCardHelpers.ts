@@ -33,3 +33,8 @@ export const getMarketCapColor = (marketCap: number): string => {
 export const generateUserIconColor = (): string =>
   Math.random() > 0.5 ? '#51c4fe' : '#777a8c';
 
+export function holderPct(count: number | undefined, total: number | undefined): number {
+  if (!count || !total || total === 0) return 0;
+  return Math.min(Math.round((count / total) * 100), 100);
+}
+

@@ -1,7 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useEffect, useMemo, Suspense } from 'react';
+import { useEffect, useMemo, Suspense, useCallback } from 'react';
 import { useAppDispatch, useAppSelector, useIsMobile, useMobulaWebSocket, usePrefetch, useTokens } from '@/hooks';
 import { setActiveTab, setActivePreset, setIsMobile } from '@/store/uiSlice';
 import { type Token, type ActiveTab } from '@/types';
@@ -87,9 +87,9 @@ export function PulseContent() {
     };
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const handleQuickBuy = (_token: Token) => {
+    const handleQuickBuy = useCallback((_token: Token) => {
 
-    };
+    }, []);
 
     const columnProps = {
         isLoading,

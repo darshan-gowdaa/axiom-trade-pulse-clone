@@ -3,7 +3,7 @@
 import React, { memo, useState, useMemo } from 'react';
 import { type Token } from '@/types';
 import { formatCurrency, formatCompactNumber, formatTimeAgo } from '@/utils';
-import { getRingColor, getMarketCapColor, generateUserIconColor } from '@/utils/tokenCardHelpers';
+import { getRingColor, getMarketCapColor, generateUserIconColor, holderPct } from '@/utils/tokenCardHelpers';
 import { useTokenCardState, useAppSelector } from '@/hooks';
 import {
   RiCheckLine, RiUserLine, RiFlashlightFill, RiFileCopyFill,
@@ -20,11 +20,6 @@ interface TokenCardProps {
   onQuickBuy?: (token: Token) => void;
 }
 
-function holderPct(count: number | undefined, total: number | undefined): number {
-  if (!count || !total || total === 0) return 0;
-  return Math.min(Math.round((count / total) * 100), 100);
-}
-
 function TokenCardComponent({
   token,
   showDecimals = true,
@@ -34,7 +29,7 @@ function TokenCardComponent({
   const [userIconColor] = useState(generateUserIconColor);
 
   // Directly select this token's flash direction to avoid O(N) re-renders
-  useAppSelector((state) => state.tokens.priceFlash[token.id]);
+  const flash = useAppSelector((state) => state.tokens.priceFlash[token.id]);
 
   const {
     tokenIdentity,
@@ -105,8 +100,12 @@ function TokenCardComponent({
   const netColor = netChange >= 0 ? '#16a34a' : '#ef4444';
   const netSign = netChange >= 0 ? '+' : '';
 
+  let flashClass = '';
+  if (flash === 'up') flashClass = 'bg-[#16a34a1a]';
+  else if (flash === 'down') flashClass = 'bg-[#ef44441a]';
+
   const cardContent = (
-    <div className={`relative w-full flex items-center pl-2 lg:pl-3 pr-1 py-2 border-b border-[#1a1b23] cursor-pointer bg-transparent gap-2 min-h-[64px] transition-colors duration-200 mr-2 ${hoverClass}`}>
+    <div className={`relative w-full flex items-center pl-2 lg:pl-3 pr-2 py-2 border-b border-[#1a1b23] cursor-pointer gap-2 min-h-[64px] transition-colors duration-200 tabular-nums ${hoverClass} ${flashClass || 'bg-transparent'}`}>
       <TokenAvatarCard
         symbol={tokenIdentity.symbol}
         name={tokenIdentity.name}
@@ -149,7 +148,7 @@ function TokenCardComponent({
 
             {/* Row 2: Time · Holder Counts */}
             <div className="flex items-center gap-1 text-[9.8px] text-[#777a8c] mt-[1px] overflow-hidden">
-              <span className="text-[#16a34a] shrink-0">
+              <span className="text-[#16a34a] shrink-0 min-w-[20px]">
                 {formatTimeAgo(token.createdAt)}
               </span>
               {typeof token.holdersCount === 'number' && (
@@ -190,7 +189,7 @@ function TokenCardComponent({
           </div>
 
           {/* MC · Vol (right side) */}
-          <div className="flex flex-col items-end gap-[1px] shrink-0">
+          <div className="flex flex-col items-end gap-[1px] shrink-0 min-w-[56px] lg:min-w-[64px]">
             <div className="flex items-center gap-[3px]">
               <span className="text-[9px] text-[#777a8c]">MC</span>
               <span className="text-[12px] font-semibold" style={{ color: mcColor }}>
@@ -221,7 +220,7 @@ function TokenCardComponent({
             </span>
           </div>
           <div className="flex items-center gap-[6px] text-[9px] shrink-0">
-            <span className="flex items-center gap-[2px] shrink-0">
+            <span className="flex items-center gap-[2px] shrink-0 min-w-[40px] justify-end">
               <span className="text-[#777a8c]">TX</span>
               <span className="text-[#fcfcfc] font-semibold">{formatCompactNumber(txCount)}</span>
             </span>
