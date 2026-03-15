@@ -3,7 +3,7 @@
 import { useEffect, useLayoutEffect, useRef, useCallback, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch } from './useRedux';
-import { updateTokenPrice, clearPriceFlash, addToken } from '@/store/tokenSlice';
+import { addToken } from '@/store/tokenSlice';
 import { type Token, type TokenStatus } from '@/types';
 import type { MobulaInitMessage, MobulaNewTokenMessage, MobulaSubscribePayload, MobulaTokenDataSchema } from '@/types/mobula.types';
 import { transformMobulaToken, transformMobulaTokens } from '@/utils/mobulaTransformer';
@@ -232,35 +232,9 @@ export function useMobulaWebSocket(chain: Chain): WebSocketState {
       const { viewName, token: tokenData } = msg.payload;
       if (!tokenData) return;
 
-      // Find current version to check for price change
-      const address = tokenData.token?.address;
-      const allStatuses: TokenStatus[] = ['new', 'finalStretch', 'migrated'];
-      let existing: Token | undefined;
-
-      for (const s of allStatuses) {
-        const list = queryClient.getQueryData<Token[]>(['tokens', s]);
-        existing = list?.find(t => t.id === address);
-        if (existing) break;
-      }
-
-      const [updatedToken] = updateTokensInLists([{ data: tokenData, viewName }]);
-
-      // Price flash logic
-      if (existing && existing.priceInSol !== updatedToken.priceInSol) {
-        dispatch(
-          updateTokenPrice({
-            tokenId: updatedToken.id,
-            status: updatedToken.status,
-            newPrice: updatedToken.priceInSol,
-            oldPrice: existing.priceInSol,
-          })
-        );
-        setTimeout(() => {
-          dispatch(clearPriceFlash(updatedToken.id));
-        }, 300);
-      }
+      updateTokensInLists([{ data: tokenData, viewName }]);
     },
-    [queryClient, dispatch, updateTokensInLists]
+    [updateTokensInLists]
   );
 
   /**

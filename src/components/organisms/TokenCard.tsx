@@ -4,7 +4,7 @@ import React, { memo, useState, useMemo } from 'react';
 import { type Token } from '@/types';
 import { formatCurrency, formatCompactNumber, formatTimeAgo } from '@/utils';
 import { getRingColor, getMarketCapColor, generateUserIconColor, holderPct } from '@/utils/tokenCardHelpers';
-import { useTokenCardState, useAppSelector } from '@/hooks';
+import { useTokenCardState } from '@/hooks';
 import {
   RiCheckLine, RiUserLine, RiFlashlightFill, RiFileCopyFill,
   RiSpyFill, RiCrosshair2Fill, RiUserStarFill, RiWaterFlashFill,
@@ -28,8 +28,7 @@ function TokenCardComponent({
   const [copied, setCopied] = useState(false);
   const [userIconColor] = useState(generateUserIconColor);
 
-  // Directly select this token's flash direction to avoid O(N) re-renders
-  const flash = useAppSelector((state) => state.tokens.priceFlash[token.id]);
+
 
   const {
     tokenIdentity,
@@ -100,12 +99,8 @@ function TokenCardComponent({
   const netColor = netChange >= 0 ? '#16a34a' : '#ef4444';
   const netSign = netChange >= 0 ? '+' : '';
 
-  let flashClass = '';
-  if (flash === 'up') flashClass = 'bg-[#16a34a1a]';
-  else if (flash === 'down') flashClass = 'bg-[#ef44441a]';
-
   const cardContent = (
-    <div className={`relative w-full flex items-center pl-2 lg:pl-3 pr-2 py-2 border-b border-[#1a1b23] cursor-pointer gap-2 min-h-[64px] transition-colors duration-200 tabular-nums ${hoverClass} ${flashClass || 'bg-transparent'}`}>
+    <div className={`relative w-full flex items-center pl-2 lg:pl-3 pr-2 py-2 border-b border-[#1a1b23] cursor-pointer gap-2 min-h-[64px] transition-colors duration-200 tabular-nums ${hoverClass} bg-transparent`}>
       <TokenAvatarCard
         symbol={tokenIdentity.symbol}
         name={tokenIdentity.name}
