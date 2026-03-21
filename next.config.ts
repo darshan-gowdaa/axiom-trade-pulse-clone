@@ -14,7 +14,7 @@ const nextConfig: NextConfig = {
   compress: true,
   allowedDevOrigins: ["10.201.195.215", 'local-origin.dev', '*.local-origin.dev',"172.28.128.1"],
   experimental: { 
-    optimizeCss: true,
+    optimizeCss: process.env.NODE_ENV === 'production',
   },
   async headers() {
     return [

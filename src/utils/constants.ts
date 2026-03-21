@@ -1,5 +1,7 @@
 import { type FilterPreset } from '@/types';
 
+export const REFERRAL_URL = 'https://docs.mobula.io?ref=dg';
+
 
 export const DEFAULT_PRESETS: Record<string, FilterPreset[]> = {
   newPairs: [

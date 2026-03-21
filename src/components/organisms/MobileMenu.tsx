@@ -16,6 +16,7 @@ import {
     RiLogoutBoxRLine
 } from '@remixicon/react';
 import { ChainLogo } from '@/components/atoms';
+import { REFERRAL_URL } from '@/utils/constants';
 
 interface MobileMenuProps {
     isOpen: boolean;
@@ -112,7 +113,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                         <div className="text-[#64748b] text-[9px] font-semibold uppercase tracking-wider mb-1.5">Account</div>
                         <MenuItem icon={RiWalletLine} label="Deposit" />
                         <MenuItem icon={RiBankCardLine} label="Withdraw" />
-                        <button className="w-full flex items-center gap-3 px-4 py-2.5 bg-transparent border border-[#2a2a38] rounded-lg hover:bg-[#1a1b23] transition-colors group">
+                        <button onClick={() => window.open(REFERRAL_URL, '_blank')} className="w-full flex items-center gap-3 px-4 py-2.5 bg-transparent border border-[#2a2a38] rounded-lg hover:bg-[#1a1b23] transition-colors group">
                             <RiLogoutBoxRLine className="w-4.5 h-4.5 text-[#f43f5e]" />
                             <span className="text-[12px] font-semibold text-[#f43f5e]">Log Out</span>
                         </button>
@@ -125,7 +126,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
 
 function MenuItem({ icon: Icon, label }: { icon: React.ElementType, label: string }) {
     return (
-        <div className="w-full flex items-center gap-2 px-2 py-2.5 bg-transparent border border-[#2a2a38] rounded-lg cursor-not-allowed group text-left">
+        <div onClick={() => window.open(REFERRAL_URL, '_blank')} className="w-full flex items-center gap-2 px-2 py-2.5 bg-transparent border border-[#2a2a38] rounded-lg cursor-pointer hover:bg-[#1a1b23] transition-colors group text-left">
             <Icon className="w-4.5 h-4.5 text-white flex-shrink-0" />
             <span className="text-[12px] font-semibold text-white flex-1 min-w-0 truncate">{label}</span>
         </div>

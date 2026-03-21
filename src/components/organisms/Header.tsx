@@ -19,7 +19,7 @@ import { MobulaLogo } from '@/components/atoms/MobulaLogo';
 import { OptimizedImage } from '@/components/atoms';
 import { AvatarDropdown, ChainDropdown, AccountSettingsDropdown, WalletDropdown } from '@/components/molecules';
 import { MobileMenu } from './MobileMenu';
-import { NAV_LINKS } from '@/utils/constants';
+import { NAV_LINKS, REFERRAL_URL } from '@/utils/constants';
 import { useAppSelector } from '@/hooks';
 
 export function Header() {
@@ -56,11 +56,11 @@ export function Header() {
 
       <div className="hidden lg:flex items-center justify-between px-[24px] h-full gap">
         <div className="flex items-center">
-          <Link href="/" className="flex items-center gap-[1px] no-underline mr-[24px]">
+          <a href={REFERRAL_URL} target="_blank" rel="noopener noreferrer" className="flex items-center gap-[1px] no-underline mr-[24px]">
             <MobulaLogo className="w-[28px] h-[28px] text-white mr-1" />
             <span className="text-white font-medium text-[16px]">mobula</span>
             <span className="bg-transparent text-[#fcfcfc] text-[13px] font-light p-0 self-end mb-[3px] ml-[2px]">API</span>
-          </Link>
+          </a>
 
 
           <div
@@ -142,20 +142,20 @@ export function Header() {
             </button>
           </ChainDropdown>
 
-          <button className="h-[28px] px-[11px] py-0 bg-[#526fff] border-0 rounded-[16px] text-[12px] font-[750] text-[#000000] cursor-pointer">
+          <button onClick={() => window.open(REFERRAL_URL, '_blank')} className="h-[28px] px-[11px] py-0 bg-[#526fff] border-0 rounded-[16px] text-[12px] font-[750] text-[#000000] cursor-pointer">
             Deposit
           </button>
 
-          <button className="w-[32px] h-[32px] flex items-center justify-center bg-[#1a1b23] rounded-full border-0 text-[#fcfcfc] cursor-pointer transition-colors duration-150 hover:bg-[#252630]">
+          <button onClick={() => window.open(REFERRAL_URL, '_blank')} className="w-[32px] h-[32px] flex items-center justify-center bg-[#1a1b23] rounded-full border-0 text-[#fcfcfc] cursor-pointer transition-colors duration-150 hover:bg-[#252630]">
             <RiStarLine className="w-[16px] h-[16px]" />
           </button>
 
-          <button className="relative w-[32px] h-[32px] flex items-center justify-center bg-[#1a1b23] rounded-full border-0 text-[#fcfcfc] cursor-pointer transition-colors duration-150 hover:bg-[#252630]">
+          <button onClick={() => window.open(REFERRAL_URL, '_blank')} className="relative w-[32px] h-[32px] flex items-center justify-center bg-[#1a1b23] rounded-full border-0 text-[#fcfcfc] cursor-pointer transition-colors duration-150 hover:bg-[#252630]">
             <RiNotification3Line className="w-[16px] h-[16px]" />
           </button>
 
           <WalletDropdown>
-            <div className="flex items-center gap-[10px] h-[28px] px-[10px] bg-[#22242d] border border-[#2a2a38] rounded-[16px] cursor-pointer transition-colors duration-150 hover:bg-[#2a2c36]">
+            <div onClick={() => window.open(REFERRAL_URL, '_blank')} className="flex items-center gap-[10px] h-[28px] px-[10px] bg-[#22242d] border border-[#2a2a38] rounded-[16px] cursor-pointer transition-colors duration-150 hover:bg-[#2a2c36]">
               <div className="flex items-center gap-[4px]">
                 <RiWalletLine className="w-[16px] h-[16px] text-white" />
                 <ChainLogo width={14} height={14} />
@@ -182,7 +182,7 @@ export function Header() {
           </AvatarDropdown>
 
           <AccountSettingsDropdown>
-            <button className="w-[32px] h-[32px] flex items-center justify-center bg-[#1a1b23] rounded-full border-0 text-[#fcfcfc] cursor-pointer transition-colors duration-150 hover:bg-[#252630]">
+            <button onClick={() => window.open(REFERRAL_URL, '_blank')} className="w-[32px] h-[32px] flex items-center justify-center bg-[#1a1b23] rounded-full border-0 text-[#fcfcfc] cursor-pointer transition-colors duration-150 hover:bg-[#252630]">
               <RiUserSettingsLine className="w-[16px] h-[16px]" />
             </button>
           </AccountSettingsDropdown>
@@ -191,9 +191,9 @@ export function Header() {
 
 
       <div className="flex lg:hidden items-center justify-between px-2 h-full overflow-hidden">
-        <Link href="/" className="flex items-center no-underline shrink-0">
+        <a href={REFERRAL_URL} target="_blank" rel="noopener noreferrer" className="flex items-center no-underline shrink-0">
           <MobulaLogo className="w-[20px] h-[20px] text-white" />
-        </Link>
+        </a>
 
         <div className="flex items-center gap-1.5 overflow-hidden">
           <button className="flex items-center gap-1 px-2 py-1 bg-[#16161e] border border-[#2a2a38] rounded-full text-[10px] whitespace-nowrap shrink-0">

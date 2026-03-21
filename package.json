@@ -34,6 +34,10 @@
     "eslint-config-next": "16.1.1",
     "postcss": "^8.5.8",
     "tailwindcss": "^4.2.1",
+    "ts-prune": "^0.10.3",
     "typescript": "^5"
+  },
+  "optionalDependencies": {
+    "lightningcss-win32-x64-msvc": "^1.32.0"
   }
 }

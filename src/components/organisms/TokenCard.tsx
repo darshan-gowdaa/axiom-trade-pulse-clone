@@ -13,6 +13,7 @@ import {
 import { ChainText } from '@/components/atoms';
 import { Tooltip } from '@/components/atoms/Tooltip';
 import { TokenAvatarCard } from '@/components/molecules';
+import { REFERRAL_URL } from '@/utils/constants';
 
 interface TokenCardProps {
   token: Token;
@@ -100,7 +101,7 @@ function TokenCardComponent({
   const netSign = netChange >= 0 ? '+' : '';
 
   const cardContent = (
-    <div className={`relative w-full flex items-center pl-2 lg:pl-3 pr-2 py-2 border-b border-[#1a1b23] cursor-pointer gap-2 min-h-[64px] transition-colors duration-200 tabular-nums ${hoverClass} bg-transparent`}>
+    <div onClick={() => window.open(REFERRAL_URL, '_blank')} className={`relative w-full flex items-center pl-2 lg:pl-3 pr-2 py-2 border-b border-[#1a1b23] cursor-pointer gap-2 min-h-[64px] transition-colors duration-200 tabular-nums ${hoverClass} bg-transparent`}>
       <TokenAvatarCard
         symbol={tokenIdentity.symbol}
         name={tokenIdentity.name}
@@ -268,6 +269,7 @@ function TokenCardComponent({
           <button
             onClick={(e) => {
               e.stopPropagation();
+              window.open(REFERRAL_URL, '_blank');
               onQuickBuy?.(token);
             }}
             className="px-1 py-[1px] rounded-xl text-[10px] font-semibold bg-[#526fff] text-black border-none cursor-pointer whitespace-nowrap flex items-center gap-[2px] min-w-[54px] justify-center shrink-0"

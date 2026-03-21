@@ -29,6 +29,7 @@ import { NavButton } from '@/components/atoms';
 import { WalletSolPill, MultiChainBadge } from '@/components/molecules';
 import { cn } from '@/lib/utils';
 import { usePrices } from '@/hooks/usePrices';
+import { REFERRAL_URL } from '@/utils/constants';
 
 interface BottomStatusBarProps {
   className?: string;
@@ -130,7 +131,7 @@ export function BottomStatusBar({ className, loading: externalLoading }: BottomS
 
   const renderIconButton = (item: { icon: React.ElementType; tooltip: string }, key?: string) => (
     <Tooltip content={item.tooltip} key={key}>
-      <button className={HOVER_CLASSES.endIcon}>
+      <button onClick={() => window.open(REFERRAL_URL, '_blank')} className={HOVER_CLASSES.endIcon}>
         <item.icon className="w-3 h-3 text-[#fcfcfc]" />
       </button>
     </Tooltip>
@@ -168,7 +169,7 @@ export function BottomStatusBar({ className, loading: externalLoading }: BottomS
       >
         <div className="flex items-center gap-2 lg:gap-2 shrink-0">
           <Tooltip content="1 - Trading Settings">
-            <button className="flex items-center gap-1 px-1 py-[2px] bg-[rgba(82,111,255,0.15)] border-none rounded-[4px] text-[#526fff] text-[9px] font-medium cursor-pointer whitespace-nowrap hover:bg-[#1a1a1f] hover:rounded-md transition-all">
+            <button onClick={() => window.open(REFERRAL_URL, '_blank')} className="flex items-center gap-1 px-1 py-[2px] bg-[rgba(82,111,255,0.15)] border-none rounded-[4px] text-[#526fff] text-[9px] font-medium cursor-pointer whitespace-nowrap hover:bg-[#1a1a1f] hover:rounded-md transition-all">
               <RiListSettingsLine className="w-[10px] h-[10px]" />
               <span className="font-semibold uppercase">Preset 1</span>
             </button>
@@ -183,7 +184,7 @@ export function BottomStatusBar({ className, loading: externalLoading }: BottomS
           <div className="w-[1px] h-3 bg-[#1a1a1f] shrink-0" />
 
           <Tooltip content="Tracker settings">
-            <button className="bg-none border-none p-[2px] cursor-pointer text-[#6b6b7a] hover:text-[#fcfcfcfc] flex hover:bg-[#1a1a1f] rounded-md transition-all">
+            <button onClick={() => window.open(REFERRAL_URL, '_blank')} className="bg-none border-none p-[2px] cursor-pointer text-[#6b6b7a] hover:text-[#fcfcfcfc] flex hover:bg-[#1a1a1f] rounded-md transition-all">
               <RiSettings3Line className="w-[12px] h-[12px] -mr-2" />
             </button>
           </Tooltip>
@@ -195,7 +196,7 @@ export function BottomStatusBar({ className, loading: externalLoading }: BottomS
           ))}
 
           <Tooltip content="Pulse Settings">
-            <button className="flex items-center gap-[3px] px-1 py-[2px] bg-[#1a1a1f] border-none rounded-[4px] text-[#6b6b7a] hover:text-[#fcfcfcfc] text-[9px] cursor-pointer hover:bg-[#25262e] transition-all">
+            <button onClick={() => window.open(REFERRAL_URL, '_blank')} className="flex items-center gap-[3px] px-1 py-[2px] bg-[#1a1a1f] border-none rounded-[4px] text-[#6b6b7a] hover:text-[#fcfcfcfc] text-[9px] cursor-pointer hover:bg-[#25262e] transition-all">
               <RiPulseLine className="w-[11px] h-[11px] text-[#6b6b7a]" />
               <span className="text-[#fcfcfc]">Pulse</span>
             </button>
@@ -264,7 +265,7 @@ export function BottomStatusBar({ className, loading: externalLoading }: BottomS
           <div className="flex items-center gap-1.5 shrink-0">
             {SOCIAL_ICONS.map((item, idx) => renderIconButton(item, `social-${idx}`))}
 
-            <button className="flex items-center gap-[2px] bg-none border-none text-[#6b6b7a] hover:text-[#fcfcfcfc] cursor-pointer text-[9px] hover:bg-[#1a1a1f] px-1 py-[1.5px] rounded-md transition-all shrink-0">
+            <button onClick={() => window.open(REFERRAL_URL, '_blank')} className="flex items-center gap-[2px] bg-none border-none text-[#6b6b7a] hover:text-[#fcfcfcfc] cursor-pointer text-[9px] hover:bg-[#1a1a1f] px-1 py-[1.5px] rounded-md transition-all shrink-0">
               <RiWindowLine className="w-[10px] h-[10px] ml-1" />
               <span>Docs</span>
             </button>

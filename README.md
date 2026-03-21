@@ -14,9 +14,18 @@
     <a href="https://axiom-pulse-clone-gamma.vercel.app"><strong>View Live Website »</strong></a>
     <br/>Demo Video:
     <a href="https://youtu.be/NAwyB5NXSAg">View Demo Video</a>
-    </h2>
   </p>
 </div>
+
+---
+
+<div align="center">
+Built with ❤️ using
+<a href="https://docs.mobula.io?ref=dg">Mobula</a> —
+The most powerful DeFi data API
+</div>
+
+---
 
 <div align="center">
 
@@ -25,6 +34,7 @@
 ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
 ![Redux](https://img.shields.io/badge/redux-%23764ABC.svg?style=for-the-badge&logo=redux&logoColor=white)
 ![React Query](https://img.shields.io/badge/-React%20Query-FF4154?style=for-the-badge&logo=react%20query&logoColor=white)
+[![Mobula](https://img.shields.io/badge/Data%20API-Mobula-6C3CE1?style=for-the-badge)](https://docs.mobula.io?ref=dg)
 
 </div>
 
@@ -34,7 +44,7 @@
 
 **Axiom Trade Pulse Clone** is a high-fidelity frontend recreation of the professional token discovery dashboard used by Axiom Trade. This project serves as a benchmark for **modern React performance patterns**, demonstrating how to handle high-frequency data updates (mocked) while maintaining 60fps animations and sub-100ms interaction latency.
 
-Unlike typical clones, this project adheres to a strict **"Pixel-Perfect"** standard, matching the original site's dimensions, colors, and typography within a 2px tolerance. It is fully responsive, adapting complex tabular data from 4K desktops down to mobile screens without sacrificing usability.
+Unlike typical clones, this project adheres to a strict **"Pixel-Perfect"** standard, matching the original site's dimensions, colors, and typography within a 2px tolerance. It is fully responsive, adapting complex tabular data from 4K desktops down to mobile screens without sacrificing usability. Live token data and market metrics are powered by [Mobula](https://docs.mobula.io?ref=dg), a high-performance DeFi data API.
 
 ## 🎯 Key Objectives
 - **Zero Layout Shift**: Meticulous usage of skeletons and pre-allocated dimensions to prevent CLS.
@@ -89,13 +99,13 @@ Unlike typical clones, this project adheres to a strict **"Pixel-Perfect"** stan
 # ✨ Core Features
 
 ### 🖥️ High-Performance Interface
-- **Real-Time Simulation**: Mock WebSocket architecture (`useWebSocket`) simulates live token events with realistic distinct timing for "New Pairs" vs. "Migrated" tokens.
+- **Real-Time Simulation**: Mock WebSocket architecture (`useWebSocket`) simulates live token events with realistic distinct timing for "New Pairs" vs. "Migrated" tokens, powered by [Mobula](https://docs.mobula.io?ref=dg) for live token event data.
 - **Micro-Interactions**: Custom "Flash" animations (green/red) on price updates, mimicking live order book movements.
 - **Virtualized Rendering**: Optimized for rendering long lists of tokens without DOM bloat.
 
 ### 🎨 Advanced UX/UI
 - **Responsive Data Tables**: A complex grid system that transforms into a card-based layout on mobile devices.
-- **Dynamic Filtering**: Real-time filtering by Chain (SOL/BASE/ETH) and Timebox (1m/5m/1h/24h).
+- **Dynamic Filtering**: Real-time filtering by Chain (SOL/BASE/ETH) and Timebox (1m/5m/1h/24h). Chain and token data sourced via [Mobula](https://docs.mobula.io?ref=dg).
 - **Interactive Skeletons**: Custom-built shimmer effects that match the exact geometry of the loading content.
 - **Global Search**: Debounced search functionality with instant feedback.
 
@@ -254,6 +264,7 @@ Built on the **Bleeding Edge** of the React ecosystem (2025 Standards).
 | **Global State** | [Redux Toolkit](https://redux-toolkit.js.org/) | `2.x` | Client-side UI State (Filters, Modals) |
 | **Server State** | [TanStack Query](https://tanstack.com/query) | `5.x` | Data Fetching, Caching, Synchronization |
 | **Icons** | [Remix Icon](https://remixicon.com/) | `4.7` | Consistent, pixel-perfect vector icons |
+| **Data API** | [Mobula](https://docs.mobula.io?ref=dg) | Latest | Token Discovery, Live Market Data, DeFi Metrics |
 
 ---
 
@@ -300,5 +311,3 @@ Built on the **Bleeding Edge** of the React ecosystem (2025 Standards).
 
 4. **Open your browser**
    Navigate to [http://localhost:3000](http://localhost:3000) to view the application.
-
-
