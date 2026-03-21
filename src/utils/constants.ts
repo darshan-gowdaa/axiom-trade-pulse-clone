@@ -1,4 +1,5 @@
 import { type FilterPreset } from '@/types';
+import { RiCoinLine, RiCircleFill } from '@remixicon/react';
 
 export const REFERRAL_URL = 'https://docs.mobula.io?ref=dg';
 
@@ -42,9 +43,9 @@ export const PULSE_TABS: { id: 'newPairs' | 'finalStretch' | 'migrated'; label: 
 
 
 export const CHAINS = [
-  { id: 'sol', name: 'SOL', icon: '◎' },
-  { id: 'bnb', name: 'BNB', icon: '🟡' },
-] as const;
+  { id: 'sol', name: 'SOL', icon: RiCoinLine },
+  { id: 'bnb', name: 'BNB', icon: RiCircleFill },
+];
 
 
 export const WS_UPDATE_INTERVAL = 2000;

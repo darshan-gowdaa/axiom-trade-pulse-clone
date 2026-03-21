@@ -20,7 +20,7 @@ import {
 import { WalletSolPill, ChainSelector, PresetPill, FilterModal } from '@/components/molecules';
 import { Tooltip } from '@/components/atoms';
 import { type ActiveTab } from '@/types';
-import { PULSE_TABS } from '@/utils/constants';
+import { PULSE_TABS, REFERRAL_URL } from '@/utils/constants';
 import { useAppDispatch } from '@/hooks';
 import { setActiveModalTab } from '@/store/filterSlice';
 
@@ -47,18 +47,18 @@ export function PulseToolbar({ className, activeTab, onTabChange }: PulseToolbar
       <div className="hidden lg:block">
         <div className="flex items-center gap-2.5 px-4 lg:px-9 py-1 border-b border-[#1a1b23] overflow-visible -ml-4">
           <Tooltip content="Settings" position="right">
-            <button aria-label="Settings" className="bg-none border-none text-[#636470] hover:text-[#a1a1aa] cursor-pointer flex transition-colors shrink-0">
+            <button onClick={() => window.open(REFERRAL_URL, '_blank')} aria-label="Settings" className="bg-none border-none text-[#636470] hover:text-[#a1a1aa] cursor-pointer flex transition-colors shrink-0">
               <RiSettings3Line className="w-3 h-3" />
             </button>
           </Tooltip>
           <div className="w-[1px] h-3 bg-[#27272a] shrink-0" />
           <Tooltip content="Watchlist" position="right">
-            <button aria-label="Watchlist" className="bg-none border-none text-[#636470] hover:text-[#a1a1aa] cursor-pointer flex transition-colors shrink-0">
+            <button onClick={() => window.open(REFERRAL_URL, '_blank')} aria-label="Watchlist" className="bg-none border-none text-[#636470] hover:text-[#a1a1aa] cursor-pointer flex transition-colors shrink-0">
               <RiStarLine className="w-2.5 h-2.5" />
             </button>
           </Tooltip>
           <Tooltip content="Active Positions" position="right">
-            <button aria-label="Active Positions" className="bg-none border-none text-white hover:text-[#a1a1aa] cursor-pointer flex transition-colors shrink-0">
+            <button onClick={() => window.open(REFERRAL_URL, '_blank')} aria-label="Active Positions" className="bg-none border-none text-white hover:text-[#a1a1aa] cursor-pointer flex transition-colors shrink-0">
               <RiLineChartLine className="w-3 h-3 ml-1.5" />
             </button>
           </Tooltip>
@@ -73,12 +73,12 @@ export function PulseToolbar({ className, activeTab, onTabChange }: PulseToolbar
 
           <div className="flex items-center gap-2.5 shrink-0">
             <Tooltip content="Help with Pulse Filters, Settings">
-              <button aria-label="Help" className="bg-none border-none text-[#52525b] hover:text-[#a1a1aa] cursor-pointer p-1 flex transition-colors">
+              <button onClick={() => window.open(REFERRAL_URL, '_blank')} aria-label="Help" className="bg-none border-none text-[#52525b] hover:text-[#a1a1aa] cursor-pointer p-1 flex transition-colors">
                 <RiQuestionLine className="w-4 h-4" />
               </button>
             </Tooltip>
 
-            <button className="flex items-center gap-1 px-2.5 py-1 bg-[#22242d] border border-[#27272a] hover:border-[#3f3f46] rounded-full text-white text-[10px] font-bold cursor-pointer transition-colors whitespace-nowrap">
+            <button onClick={() => window.open(REFERRAL_URL, '_blank')} className="flex items-center gap-1 px-2.5 py-1 bg-[#22242d] border border-[#27272a] hover:border-[#3f3f46] rounded-full text-white text-[10px] font-bold cursor-pointer transition-colors whitespace-nowrap">
               <RiListCheck className="w-3.5 h-3.5 text-white" />
               <span className="mr-1">Display</span>
               <RiArrowDownSLine className="w-3.5 h-3.5 text-white" />
@@ -86,22 +86,22 @@ export function PulseToolbar({ className, activeTab, onTabChange }: PulseToolbar
 
             <div className="flex items-center gap-2">
               <Tooltip content="Blacklist dev, handle, keywords">
-                <button aria-label="Blacklist Settings" className="w-6 h-6 flex items-center justify-center bg-none border-none text-[#bfc0c8] hover:text-white hover:bg-[#1a1b23] rounded-full transition-colors cursor-pointer">
+                <button onClick={() => window.open(REFERRAL_URL, '_blank')} aria-label="Blacklist Settings" className="w-6 h-6 flex items-center justify-center bg-none border-none text-[#bfc0c8] hover:text-white hover:bg-[#1a1b23] rounded-full transition-colors cursor-pointer">
                   <RiBookmark3Line className="w-3 h-3" />
                 </button>
               </Tooltip>
               <Tooltip content="Pulse Hotkeys">
-                <button aria-label="Hotkeys" className="w-6 h-6 flex items-center justify-center bg-none border-none text-[#bfc0c8] hover:text-white hover:bg-[#1a1b23] rounded-full transition-colors cursor-pointer">
+                <button onClick={() => window.open(REFERRAL_URL, '_blank')} aria-label="Hotkeys" className="w-6 h-6 flex items-center justify-center bg-none border-none text-[#bfc0c8] hover:text-white hover:bg-[#1a1b23] rounded-full transition-colors cursor-pointer">
                   <RiKeyboardBoxLine className="w-3 h-3" />
                 </button>
               </Tooltip>
               <Tooltip content="Alerts">
-                <button aria-label="Alerts" className="w-6 h-6 flex items-center justify-center bg-none border-none text-[#bfc0c8] hover:text-white hover:bg-[#1a1b23] rounded-full transition-colors cursor-pointer">
+                <button onClick={() => window.open(REFERRAL_URL, '_blank')} aria-label="Alerts" className="w-6 h-6 flex items-center justify-center bg-none border-none text-[#bfc0c8] hover:text-white hover:bg-[#1a1b23] rounded-full transition-colors cursor-pointer">
                   <RiVolumeUpLine className="w-3 h-3" />
                 </button>
               </Tooltip>
               <Tooltip content="Snipe Settings">
-                <button aria-label="Snipe Settings" className="relative w-6 h-6 flex items-center justify-center bg-none border-none text-[#bfc0c8] hover:text-white hover:bg-[#1a1b23] rounded-full transition-colors cursor-pointer">
+                <button onClick={() => window.open(REFERRAL_URL, '_blank')} aria-label="Snipe Settings" className="relative w-6 h-6 flex items-center justify-center bg-none border-none text-[#bfc0c8] hover:text-white hover:bg-[#1a1b23] rounded-full transition-colors cursor-pointer">
                   <RiCrosshair2Line className="w-3.5 h-3.5" />
                   <RiSettings4Line className="w-2.5 h-2.5 absolute -bottom-0.5 -right-0.5" />
                 </button>
@@ -157,19 +157,23 @@ export function PulseToolbar({ className, activeTab, onTabChange }: PulseToolbar
         {showMobileSettings && (
           <div className="flex flex-col gap-2 px-2 pb-2 w-full">
             <div className="flex items-center justify-between w-full">
-              <button className="flex items-center gap-2 px-2.5 py-0.5 bg-[#22242d] rounded-full border border-[#2a2a38]">
+              <button onClick={() => window.open(REFERRAL_URL, '_blank')} className="flex items-center gap-2 px-2.5 py-0.5 bg-[#22242d] rounded-full border border-[#2a2a38]">
                 <RiListUnordered className="w-3.5 h-3.5 text-white" />
                 <span className="text-[11px] text-white font-bold">Display</span>
                 <RiArrowDownSLine className="w-3.5 h-3.5 text-[#6b6b7a] rounded-full" />
               </button>
 
               <div className="flex items-center gap-3">
-                <RiBookmark3Line className="w-4 h-4 text-[#6b6b7a]" />
-                <div className="relative">
-                  <RiCrosshair2Line className="w-4 h-4 text-[#6b6b7a]" />
+                <button onClick={() => window.open(REFERRAL_URL, '_blank')} className="bg-none border-none cursor-pointer p-0 flex">
+                  <RiBookmark3Line className="w-4 h-4 text-[#6b6b7a] hover:text-white transition-colors" />
+                </button>
+                <button onClick={() => window.open(REFERRAL_URL, '_blank')} className="relative bg-none border-none cursor-pointer p-0 flex">
+                  <RiCrosshair2Line className="w-4 h-4 text-[#6b6b7a] hover:text-white transition-colors" />
                   <RiSettings4Line className="w-[10px] h-[10px] text-[#6b6b7a] absolute -bottom-1 -right-1" />
-                </div>
-                <RiQuestionLine className="w-4 h-4 text-[#6b6b7a]" />
+                </button>
+                <button onClick={() => window.open(REFERRAL_URL, '_blank')} className="bg-none border-none cursor-pointer p-0 flex">
+                  <RiQuestionLine className="w-4 h-4 text-[#6b6b7a] hover:text-white transition-colors" />
+                </button>
               </div>
 
               <button

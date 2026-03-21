@@ -6,6 +6,7 @@ import {
     RiArrowLeftRightLine
 } from '@remixicon/react';
 import { ChainLogo, OptimizedImage } from '@/components/atoms';
+import { REFERRAL_URL } from '@/utils/constants';
 
 interface WalletDropdownProps {
     children: ReactNode;
@@ -42,11 +43,11 @@ export function WalletDropdown({ children }: WalletDropdownProps) {
                         <div className="flex items-center justify-between mb-1">
                             <span className="text-[11px] text-[#94a3b8] font-medium">Total Value</span>
                             <div className="flex items-center gap-3">
-                                <button className="flex items-center gap-1 text-[10px] text-[#94a3b8] hover:text-white transition-colors">
+                                <button onClick={() => window.open(REFERRAL_URL, '_blank')} className="flex items-center gap-1 text-[10px] text-[#94a3b8] hover:text-white transition-colors">
                                     <RiFileCopyLine className="w-3 h-3" />
                                     <span>Solana</span>
                                 </button>
-                                <button className="flex items-center gap-1 text-[10px] text-[#94a3b8] hover:text-white transition-colors">
+                                <button onClick={() => window.open(REFERRAL_URL, '_blank')} className="flex items-center gap-1 text-[10px] text-[#94a3b8] hover:text-white transition-colors">
                                     <RiFileCopyLine className="w-3 h-3" />
                                     <span>Perps</span>
                                 </button>
@@ -78,10 +79,10 @@ export function WalletDropdown({ children }: WalletDropdownProps) {
 
 
                         <div className="flex gap-2">
-                            <button className="flex-1 bg-[#526fff] hover:bg-[#465ecc] text-black text-[11px] font-bold py-0.5 rounded-full transition-colors">
+                            <button onClick={() => window.open(REFERRAL_URL, '_blank')} className="flex-1 bg-[#526fff] hover:bg-[#465ecc] text-black text-[11px] font-bold py-0.5 rounded-full transition-colors">
                                 Deposit
                             </button>
-                            <button className="flex-1 bg-[#2a2a35] hover:bg-[#32323e] text-white text-[11px] font-bold py-0.5 rounded-full transition-colors">
+                            <button onClick={() => window.open(REFERRAL_URL, '_blank')} className="flex-1 bg-[#2a2a35] hover:bg-[#32323e] text-white text-[11px] font-bold py-0.5 rounded-full transition-colors">
                                 Withdraw
                             </button>
                         </div>

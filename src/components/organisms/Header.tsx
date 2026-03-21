@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useCallback } from 'react';
-import Link from 'next/link';
+
 import {
   RiSearchLine,
   RiArrowDownSLine,
@@ -14,7 +14,7 @@ import {
   RiFileCopyLine,
   RiUserSettingsLine,
 } from '@remixicon/react';
-import { ChainLogo, ChainText } from '@/components/atoms';
+import { ChainLogo, ChainText, Tooltip } from '@/components/atoms';
 import { MobulaLogo } from '@/components/atoms/MobulaLogo';
 import { OptimizedImage } from '@/components/atoms';
 import { AvatarDropdown, ChainDropdown, AccountSettingsDropdown, WalletDropdown } from '@/components/molecules';
@@ -56,11 +56,13 @@ export function Header() {
 
       <div className="hidden lg:flex items-center justify-between px-[24px] h-full gap">
         <div className="flex items-center">
-          <a href={REFERRAL_URL} target="_blank" rel="noopener noreferrer" className="flex items-center gap-[1px] no-underline mr-[24px]">
-            <MobulaLogo className="w-[28px] h-[28px] text-white mr-1" />
-            <span className="text-white font-medium text-[16px]">mobula</span>
-            <span className="bg-transparent text-[#fcfcfc] text-[13px] font-light p-0 self-end mb-[3px] ml-[2px]">API</span>
-          </a>
+          <Tooltip content="Real-time DeFi data powered by Mobula API — click to learn more" position="bottom-left">
+            <a href={REFERRAL_URL} target="_blank" rel="noopener noreferrer" className="flex items-center gap-[1px] no-underline mr-[24px]">
+              <MobulaLogo className="w-[28px] h-[28px] text-white mr-1" />
+              <span className="text-white font-medium text-[16px]">mobula</span>
+              <span className="bg-transparent text-[#fcfcfc] text-[13px] font-light p-0 self-end mb-[3px] ml-[2px]">API</span>
+            </a>
+          </Tooltip>
 
 
           <div
@@ -75,13 +77,14 @@ export function Header() {
               onScroll={updateScrollState}
             >
               {NAV_LINKS.map((link) => (
-                <span
+                <button
                   key={link.href}
-                  className={`text-[12px] font-medium transition-all duration-150 whitespace-nowrap px-[12px] py-[6px] -mx-[12px] -my-[6px] rounded-lg cursor-not-allowed hover:bg-[#1a1f3d] hover:text-[#526fff] ${link.active ? 'text-[#526fff]' : 'text-white'
+                  onClick={() => window.open(REFERRAL_URL, '_blank')}
+                  className={`text-[12px] font-medium transition-all duration-150 whitespace-nowrap px-[12px] py-[6px] -mx-[12px] -my-[6px] rounded-lg cursor-pointer border-none bg-transparent hover:bg-[#1a1f3d] hover:text-[#526fff] ${link.active ? 'text-[#526fff]' : 'text-white'
                     }`}
                 >
                   {link.label}
-                </span>
+                </button>
               ))}
             </div>
 
@@ -155,7 +158,7 @@ export function Header() {
           </button>
 
           <WalletDropdown>
-            <div onClick={() => window.open(REFERRAL_URL, '_blank')} className="flex items-center gap-[10px] h-[28px] px-[10px] bg-[#22242d] border border-[#2a2a38] rounded-[16px] cursor-pointer transition-colors duration-150 hover:bg-[#2a2c36]">
+            <div className="flex items-center gap-[10px] h-[28px] px-[10px] bg-[#22242d] border border-[#2a2a38] rounded-[16px] cursor-pointer transition-colors duration-150 hover:bg-[#2a2c36]">
               <div className="flex items-center gap-[4px]">
                 <RiWalletLine className="w-[16px] h-[16px] text-white" />
                 <ChainLogo width={14} height={14} />
@@ -196,7 +199,7 @@ export function Header() {
         </a>
 
         <div className="flex items-center gap-1.5 overflow-hidden">
-          <button className="flex items-center gap-1 px-2 py-1 bg-[#16161e] border border-[#2a2a38] rounded-full text-[10px] whitespace-nowrap shrink-0">
+          <button onClick={() => window.open(REFERRAL_URL, '_blank')} className="flex items-center gap-1 px-2 py-1 bg-[#16161e] border border-[#2a2a38] rounded-full text-[10px] whitespace-nowrap shrink-0">
             <RiWalletLine className="w-3.5 h-3.5 text-[rgba(255,255,255,0.7)]" />
             <ChainLogo width={9} height={9} />
             <span className="text-white font-semibold">0</span>
@@ -206,16 +209,16 @@ export function Header() {
             <RiArrowDownSLine className="w-2.5 h-2.5 text-[#6b6b7a]" />
           </button>
 
-          <button className="flex items-center gap-1 px-2 py-1 bg-[#16161e] border border-[#2a2a38] rounded-full text-[10px] text-white font-medium whitespace-nowrap shrink-0">
+          <button onClick={() => window.open(REFERRAL_URL, '_blank')} className="flex items-center gap-1 px-2 py-1 bg-[#16161e] border border-[#2a2a38] rounded-full text-[10px] text-white font-medium whitespace-nowrap shrink-0">
             <RiFileCopyLine className="w-3 h-3 text-white" />
             <span>Paste CA</span>
           </button>
 
-          <button className="flex items-center justify-center w-7 h-7 bg-[#16161e] rounded-full border border-[#2a2a38] shrink-0">
+          <button onClick={() => window.open(REFERRAL_URL, '_blank')} className="flex items-center justify-center w-7 h-7 bg-[#16161e] rounded-full border border-[#2a2a38] shrink-0">
             <RiSearchLine className="w-3.5 h-3.5 text-white" />
           </button>
 
-          <div className="relative w-7 h-7 shrink-0">
+          <div onClick={() => window.open(REFERRAL_URL, '_blank')} className="relative w-7 h-7 shrink-0 cursor-pointer">
             <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#f472b6] via-[#a78bfa] to-[#22d3ee] p-[1.5px]">
               <div className="w-full h-full rounded-full bg-[#0c0c10]" />
             </div>

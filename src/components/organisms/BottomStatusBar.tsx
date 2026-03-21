@@ -26,7 +26,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import { ChainLogo, Tooltip } from '@/components/atoms';
 import { NavButton } from '@/components/atoms';
-import { WalletSolPill, MultiChainBadge } from '@/components/molecules';
+import { WalletSolPill } from '@/components/molecules';
 import { cn } from '@/lib/utils';
 import { usePrices } from '@/hooks/usePrices';
 import { REFERRAL_URL } from '@/utils/constants';
@@ -210,8 +210,6 @@ export function BottomStatusBar({ className, loading: externalLoading }: BottomS
           <div className="w-[1px] h-3 bg-[#1a1a1f] shrink-0 -mr-1" />
 
           <div className="flex items-center gap-1 xl:gap-2">
-            <MultiChainBadge />
-            <div className="w-[1px] h-3 bg-[#1a1a1f] shrink-0 -mr-2" />
 
             {PRICE_DATA_CONFIG.map(item => (
               <Tooltip content={item.tooltip} key={item.label}>
@@ -230,7 +228,10 @@ export function BottomStatusBar({ className, loading: externalLoading }: BottomS
                 <span className="text-[#14f195] text-[9px] font-semibold">${loading ? '...' : prices[mobulaKey]?.toFixed(1)}</span>
               </div>
             </Tooltip>
+
+            
           </div>
+
 
           <div className="w-[1px] h-3 bg-[#1a1a1f] shrink-0" />
         </div>
@@ -265,9 +266,9 @@ export function BottomStatusBar({ className, loading: externalLoading }: BottomS
           <div className="flex items-center gap-1.5 shrink-0">
             {SOCIAL_ICONS.map((item, idx) => renderIconButton(item, `social-${idx}`))}
 
-            <button onClick={() => window.open(REFERRAL_URL, '_blank')} className="flex items-center gap-[2px] bg-none border-none text-[#6b6b7a] hover:text-[#fcfcfcfc] cursor-pointer text-[9px] hover:bg-[#1a1a1f] px-1 py-[1.5px] rounded-md transition-all shrink-0">
+            <button onClick={() => window.open(REFERRAL_URL, '_blank')} className="flex items-center gap-[2px] bg-none border-none text-[#526fff] hover:text-white cursor-pointer text-[9px] hover:bg-[#1a1a1f] px-1 py-[1.5px] rounded-md transition-all shrink-0">
               <RiWindowLine className="w-[10px] h-[10px] ml-1" />
-              <span>Docs</span>
+              <span>Mobula API Docs</span>
             </button>
 
           </div>

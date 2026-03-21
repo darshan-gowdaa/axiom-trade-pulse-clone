@@ -8,7 +8,7 @@ import {
   RiFolderUserLine
 } from '@remixicon/react';
 import { usePathname } from 'next/navigation';
-import Link from 'next/link';
+import { REFERRAL_URL } from '@/utils/constants';
 
 const NAV_ITEMS = [
   { label: 'Trending', icon: RiFireLine, href: '/discover' },
@@ -29,10 +29,10 @@ export function MobileNavBar() {
             ? pathname === '/' || pathname.startsWith('/pulse')
             : pathname.startsWith(item.href);
         return (
-          <Link
+          <button
             key={item.href}
-            href={item.href}
-            className="flex-1 flex flex-col items-center justify-center gap-0.5 no-underline bg-transparent"
+            onClick={() => window.open(REFERRAL_URL, '_blank')}
+            className="flex-1 flex flex-col items-center justify-center gap-0.5 bg-transparent border-none cursor-pointer"
           >
             <item.icon
               className={`w-4 h-4 ${isActive ? 'text-white' : 'text-[#6b6b7a]'
@@ -44,7 +44,7 @@ export function MobileNavBar() {
             >
               {item.label}
             </span>
-          </Link>
+          </button>
         );
       })}
     </div>

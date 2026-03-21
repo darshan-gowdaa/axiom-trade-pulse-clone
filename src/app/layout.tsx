@@ -37,18 +37,23 @@ const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://axiom.trade';
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: 'Mobula - Pulse | Real-time Solana Token Tracker',
+    default: 'Mobula Pulse | Free Axiom Trade Alternative — Real-time Solana & BNB Token Tracker',
     template: '%s | Mobula Pulse'
   },
-  description: 'Real-time token discovery, trading platform, and analytics on Solana. Track live prices, liquidity, and volume of Solana tokens.',
-  keywords: ['Solana', 'DEX', 'Token', 'Trading', 'DeFi', 'Crypto', 'Analytics', 'Live Tracker', 'Pulse'],
+  description: 'Free Axiom Trade alternative. Real-time Solana & BNB token tracker — live prices, liquidity, volume, and new pair discovery powered by Mobula API. No sign-up needed.',
+  keywords: [
+    'Axiom trade alternative', 'free Axiom trade', 'Solana token tracker', 'BNB token tracker',
+    'pump tracker', 'meme coin tracker', 'new pairs Solana', 'pumpfun tracker',
+    'DEX screener alternative', 'live token discovery', 'DeFi analytics',
+    'Solana trading platform', 'BNB DEX', 'crypto pulse', 'Mobula API'
+  ],
   applicationName: 'Mobula Pulse',
   authors: [{ name: 'Mobula Team', url: 'https://mobula.io' }],
   creator: 'Mobula',
   publisher: 'Mobula',
   openGraph: {
-    title: 'Mobula - Pulse | Real-time Solana Token Tracker',
-    description: 'Real-time token discovery, trading platform, and analytics on Solana. Track live prices, liquidity, and volume.',
+    title: 'Mobula Pulse | Free Axiom Trade Alternative — Real-time Token Tracker',
+    description: 'Free real-time Solana & BNB token tracker. New pairs, live prices, liquidity and volume — the best free Axiom Trade alternative powered by Mobula API.',
     url: baseUrl,
     siteName: 'Mobula Pulse',
     locale: 'en_US',
@@ -56,8 +61,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Mobula - Pulse | Real-time Solana Token Tracker',
-    description: 'Live token discovery and trading analytics for Solana.',
+    title: 'Mobula Pulse | Free Axiom Trade Alternative',
+    description: 'Free real-time Solana & BNB token tracker. New pairs, live prices — the best free Axiom Trade alternative.',
     creator: '@MobulaIO',
   },
   alternates: {
